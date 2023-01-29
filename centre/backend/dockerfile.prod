@@ -6,4 +6,6 @@ RUN apt update -y && apt install ripgrep
 
 COPY . .
 
-CMD npm i && npm run start:prod
+RUN npm i && npm run build
+
+CMD npm run start:prod

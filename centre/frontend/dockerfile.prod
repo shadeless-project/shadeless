@@ -4,6 +4,8 @@ WORKDIR /app
 
 RUN npm install --global serve
 
-COPY dist .
+COPY . .
 
-CMD serve -l 3000 -s
+RUN npm i && npm run build
+
+CMD serve dist -l 3000 -s
