@@ -1,6 +1,10 @@
-# Shadeless centre
+# Shadeless
 
-The data centre that store all web traffic under mongodb
+Service is hosting at: http://shadeless.linesec-apps-beta.com/
+
+The data centre that store all web traffic under mongodb:
+
+![shadeless drawio](https://user-images.githubusercontent.com/25105395/215317587-4a1b32b0-486b-46e0-8276-bfa9b75f4690.png)
 
 More documentation can be found at:
 
