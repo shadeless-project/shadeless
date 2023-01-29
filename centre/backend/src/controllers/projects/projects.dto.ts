@@ -6,15 +6,13 @@ import {
   IsOptional,
   IsString,
   Matches,
-  Max,
   Min,
 } from 'class-validator';
-import { CensorType } from 'libs/schemas/censor.schema';
 import { ProjectStatus } from 'libs/schemas/project.schema';
 
 export class PostProjectDto {
   @IsString()
-  @Matches(/^[a-z0-9]{1,128}$/i)
+  @Matches(/^[\w-]{1,128}$/i)
   name: string;
 
   @IsString()

@@ -22,7 +22,7 @@ export const ProjectSchema = new Schema<ProjectDocument>(
       type: Schema.Types.String,
       required: true,
       unique: true,
-      match: /^[\w-]+$/i,
+      match: /^[\w-]{1,128}$/i,
     },
     description: { type: Schema.Types.String, default: '' },
     status: { type: Schema.Types.String, default: ProjectStatus.TODO },

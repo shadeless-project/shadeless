@@ -40,7 +40,7 @@ export class StaticFileController {
   ) {}
 
   validateInput(projectName: string, fileHash: string) {
-    if (/^[a-z0-9]+$/i.test(projectName) && /^[0-9a-f]{64}$/i.test(fileHash))
+    if (/^[\w-]{1,128}$/i.test(projectName) && /^[0-9a-f]{64}$/i.test(fileHash))
       return true;
     throw new NotFoundException('Wrong format static file');
   }
