@@ -1,0 +1,45 @@
+version: '3'
+services:
+  shadeless-db:
+    container_name: shadeless-db
+    image: mongo:4
+    volumes:
+      - "shadeless-volume:/data/db"
+    restart: always
+
+  shadeless-nginx:
+    container_name: shadeless-nginx
+    build:
+      context: ./centre/nginx/
+    links:
+      - "shadeless-ui:app-ui"
+      - "shadeless-centre:app-centre"
+    ports:
+      - "127.0.0.1:13337:80"
+
+  shadeless-ui:
+    build:
+      context: ./centre/frontend/
+      dockerfile: dockerfile.prod
+    container_name: shadeless-ui
+    restart: always
+
+  shadeless-centre:
+    build:
+      context: ./centre/backend/
+      dockerfile: dockerfile.prod
+    container_name: shadeless-centre
+    restart: always
+    volumes:
+      - ./files-prod/:/files/
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - DATABASE_URL=mongodb://shadeless-db:27017/shadeless
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=adminpassword
+      - OPERATOR_USERNAME=operator
+      - OPERATOR_PASSWORD=operatorpassword
+volumes:
+  shadeless-volume:
+    external: false

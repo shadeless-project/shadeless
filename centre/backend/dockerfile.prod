@@ -1,0 +1,9 @@
+FROM node:16-buster
+
+WORKDIR /app
+
+RUN apt update -y && apt install ripgrep
+
+COPY . .
+
+CMD npm i && npm run start:prod

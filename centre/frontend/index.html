@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/icon.png" />
+  <meta name="description" content="Web traffic data centre for bug hunters collaboration">
+  <meta name="keywords" content="reconnaissance">
+  <meta property="og:description" content="Hello, I'm strnegth">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shadeless">
+  <meta property="og:image" content="/icon.png">
+  <meta property="og:image:type" content="image/png">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shadeless</title>
+  <style>
+    :root {
+      --bg-grey: rgb(249, 249, 249);
+
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 400;
+
+      min-height:100%;
+      position:relative;
+
+      color-scheme: light dark;
+      background-color: #242424;
+
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    html,
+    body {
+      background-color: var(--bg-grey) !important;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    :root {
+      flex: 1 0 auto;
+    }
+
+    footer {
+      flex-shrink: 0;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        color: #213547;
+        background-color: #ffffff;
+      }
+      button {
+        background-color: #f9f9f9;
+      }
+    }
+
+    @keyframes newAddedRow {
+      0% {
+        background-color: black;
+        color: red;
+      }
+      40% {}
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

