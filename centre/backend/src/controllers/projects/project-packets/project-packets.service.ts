@@ -246,7 +246,10 @@ export class ProjectPacketsService {
         bodyQuery,
       );
       const censors = await this.censorModel.find({
-        $or: [{ project, type: CensorType.ONE }, { type: CensorType.ALL }],
+        $or: [
+          { project: projectName, type: CensorType.ONE },
+          { type: CensorType.ALL },
+        ],
       });
       const matchBodyPackets = filterBodyQuery({
         offset: 0,
@@ -334,7 +337,10 @@ export class ProjectPacketsService {
         bodyQuery,
       );
       const censors = await this.censorModel.find({
-        $or: [{ project, type: CensorType.ONE }, { type: CensorType.ALL }],
+        $or: [
+          { project: projectName, type: CensorType.ONE },
+          { type: CensorType.ALL },
+        ],
       });
       const resultPackets = filterBodyQuery({
         ...query,
@@ -387,7 +393,10 @@ export class ProjectPacketsService {
         bodyQuery,
       );
       const censors = await this.censorModel.find({
-        $or: [{ project, type: CensorType.ONE }, { type: CensorType.ALL }],
+        $or: [
+          { project: projectName, type: CensorType.ONE },
+          { type: CensorType.ALL },
+        ],
       });
       const resultPackets = filterBodyQuery({
         offset: 0,
