@@ -151,6 +151,7 @@ export class UploadPacketDto {
   codeName: string;
 
   @IsString()
-  @Matches(/^[a-z0-9]{1,128}$/i)
+  @MinLength(1)
+  @MaxLength(128)
   project: string;
 }

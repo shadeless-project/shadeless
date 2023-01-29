@@ -26,7 +26,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
           : responseError.error;
 
       this.logger.error(
-        `${request.method} ${statusCode} ${request.headers['host']} ${request.originalUrl} ${request.headers['x-real-ip']}: ${exception.message}`,
+        `${request.method} ${statusCode} ${request.headers['host']} ${request.originalUrl} ${request.headers['x-real-ip']}: ${exception.message} ${exception.stack}`,
       );
 
       response.status(statusCode).json({
@@ -38,7 +38,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     } else {
       this.logger.error(
-        `${request.method} 500 ${request.headers['host']} ${request.originalUrl} ${request.headers['x-real-ip']}: ${exception.message}`,
+        `${request.method} 500 ${request.headers['host']} ${request.originalUrl} ${request.headers['x-real-ip']}: ${exception.message} ${exception.stack}`,
       );
       response.status(500).json({
         statusCode: 500,

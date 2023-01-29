@@ -16,7 +16,7 @@ import path from 'path';
 import { Response } from 'express';
 import fs from 'fs';
 import fsPromise from 'fs/promises';
-import { Censor, CensorDocument } from 'libs/schemas/censor.schema';
+import { Censor, CensorDocument, CensorType } from 'libs/schemas/censor.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
@@ -74,7 +74,12 @@ export class StaticFileController {
     const fileContent = await fsPromise.readFile(fileLocation);
     if (fileContent.length === 0) return response.end(fileContent);
 
-    const censors = await this.censorModel.find({ project: projectName });
+    const censors = await this.censorModel.find({
+      $or: [
+        { project: projectName, type: CensorType.ONE },
+        { type: CensorType.ALL },
+      ],
+    });
     const relatedPackets = await this.rawPacketModel.find({
       project: projectName,
       $or: [{ requestBodyHash: fileHash }, { responseBodyHash: fileHash }],

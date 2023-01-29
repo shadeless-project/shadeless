@@ -10,7 +10,7 @@ import {
   QueryPacketDto,
 } from '../projects.dto';
 import path from 'path';
-import { Censor, CensorDocument } from 'libs/schemas/censor.schema';
+import { Censor, CensorDocument, CensorType } from 'libs/schemas/censor.schema';
 import { isCensorsMatchPacket } from 'controllers/static-file/static-file.controller';
 import { distinctHashAgg, projectAgg } from './query-aggregation-mongo';
 
@@ -245,7 +245,9 @@ export class ProjectPacketsService {
         path.join('/files', projectName),
         bodyQuery,
       );
-      const censors = await this.censorModel.find({ project: projectName });
+      const censors = await this.censorModel.find({
+        $or: [{ project, type: CensorType.ONE }, { type: CensorType.ALL }],
+      });
       const matchBodyPackets = filterBodyQuery({
         offset: 0,
         limit: 99999999,
@@ -331,7 +333,9 @@ export class ProjectPacketsService {
         path.join('/files', projectName),
         bodyQuery,
       );
-      const censors = await this.censorModel.find({ project: projectName });
+      const censors = await this.censorModel.find({
+        $or: [{ project, type: CensorType.ONE }, { type: CensorType.ALL }],
+      });
       const resultPackets = filterBodyQuery({
         ...query,
         packets,
@@ -382,7 +386,9 @@ export class ProjectPacketsService {
         path.join('/files', projectName),
         bodyQuery,
       );
-      const censors = await this.censorModel.find({ project: projectName });
+      const censors = await this.censorModel.find({
+        $or: [{ project, type: CensorType.ONE }, { type: CensorType.ALL }],
+      });
       const resultPackets = filterBodyQuery({
         offset: 0,
         limit: packets.length,
