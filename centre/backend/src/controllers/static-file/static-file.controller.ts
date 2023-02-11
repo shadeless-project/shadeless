@@ -90,12 +90,4 @@ export class StaticFileController {
     }
     return response.end(fileContent);
   }
-
-  @Get('/shadeless-burp')
-  getShadelessBurp(@Res() response: Response) {
-    return response.redirect(
-      301,
-      'https://stc.drstra.in/shadeless/shadeless.1.1.1.jar',
-    );
-  }
 }

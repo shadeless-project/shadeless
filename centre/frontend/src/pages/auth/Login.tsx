@@ -1,7 +1,7 @@
-import { Box, Button, FormControl, FormLabel, Image, Input, Link, Text, Tooltip } from "@chakra-ui/react";
+import { Box, FormControl, FormLabel, Image, Input, Link, Text, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { login } from "src/libs/apis/auth";
-import { INSTRUCTION_EXT_URL } from "src/libs/apis/types";
+import { INSTRUCTION_SHADELESS } from "src/libs/apis/types";
 import { useLocation } from "wouter";
 import SubmitButton from "../common/submit-button";
 
@@ -27,17 +27,17 @@ export default function Login() {
     }
   }
   return (
-    <Box 
+    <Box
       display="grid"
       height="100vh"
       gridTemplateColumns="1fr 1fr"
     >
-      <Box 
+      <Box
         bg="rgb(20,20,20)"
       >
-        <Image 
-          w="150px" 
-          h="150px" 
+        <Image
+          w="150px"
+          h="150px"
           src="/icon.png"
           mx="auto"
           bg="grey"
@@ -78,13 +78,13 @@ export default function Login() {
           <FormLabel fontSize="sm">Username&nbsp;
             <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
           </FormLabel>
-          <Input 
-            id="username" 
-            size="md" 
+          <Input
+            id="username"
+            size="md"
             mt="-3px"
             fontSize="xs"
             placeholder="admin"
-            _placeholder={{opacity: '0.6'}} 
+            _placeholder={{opacity: '0.6'}}
           />
           <FormLabel mt="17px" fontSize="sm">
             Password&nbsp;
@@ -123,10 +123,10 @@ export default function Login() {
             Login
           </SubmitButton>
 
-          <Link 
+          <Link
             color="blue"
             fontSize="sm"
-            href={INSTRUCTION_EXT_URL}
+            href={INSTRUCTION_SHADELESS}
             rel="noopener noreferer"
           >
             Learn more about Shadeless &gt;&gt;&gt;

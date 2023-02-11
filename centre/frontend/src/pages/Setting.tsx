@@ -3,7 +3,6 @@ import { Box } from '@chakra-ui/react';
 import ShowProjectsBox from 'src/pages/setting/show-project';
 import CreateProjectBox from 'src/pages/setting/create-project';
 import { getAllProjects, Project } from 'src/libs/apis/projects';
-import DownloadBurp from './setting/download-burp';
 
 function SettingPage () {
   const [projects, setProjects] = React.useState<Project[]>([]);
@@ -18,7 +17,6 @@ function SettingPage () {
 
   return (
     <Box>
-      <DownloadBurp />
       <CreateProjectBox
         getProjects={getProjects}
       />

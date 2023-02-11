@@ -1,6 +1,6 @@
 export const API_URL = import.meta.env.VITE_API_ENDPOINT
 export const INSTRUCTION_FILTER_URL = import.meta.env.VITE_INSTRUCTION_FILTER_ENDPOINT
-export const INSTRUCTION_EXT_URL = import.meta.env.VITE_INSTRUCTION_EXT_ENDPOINT
+export const INSTRUCTION_SHADELESS = import.meta.env.VITE_INSTRUCTION_SHADELESS
 export interface ApiResponse<T> {
   statusCode: number;
   data: T;
