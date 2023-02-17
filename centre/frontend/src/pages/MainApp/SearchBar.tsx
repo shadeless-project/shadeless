@@ -238,14 +238,14 @@ export default function SearchBar (props: SearchBarProps) {
         >
           Query
         </Button>
-        <Menu>
-          <MenuButton 
-            p="0" 
+        <Menu closeOnSelect={false}>
+          <MenuButton
+            p="0"
             size="sm"
-            fontSize="sm" 
+            fontSize="sm"
             mt="-3px"
-            bg="gray.100" 
-            ml="5px" 
+            bg="gray.100"
+            ml="5px"
             as={Button}
           >
             <SettingsIcon />
@@ -253,7 +253,7 @@ export default function SearchBar (props: SearchBarProps) {
           <MenuList
             fontSize="sm"
           >
-            <MenuItem 
+            <MenuItem
               onClick={(e) => {
                 if (e.target.toString().includes('object HTMLSpanElement')) return;
                 const newVal = !showFilterBody;
@@ -261,7 +261,7 @@ export default function SearchBar (props: SearchBarProps) {
                 localStorage.setItem('showFilterBody', newVal.toString());
               }}
             >
-              <><Checkbox isChecked={showFilterBody}>Query with body</Checkbox></>
+              <Checkbox isChecked={showFilterBody}>Query with body</Checkbox>
             </MenuItem>
             <MenuItem
               onClick={(e) => {
