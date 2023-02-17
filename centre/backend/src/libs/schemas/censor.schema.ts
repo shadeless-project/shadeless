@@ -9,6 +9,7 @@ export class Censor {
   project: string;
   type: CensorType;
   condition: any;
+  description: string;
 }
 export interface CensorDocument extends Censor, Document {
   _id: Types.ObjectId;
@@ -22,6 +23,7 @@ export const CensorSchema = new Schema<CensorDocument>(
       type: Schema.Types.Mixed,
       required: true,
     },
+    description: { type: Schema.Types.String },
   },
   { timestamps: true },
 );

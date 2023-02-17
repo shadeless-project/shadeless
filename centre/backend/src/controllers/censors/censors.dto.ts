@@ -11,4 +11,7 @@ export class PostCensorDto {
   @IsString()
   @IsOptional()
   project: string;
+
+  @IsString()
+  description: string;
 }

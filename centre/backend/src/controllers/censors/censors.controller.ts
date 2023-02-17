@@ -27,7 +27,10 @@ export class CensorsController {
     const censors = await this.censorModel.find({
       $or: [{ project, type: CensorType.ONE }, { type: CensorType.ALL }],
     });
-    return censors;
+    return censors.map((c) => ({
+      ...c,
+      description: c.description || '',
+    }));
   }
 
   @Post('/')

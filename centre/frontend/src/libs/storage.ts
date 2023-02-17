@@ -64,7 +64,7 @@ export function getUserRole() {
   try {
     const splitted = auth.split('.');
     if (splitted.length !== 3) return '';
-    return JSON.parse(atob(splitted[1])).user;
+    return JSON.parse(atob(splitted[1])).role;
   } catch (err) {
     return '';
   }

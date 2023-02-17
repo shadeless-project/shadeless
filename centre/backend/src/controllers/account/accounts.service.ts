@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Account, AccountDocument } from 'libs/schemas/account.schema';
+import {
+  Account,
+  AccountDocument,
+  AccountRole,
+} from 'libs/schemas/account.schema';
 
 @Injectable()
 export class AccountsService {
@@ -16,5 +20,17 @@ export class AccountsService {
       delete acc.__v;
       return acc;
     });
+  }
+
+  async createAccount(username: string, password: string, role: AccountRole) {
+    await this.accountModel.create({
+      username,
+      password,
+      role,
+    });
+  }
+
+  async deleteAccount(_id: string) {
+    await this.accountModel.findByIdAndDelete(_id);
   }
 }
