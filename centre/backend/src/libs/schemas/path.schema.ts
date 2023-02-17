@@ -25,4 +25,4 @@ export const PathSchema = new Schema<PathDocument>(
 
 PathSchema.index({ project: 1, origin: 1, path: 1 }, { unique: true });
 
-export default mongoose.model<PathDocument>('path', PathSchema, 'path');
+export default mongoose.model<PathDocument>('paths', PathSchema, 'paths');

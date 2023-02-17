@@ -26,4 +26,8 @@ export const CensorSchema = new Schema<CensorDocument>(
   { timestamps: true },
 );
 
-export default mongoose.model<CensorDocument>('censor', CensorSchema, 'censor');
+export default mongoose.model<CensorDocument>(
+  'censors',
+  CensorSchema,
+  'censors',
+);

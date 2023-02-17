@@ -43,8 +43,6 @@ services:
       - DATABASE_URL=mongodb://host.docker.internal:27017/shadeless
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=Alo123!@#
-      - OPERATOR_USERNAME=operator
-      - OPERATOR_PASSWORD=operator!@#
 volumes:
   app-volume:
     external: false

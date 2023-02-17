@@ -17,7 +17,7 @@ export const OccurenceSchema = new Schema<OccurenceDocument>({
 OccurenceSchema.index({ hash: 1 }, { unique: true });
 
 export default mongoose.model<OccurenceDocument>(
-  'occurence',
+  'occurences',
   OccurenceSchema,
-  'occurence',
+  'occurences',
 );

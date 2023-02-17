@@ -1,13 +1,9 @@
 import {
-  ConsoleLogger,
   Controller,
   Get,
   Head,
-  HttpCode,
   NotFoundException,
   Param,
-  Query,
-  Redirect,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -86,7 +82,7 @@ export class StaticFileController {
     });
 
     if (relatedPackets.find((p) => isCensorsMatchPacket(censors, p))) {
-      return response.end('*'.repeat(fileContent.length));
+      return response.end('*'.repeat(Math.min(fileContent.length, 512)));
     }
     return response.end(fileContent);
   }

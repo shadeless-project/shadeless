@@ -13,6 +13,7 @@ import { Box, Progress, Text, useToast } from '@chakra-ui/react';
 import CensorPage from './censor/Censor';
 import { getAllProjects } from 'src/libs/apis/projects';
 import Navbar from './common/navbar';
+import AccountPage from './accounts/Accounts';
 
 function Routes () {
   const setLocation = useLocation()[1];
@@ -79,6 +80,10 @@ function Routes () {
             </Route>
             <Route path="/censor">
               <CensorPage project={currentProject} />
+              <Footer />
+            </Route>
+            <Route path="/accounts">
+              <AccountPage />
               <Footer />
             </Route>
             <Route>

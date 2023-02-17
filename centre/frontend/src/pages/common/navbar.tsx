@@ -190,10 +190,15 @@ function Navbar () {
             <MenuItem>
               Choose project
             </MenuItem>
-            <MenuItem onClick={logout}>
-              Logout
+          </Link>
+          <Link href='/accounts'>
+            <MenuItem>
+              Accounts setting
             </MenuItem>
           </Link>
+          <MenuItem onClick={logout}>
+            Logout
+          </MenuItem>
         </MenuList>
       </Menu>
     </Flex>

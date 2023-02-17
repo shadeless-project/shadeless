@@ -28,4 +28,4 @@ export const UserSchema = new Schema<UserDocument>(
 
 UserSchema.index({ project: 1, codeName: 1 }, { unique: true });
 
-export default mongoose.model<UserDocument>('user', UserSchema, 'user');
+export default mongoose.model<UserDocument>('users', UserSchema, 'users');

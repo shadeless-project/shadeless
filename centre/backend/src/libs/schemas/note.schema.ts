@@ -23,4 +23,4 @@ export const NoteSchema = new Schema<NoteDocument>(
   { timestamps: true },
 );
 
-export default mongoose.model<NoteDocument>('note', NoteSchema, 'note');
+export default mongoose.model<NoteDocument>('notes', NoteSchema, 'notes');

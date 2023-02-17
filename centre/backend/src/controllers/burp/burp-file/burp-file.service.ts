@@ -30,7 +30,9 @@ export class BurpFileService {
       await fs.mkdir(path.join('/files', body.project), { recursive: true });
       try {
         await mvAsync(file.path, path.join('/files', body.project, body.id));
-      } catch (err) { console.log(err); }
+      } catch (err) {
+        console.log(err);
+      }
       await this.fileModel.create(newObj);
     }
   }

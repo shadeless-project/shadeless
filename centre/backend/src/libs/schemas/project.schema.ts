@@ -31,7 +31,7 @@ export const ProjectSchema = new Schema<ProjectDocument>(
 );
 
 export default mongoose.model<ProjectDocument>(
-  'project',
+  'projects',
   ProjectSchema,
-  'project',
+  'projects',
 );
