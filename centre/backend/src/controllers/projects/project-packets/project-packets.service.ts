@@ -46,6 +46,7 @@ function countFilteredPacketsAgg(
     distinctCol ? { $group: { _id: '$' + distinctCol } } : {},
     { $count: 'count' },
   ];
+
   return agg.filter((a) => Object.entries(a).length !== 0);
 }
 
@@ -76,10 +77,16 @@ function findPacketsAggregation(
         as: 'count',
       },
     },
+    // {
+    //   $replaceRoot: {
+    //     newRoot: { $mergeObjects: [{ $arrayElemAt: ['$count', 0] }, '$$ROOT'] },
+    //   },
+    // },
+    // { $project: { count: 0 } },
     { $unwind: '$count' },
     projectAgg,
     { $match: filter },
-    sort ? { $sort: { createdAt: -1, requestPacketIndex: -1 } } : {},
+    sort ? { $sort: { createdAt: -1 } } : {},
     isHashDistinct ? distinctHashAgg : {},
     skip ? { $skip: skip } : {},
     limit ? { $limit: limit } : {},

@@ -105,6 +105,7 @@ export const RawPacketSchema = new Schema<RawPacketDocument>(
 );
 
 RawPacketSchema.index({ requestPacketId: 1, project: 1 }, { unique: true });
+RawPacketSchema.index({ createdAt: -1 });
 
 export default mongoose.model<RawPacketDocument>(
   'rawpackets',
