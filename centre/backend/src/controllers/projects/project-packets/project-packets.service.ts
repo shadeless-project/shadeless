@@ -5,6 +5,8 @@ import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
 import { Model } from 'mongoose';
 import {
+  DashboardAdditionalDataType,
+  QueryMiniDashboardAdditionalDataDto,
   QueryMiniDashboardDto,
   QueryPacketAfterTimeDto,
   QueryPacketDto,
@@ -77,12 +79,6 @@ function findPacketsAggregation(
         as: 'count',
       },
     },
-    // {
-    //   $replaceRoot: {
-    //     newRoot: { $mergeObjects: [{ $arrayElemAt: ['$count', 0] }, '$$ROOT'] },
-    //   },
-    // },
-    // { $project: { count: 0 } },
     { $unwind: '$count' },
     projectAgg,
     { $match: filter },
@@ -281,17 +277,6 @@ export class ProjectPacketsService {
         numLeastAppeared: packetMin[0]?.count,
       };
     }
-    const numPackets = await this.countPacket(filter, '', query.queryDistinct);
-    const uniqueEndpoints = await this.countPacket(
-      filter,
-      'hash',
-      query.queryDistinct,
-    );
-    const origins = await this.getAllPacketsWithDistinctCol(
-      filter,
-      'origin',
-      query.queryDistinct,
-    );
 
     const agg = findPacketsAggregation(filter, query.queryDistinct);
     const res = await this.rawPacketModel
@@ -308,10 +293,11 @@ export class ProjectPacketsService {
       .allowDiskUse(true);
     const numMostAppeared = res.length > 0 ? res[0].mostAppeared : -1;
     const numLeastAppeared = res.length > 0 ? res[0].leastAppeared : -1;
+
     return {
-      origins,
-      numPackets,
-      uniqueEndpoints,
+      origins: null,
+      numPackets: null,
+      uniqueEndpoints: null,
       numMostAppeared,
       numLeastAppeared,
       numAllPackets,
@@ -319,6 +305,29 @@ export class ProjectPacketsService {
       packetMost: null,
       packetMin: null,
     };
+  }
+
+  // For performance purpose
+  async queryDashboardAdditionalData(
+    projectName: string,
+    query: QueryMiniDashboardAdditionalDataDto,
+  ) {
+    const filter = {
+      project: projectName,
+      ...query.criteria,
+    };
+    if (query.type === DashboardAdditionalDataType.NUM_PACKETS)
+      return this.countPacket(filter, '', query.queryDistinct);
+    if (query.type === DashboardAdditionalDataType.ORIGINS)
+      return this.getAllPacketsWithDistinctCol(
+        filter,
+        'origin',
+        query.queryDistinct,
+      );
+    if (query.type === DashboardAdditionalDataType.UNIQUE_ENDPOINTS)
+      return this.countPacket(filter, 'hash', query.queryDistinct);
+
+    return null;
   }
 
   async queryPackets(projectName: string, query: QueryPacketDto) {

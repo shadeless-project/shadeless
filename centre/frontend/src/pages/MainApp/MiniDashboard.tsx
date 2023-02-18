@@ -1,6 +1,6 @@
 import { Box, Button, Grid, SkeletonText, Stat, StatLabel, StatNumber, Text, Tooltip, useToast } from "@chakra-ui/react";
 import React from "react";
-import { DashboardPackets, defaultDashboardPacket, getDashboardPackets, getPackets } from "src/libs/apis/packets";
+import { DashboardAdditionalDataType, DashboardPackets, defaultDashboardPacket, getDashboardAdditionalData, getDashboardPackets, getPackets } from "src/libs/apis/packets";
 import { notify } from "src/libs/notify";
 import { Query2ObjectResult } from "src/libs/query.parser";
 import storage from 'src/libs/storage';
@@ -20,6 +20,28 @@ export default function MiniDashboard (props: MiniDashboardProps) {
   const [dashboardData, setDashboardData] = React.useState<DashboardPackets>(defaultDashboardPacket);
   const [isLoading, setIsLoading] = React.useState(true);
 
+  async function getMostAndLeastPackets(numLeast: number, numMost: number) {
+    const applyFilterMin = JSON.parse(JSON.stringify(applyingFilter));
+    applyFilterMin.queryDistinct = true;
+    applyFilterMin.criteria.count = numLeast;
+    const respMin = getPackets(
+      currentProject,
+      applyFilterMin,
+      0, 50, true,
+    );
+
+    const applyFilterMax = JSON.parse(JSON.stringify(applyingFilter));
+    applyFilterMax.queryDistinct = true;
+    applyFilterMax.criteria.count = numMost;
+    const respMost = getPackets(currentProject, applyFilterMax, 0, 999999999, true);
+
+    const result = await Promise.all([
+      respMin,
+      respMost,
+    ]);
+    return result.map(r => r.data);
+  }
+
   React.useEffect(() => {
     async function getDashboardInfo() {
       setIsLoading(true);
@@ -27,21 +49,32 @@ export default function MiniDashboard (props: MiniDashboardProps) {
       const resp = await getDashboardPackets(storage.getProject(), applyingFilter);
       if (resp.statusCode === 200) {
         if (resp.data.packetMin === null && resp.data.packetMost === null) {
-          const applyFilter = JSON.parse(JSON.stringify(applyingFilter));
-          applyFilter.queryDistinct = true;
-          applyFilter.criteria.count = resp.data.numLeastAppeared;
-          const respMin = await getPackets(
-            currentProject, 
-            applyFilter,
-            0, 999999999, true,
-          );
-          applyFilter.criteria.count = resp.data.numMostAppeared;
-          const respMost = await getPackets(currentProject, applyFilter, 0, 999999999, true);
-          resp.data.packetMin = respMin.data;
-          resp.data.packetMost = respMost.data;
+          const results = await Promise.all([
+            getMostAndLeastPackets(
+              resp.data.numLeastAppeared,
+              resp.data.numMostAppeared,
+            ),
+            getDashboardAdditionalData(storage.getProject(), {
+              ...applyingFilter,
+              type: DashboardAdditionalDataType.NUM_PACKETS
+            }),
+            getDashboardAdditionalData(storage.getProject(), {
+              ...applyingFilter,
+              type: DashboardAdditionalDataType.ORIGINS
+            }),
+            getDashboardAdditionalData(storage.getProject(), {
+              ...applyingFilter,
+              type: DashboardAdditionalDataType.UNIQUE_ENDPOINTS
+            })
+          ]);
+          resp.data.packetMin = results[0][0];
+          resp.data.packetMost = results[0][1];
+          resp.data.numPackets = results[1].data as number;
+          resp.data.origins = results[2].data as string[];
+          resp.data.uniqueEndpoints = results[3].data as number;
         }
-        setIsLoading(false);
         setDashboardData(resp.data);
+        setIsLoading(false);
       } else notify(toast, resp);
     }
     getDashboardInfo();
@@ -80,26 +113,28 @@ export default function MiniDashboard (props: MiniDashboardProps) {
             >
               Filtered origins
             </StatLabel>
-            <Box display={isLoading ? 'none' : 'block'}>
-              <StatNumber
-                fontSize="md"
-                ml="2px"
-              >
-                {dashboardData.origins.length}/{dashboardData.numAllOrigins} <Text fontSize="xs" opacity='.5' as="span">records</Text>
-              </StatNumber>
-              <Tooltip fontSize="2xs" placement="top" label="Copy to clipboard all origins">
-                <Button
-                  position="absolute"
-                  top="0"
-                  right="0"
-                  height="100%"
-                  width="1vw"
-                  borderRadius="0"
-                  colorScheme="blackAlpha"
-                  onClick={clickCopyOrigins}
-                ></Button>
-              </Tooltip>
-            </Box>
+            {!isLoading &&
+              <Box>
+                <StatNumber
+                  fontSize="md"
+                  ml="2px"
+                >
+                  {dashboardData.origins.length}/{dashboardData.numAllOrigins} <Text fontSize="xs" opacity='.5' as="span">records</Text>
+                </StatNumber>
+                <Tooltip fontSize="2xs" placement="top" label="Copy to clipboard all origins">
+                  <Button
+                    position="absolute"
+                    top="0"
+                    right="0"
+                    height="100%"
+                    width="1vw"
+                    borderRadius="0"
+                    colorScheme="blackAlpha"
+                    onClick={clickCopyOrigins}
+                  ></Button>
+                </Tooltip>
+              </Box>
+            }
             <SkeletonText display={isLoading ? 'block' : 'none'} noOfLines={2} mt="8px" />
           </Stat>
 
@@ -116,13 +151,14 @@ export default function MiniDashboard (props: MiniDashboardProps) {
             >
               Filtered packets
             </StatLabel>
-            <StatNumber
-              display={isLoading ? 'none' : 'block'}
-              fontSize="md"
-              ml="2px"
-            >
-              {dashboardData.numPackets}/{dashboardData.numAllPackets} <Text fontSize="xs" opacity='.5' as="span">records</Text>
-            </StatNumber>
+            {!isLoading &&
+              <StatNumber
+                fontSize="md"
+                ml="2px"
+              >
+                {dashboardData.numPackets}/{dashboardData.numAllPackets} <Text fontSize="xs" opacity='.5' as="span">records</Text>
+              </StatNumber>
+            }
             <SkeletonText display={isLoading ? 'block' : 'none'} noOfLines={2} mt="8px" />
           </Stat>
 
@@ -139,13 +175,14 @@ export default function MiniDashboard (props: MiniDashboardProps) {
             >
               Unique endpoints
             </StatLabel>
-            <StatNumber
-              display={isLoading ? 'none' : 'block'}
-              fontSize="md"
-              ml="2px"
-            >
-              {dashboardData.uniqueEndpoints} <Text fontSize="xs" opacity='.5' as="span">records</Text>
-            </StatNumber>
+            {!isLoading &&
+              <StatNumber
+                fontSize="md"
+                ml="2px"
+              >
+                {dashboardData.uniqueEndpoints} <Text fontSize="xs" opacity='.5' as="span">records</Text>
+              </StatNumber>
+            }
             <SkeletonText display={isLoading ? 'block' : 'none'} noOfLines={2} mt="8px" />
           </Stat>
         </Grid>
@@ -179,8 +216,8 @@ export default function MiniDashboard (props: MiniDashboardProps) {
                 wordBreak="break-word"
               >
                 {dashboardData !== null && dashboardData.packetMost?.map(p =>
-                  <Text 
-                    color="black" 
+                  <Text
+                    color="black"
                     key={`dashboard-id-max-${p._id}`}
                     _hover={{ textDecor: 'underline' }}
                   >
@@ -205,7 +242,7 @@ export default function MiniDashboard (props: MiniDashboardProps) {
               opacity='.5'
             >
               Least repetitive endpoint&nbsp;
-              {dashboardData.packetMin !== null && dashboardData.packetMin.length != 0 && <Text as="span" fontSize="xs" opacity="1">({(dashboardData.packetMin[0] as any).count} times)</Text>}
+              {dashboardData.packetMin !== null && dashboardData.packetMin.length != 0 && <Text as="span" fontSize="xs" opacity="1">({(dashboardData.packetMin[0] as any).count} times) (max 50 only) </Text>}
             </StatLabel>
             <StatNumber
               fontSize="md"
@@ -219,8 +256,8 @@ export default function MiniDashboard (props: MiniDashboardProps) {
                 wordBreak="break-word"
               >
                 {dashboardData.packetMin !== null && dashboardData.packetMin.map(p =>
-                  <Text 
-                    color="black" 
+                  <Text
+                    color="black"
                     key={`dashboard-id-min-${p._id}`}
                     _hover={{ textDecor: 'underline' }}
                   >

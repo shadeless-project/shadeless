@@ -89,10 +89,10 @@ export const defaultPacket: Packet = {
 };
 
 export async function getPackets(
-  projectName: string, 
-  filter: Query2ObjectResult, 
-  offset: number = 0, 
-  limit: number = NUM_PACKETS_PER_PAGE, 
+  projectName: string,
+  filter: Query2ObjectResult,
+  offset: number = 0,
+  limit: number = NUM_PACKETS_PER_PAGE,
   minimal: boolean = false,
 ): Promise<ApiResponse<Packet[]>> {
   const results = await fetch(`${API_URL}/projects/${projectName}/query`, {
@@ -101,8 +101,8 @@ export async function getPackets(
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('authorization') || '',
     },
-    body: JSON.stringify({ 
-      ...filter, 
+    body: JSON.stringify({
+      ...filter,
       limit, offset,
       minimal,
     })
@@ -111,8 +111,8 @@ export async function getPackets(
 }
 
 export async function getPacketsAfterTime(
-  projectName: string, 
-  filter: Query2ObjectResult, 
+  projectName: string,
+  filter: Query2ObjectResult,
   from: string,
   minimal: boolean = false,
 ): Promise<ApiResponse<Packet[]>> {
@@ -122,8 +122,8 @@ export async function getPacketsAfterTime(
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('authorization') || '',
     },
-    body: JSON.stringify({ 
-      ...filter, 
+    body: JSON.stringify({
+      ...filter,
       from,
       minimal,
     })
@@ -153,6 +153,14 @@ export const defaultDashboardPacket: DashboardPackets = {
   numMostAppeared: 0,
   numLeastAppeared: 0,
 }
+export enum DashboardAdditionalDataType {
+  NUM_PACKETS,
+  ORIGINS,
+  UNIQUE_ENDPOINTS,
+}
+export type DashboardAdditionalDataDto = Omit<Query2ObjectResult, 'body' | 'requestBody' | 'responseBody'> & {
+  type: DashboardAdditionalDataType
+}
 export async function getDashboardPackets(projectName: string, filter: Query2ObjectResult): Promise<ApiResponse<DashboardPackets>> {
   const results = await fetch(`${API_URL}/projects/${projectName}/query_mini_dashboard`, {
     method: 'POST',
@@ -163,4 +171,15 @@ export async function getDashboardPackets(projectName: string, filter: Query2Obj
     body: JSON.stringify(filter)
   });
   return results.json() as unknown as ApiResponse<DashboardPackets>;
+}
+export async function getDashboardAdditionalData(projectName: string, filter: DashboardAdditionalDataDto): Promise<ApiResponse<any>> {
+  const results = await fetch(`${API_URL}/projects/${projectName}/query_mini_dashboard_additional_data`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('authorization') || '',
+    },
+    body: JSON.stringify(filter)
+  });
+  return results.json() as unknown as ApiResponse<any>;
 }

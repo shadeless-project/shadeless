@@ -54,6 +54,23 @@ export class QueryMiniDashboardDto {
   queryDistinct?: boolean;
 }
 
+export enum DashboardAdditionalDataType {
+  NUM_PACKETS,
+  ORIGINS,
+  UNIQUE_ENDPOINTS,
+}
+export class QueryMiniDashboardAdditionalDataDto {
+  @IsObject()
+  criteria: any;
+
+  @IsBoolean()
+  @IsOptional()
+  queryDistinct?: boolean;
+
+  @IsEnum(DashboardAdditionalDataType)
+  type: DashboardAdditionalDataType;
+}
+
 export class QueryPacketDto {
   @IsString()
   @IsOptional()

@@ -15,6 +15,7 @@ import {
   PostProjectDto,
   PutProjectDto,
   PutStatusProjectDto,
+  QueryMiniDashboardAdditionalDataDto,
   QueryMiniDashboardDto,
   QueryPacketAfterTimeDto,
   QueryPacketDto,
@@ -75,6 +76,20 @@ export class ProjectsController {
       projectName,
       queryCriteria,
     );
+    return result;
+  }
+
+  @Post(':name/query_mini_dashboard_additional_data')
+  @HttpCode(200)
+  async miniDashboardAdditionalData(
+    @Param('name') projectName: string,
+    @Body() queryCriteria: QueryMiniDashboardAdditionalDataDto,
+  ) {
+    const result =
+      await this.projectPacketsService.queryDashboardAdditionalData(
+        projectName,
+        queryCriteria,
+      );
     return result;
   }
 
