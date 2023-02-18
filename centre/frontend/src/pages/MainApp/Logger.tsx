@@ -5,10 +5,9 @@ import SearchBar from "./SearchBar";
 import { notify } from "src/libs/notify";
 import { ApiResponse } from "src/libs/apis/types";
 import PacketDetail from "./packet-detail";
-import { FilterBodyType } from "./App";
 import { Query2ObjectResult } from "src/libs/query.parser";
 
-export const NUM_PACKETS_PER_PAGE = 40;
+export const NUM_PACKETS_PER_PAGE = 30;
 
 type LoggerProps = {
   currentProject: string;
@@ -28,7 +27,7 @@ export default function Logger(props: LoggerProps) {
     before: '',
     now: '',
   });
-  const [isLoadingPackets, setIsLoadingPackets ] = React.useState(true);
+  const [isLoadingPackets, setIsLoadingPackets] = React.useState(true);
   const [packetInterval, setPacketInterval] = React.useState({
     from: 0,
     to: NUM_PACKETS_PER_PAGE,
@@ -65,7 +64,7 @@ export default function Logger(props: LoggerProps) {
         res.push(p);
       }
     });
-    return res.sort((a, b) => -isSmaller(a,b));
+    return res.sort((a, b) => -isSmaller(a, b));
   }
 
   async function getLatestPacket() {
@@ -93,7 +92,7 @@ export default function Logger(props: LoggerProps) {
     if (packets.statusCode !== 200) {
       notify(toast, packets as any as ApiResponse<string>, 'get-packet-err-toast');
     } else {
-      packets.data.sort((a, b) => -isSmaller(a,b));
+      packets.data.sort((a, b) => -isSmaller(a, b));
       setPackets(packets.data);
       const newFrom = packets.data.length;
       const newTo = newFrom + NUM_PACKETS_PER_PAGE;
@@ -202,8 +201,8 @@ export default function Logger(props: LoggerProps) {
               lineHeight="20px"
               cursor="pointer"
               _hover={{ bg: 'gray.200' }}
-              onClick={(e) => clickPacket(e, p) }
-              onMouseDown={(e) => setPlaceMouseClick({ x: e.pageX, y: e.pageY }) }
+              onClick={(e) => clickPacket(e, p)}
+              onMouseDown={(e) => setPlaceMouseClick({ x: e.pageX, y: e.pageY })}
               {...(choosingPacket._id === p._id || urlHash === p.requestPacketId) && {
                 bg: 'black',
                 color: 'white',

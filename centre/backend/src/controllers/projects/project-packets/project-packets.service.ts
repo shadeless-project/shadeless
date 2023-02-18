@@ -52,6 +52,17 @@ function countFilteredPacketsAgg(
   return agg.filter((a) => Object.entries(a).length !== 0);
 }
 
+function isObjectContainKey(obj: any, key: string) {
+  if (typeof obj !== 'object') return false;
+  const entries = Object.entries(obj);
+  if (!entries) return false;
+  for (const [k, v] of entries) {
+    if (key === k) return true;
+    if (isObjectContainKey(v, key)) return true;
+  }
+  return false;
+}
+
 function findPacketsAggregation(
   filter: any,
   isHashDistinct = false,
@@ -60,6 +71,28 @@ function findPacketsAggregation(
   limit?: number,
 ) {
   filter = JSON.parse(JSON.stringify(filter));
+
+  // optimize if there's no count filter
+  if (!isObjectContainKey(filter, 'count')) {
+    return [
+      { $match: filter },
+      sort ? { $sort: { createdAt: -1 } } : {},
+      isHashDistinct ? distinctHashAgg : {},
+      skip ? { $skip: skip } : {},
+      limit ? { $limit: limit } : {},
+      {
+        $lookup: {
+          localField: 'hash',
+          from: 'occurences',
+          foreignField: 'hash',
+          as: 'count',
+        },
+      },
+      { $unwind: '$count' },
+      projectAgg,
+    ].filter((a) => Object.entries(a).length !== 0);
+  }
+
   const matchProjectOptimize: any = {};
   if (!!filter.project) {
     const { project } = filter;
@@ -184,7 +217,7 @@ export class ProjectPacketsService {
     @InjectModel(Censor.name) private censorModel: Model<CensorDocument>,
     @InjectModel(RawPacket.name)
     private rawPacketModel: Model<RawPacketDocument>,
-  ) {}
+  ) { }
 
   async countPacket(filter: any, distinctCol = '', isHashDistinct = false) {
     const aggForCountPackets = countFilteredPacketsAgg(
