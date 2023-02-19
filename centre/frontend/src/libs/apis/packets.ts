@@ -132,9 +132,9 @@ export async function getPacketsAfterTime(
 }
 
 export type DashboardPackets = {
-  origins: string[],
-  numPackets : number,
-  uniqueEndpoints: number,
+  origins: string[] | null,
+  numPackets : number | null,
+  uniqueEndpoints: number | null,
   packetMost: Packet[] | null,
   packetMin: Packet[] | null,
   numAllPackets: number,
