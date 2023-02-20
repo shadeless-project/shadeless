@@ -7,7 +7,6 @@ import ProjectsPage from 'src/pages/projects/ProjectsPage';
 import Page404 from './Page404';
 import { Box, Link, Text } from '@chakra-ui/react';
 import Navbar from './common/navbar';
-import Footer from './common/footer';
 import SettingPage from './setting/SettingPage';
 import CensorPage from './censor/Censor';
 import AccountPage from './accounts/Accounts';
@@ -25,7 +24,6 @@ function Routes () {
     <Box
       bg="custom.grey"
       pb="10vh"
-      height="100vh"
     >
       <Navbar />
       <Box

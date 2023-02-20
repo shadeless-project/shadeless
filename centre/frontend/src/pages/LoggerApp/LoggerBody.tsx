@@ -145,6 +145,7 @@ export default function LoggerBody(props: LoggerBodyProps) {
     window.onscroll = async (ev) => {
       if (!isLoadingPackets && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
         setIsLoadingPackets(true);
+        console.log('ok');
         await getPacketsInInterval(packetInterval.from, packetInterval.to);
       }
     };

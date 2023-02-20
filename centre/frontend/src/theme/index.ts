@@ -7,8 +7,11 @@ const config : ThemeConfig = {
 const colors = {
   custom: {
     'white': 'rgb(255, 255, 255)',
+    'primary': 'rgb(97, 91, 194)',
+    'focus-primary': '#E3E2F6',
+    'hover-primary': '#F4F3FC',
+    'hover-grey': 'rgb(249, 249, 249)',
     'grey': 'rgb(244, 244, 244)',
-    'primary': 'rgb(97, 91, 194);',
     'focus-grey': 'rgb(230, 230, 230)',
     'black': 'rgb(10, 10, 10)',
   },

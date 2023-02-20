@@ -20,8 +20,7 @@ function AppPage (props: AppPageProps) {
   return (
     <LoggerContext.Provider value={project}>
       <LoggerDashboard
-        currentProject={project}
-        applyingFilter={applyingFilter} 
+        applyingFilter={applyingFilter}
       />
       <LoggerBody
         applyingFilter={applyingFilter}

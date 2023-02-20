@@ -11,11 +11,12 @@ function ButtonNavigation({ children }: ButtonNavigationProps) {
       <Text
         fontSize="md"
         w="100%"
+        px="20px"
+        py="5px"
         cursor="pointer"
-        p="10px"
-        _hover={{"bg": "custom.grey"}}
+        _hover={{"bg": "custom.hover-grey"}}
         borderColor="custom.primary"
-        borderLeftWidth={location.pathname.slice(1) === children.toLowerCase() ? "2px" : ""}
+        borderLeftWidth={location.pathname.slice(1) === children.toLowerCase() ? "2.5px" : ""}
       >
         {children}
       </Text>
@@ -28,13 +29,13 @@ type SettingPageProps = {
 }
 export default function SettingPage ({ body }: SettingPageProps) {
   return (
-    <Grid 
+    <Grid
       mt="var(--component-distance)"
-      gridTemplateColumns="auto 80%"
+      gridTemplateColumns="auto 85%"
       gridAutoRows="100%"
       width="var(--component-width)"
       mx="auto"
-      gap="10px"
+      gap="20px"
     >
       <Box
         bg="custom.white"

@@ -1,4 +1,4 @@
-import { Box, FormControl, FormLabel, Image, Input, Link, Text, Tooltip } from "@chakra-ui/react";
+import { Box, FormControl, FormLabel, Grid, Image, Input, Link, Text, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { login } from "src/libs/apis/auth";
 import { INSTRUCTION_SHADELESS } from "src/libs/apis/types";
@@ -27,29 +27,26 @@ export default function Login() {
     }
   }
   return (
-    <Box
-      display="grid"
+    <Grid
       height="100vh"
       gridTemplateColumns="1fr 1fr"
     >
-      <Box
-        bg="rgb(20,20,20)"
-      >
+      <Box bg="custom.black">
         <Image
           w="150px"
           h="150px"
           src="/icon.png"
           mx="auto"
-          bg="grey"
+          bg="custom.focus-primary"
           borderRadius="10em"
-          mt="16vh"
+          mt="20vh"
         ></Image>
         <Text
           textAlign="center"
           as="h1"
           fontSize="7xl"
           fontWeight="bold"
-          color="white"
+          color="custom.focus-primary"
         >
           Shadeless
         </Text>
@@ -59,81 +56,91 @@ export default function Login() {
           mt="-40px"
           fontSize="7xl"
           fontWeight="bold"
+          color="custom.focus-primary"
+          opacity=".1"
         >
           Shadeless
         </Text>
       </Box>
-      <Box
-        bg="custom.white !important"
-      >
+      <Box bg="custom.white">
         <Box
-        p="2%"
-        borderRadius="7px"
-        mx="auto"
-        w="60%"
-        minW="400px"
-        mt="30vh"
-      >
-        <FormControl>
-          <FormLabel fontSize="sm">Username&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
-          </FormLabel>
-          <Input
-            id="username"
-            size="md"
-            mt="-3px"
-            fontSize="xs"
-            placeholder="admin"
-            _placeholder={{opacity: '0.6'}}
-          />
-          <FormLabel mt="17px" fontSize="sm">
-            Password&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
-          </FormLabel>
-          <Input
-            id="password"
-            type="password"
-            mt="-3px"
-            size="md"
-            placeholder="***********"
-            onKeyDown={(e) => { if (e.key === 'Enter') document.getElementById('login-btn')?.click() }}
-          />
-
-          {error !== '' &&
-            <Text
-              color="red.500"
-              fontWeight="bold"
-              mt="10px"
+          p="2%"
+          borderRadius="7px"
+          mx="auto"
+          w="60%"
+          minW="400px"
+          mt="30vh"
+        >
+          <FormControl>
+            <FormLabel
+              fontSize="md"
+              fontWeight="600"
             >
-              {error}
-            </Text>
-          }
-          <SubmitButton
-            id="login-btn"
-            mt="15px"
-            bg="black"
-            color="white"
-            isSubmitting={isSubmitting}
-            onClick={submit}
-            _hover={{opacity: '.6'}}
-            w="100%"
-            submittingText="Logging in"
-            mb="10px"
-          >
-            Login
-          </SubmitButton>
+              Username&nbsp;
+              <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            </FormLabel>
+            <Input
+              bg="custom.white"
+              id="username"
+              size="md"
+              mt="-3px"
+              fontSize="sm"
+              placeholder="admin"
+              _placeholder={{opacity: '0.6'}}
+            />
+            <FormLabel
+              mt="17px"
+              fontSize="md"
+              fontWeight="600"
+            >
+              Password&nbsp;
+              <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            </FormLabel>
+            <Input
+              type="password"
+              bg="custom.white"
+              id="password"
+              size="md"
+              mt="-3px"
+              fontSize="sm"
+              placeholder="***********"
+              onKeyDown={(e) => { if (e.key === 'Enter') document.getElementById('login-btn')?.click() }}
+            />
 
-          <Link
-            color="blue"
-            fontSize="sm"
-            href={INSTRUCTION_SHADELESS}
-            rel="noopener noreferer"
-          >
-            Learn more about Shadeless &gt;&gt;&gt;
-          </Link>
-        </FormControl>
+            {error !== '' &&
+              <Text
+                color="red.500"
+                fontWeight="bold"
+                mt="10px"
+              >
+                {error}
+              </Text>
+            }
+            <SubmitButton
+              id="login-btn"
+              mt="15px"
+              isSubmitting={isSubmitting}
+              onClick={submit}
+              w="100%"
+              submittingText="Logging in"
+              mb="10px"
+              colorScheme="purple"
+            >
+              Login
+            </SubmitButton>
+
+            <Link
+              color="custom.primary"
+              fontWeight="600"
+              fontSize="md"
+              href={INSTRUCTION_SHADELESS}
+              rel="noopener noreferer"
+            >
+              Learn more about Shadeless &gt;&gt;&gt;
+            </Link>
+          </FormControl>
+        </Box>
       </Box>
-      </Box>
-    </Box>
+    </Grid>
   );
 }

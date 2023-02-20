@@ -1,11 +1,11 @@
 import { QuestionIcon } from "@chakra-ui/icons";
 import { Box,
   Button,
-  Checkbox, Code, Divider, Input, Modal,
+  Checkbox, Code, Divider, Flex, Input, Modal,
   ModalBody, ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader, ModalOverlay, Text, Tooltip, useDisclosure, useToast } from "@chakra-ui/react";
+  ModalHeader, ModalOverlay, Spinner, Text, Tooltip, useDisclosure, useToast } from "@chakra-ui/react";
 import React from "react";
 import { Censor, CensorType, createCensor, defaultCensor, deleteCensor, getCensors } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
@@ -85,33 +85,33 @@ export default function CensorPage(props: CensorPageProps) {
 
   return (
     <Box
-      mx="auto"
-      w="50%"
-      mt="3vh"
       p="10px"
-      borderRadius="3px"
+      borderRadius="var(--component-border)"
+      boxShadow="sm"
       bg="custom.white"
-      fontSize="sm"
     >
-      <Button
-        id='click-add-censor'
-        size="sm"
-        bg="black"
-        mt="15px"
-        color="white"
-        _hover={{ opacity: ".6" }}
-        onClick={onOpen}
+      <Flex
+        justifyContent="space-between"
+        alignContent="center"
+        alignItems="center"
+        p="15px"
       >
-        Add censor
-      </Button>
+        <Text
+          as="h2"
+          fontSize="3xl"
+        >
+          Global censors {isLoading ? <Spinner ml="10px" /> : <Text as="span">({globalCensors.length})</Text>}
+        </Text>
+        <Button
+          id='click-add-censor'
+          onClick={onOpen}
+          colorScheme="purple"
+          disabled={isLoading}
+        >
+          Add censor
+        </Button>
+      </Flex>
 
-      <Text
-        fontWeight="bold"
-        fontSize="3xl"
-        mt="30px"
-      >
-        # Global censors
-      </Text>
       <CensorTable
         censors={globalCensors}
         isLoading={isLoading}
@@ -120,11 +120,11 @@ export default function CensorPage(props: CensorPageProps) {
       />
 
       <Text
-        fontWeight="bold"
+        as="h2"
         fontSize="3xl"
-        mt="30px"
+        p="15px"
       >
-        # Project censors
+        Project censors {isLoading ? <Spinner ml="10px" /> : <Text as="span">({projectCensors.length})</Text>}
       </Text>
       <CensorTable
         censors={projectCensors}

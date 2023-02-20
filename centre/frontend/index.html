@@ -17,7 +17,7 @@
   <title>Shadeless</title>
   <style>
     :root {
-      --component-width: 70%;
+      --component-width: 85%;
       --component-distance: 2vh;
       --component-border: 10px;
 
@@ -91,6 +91,7 @@
       document.execCommand('copy');
       document.body.removeChild(el);
     };
+    if (location.pathname === '/') location = '/projects';
   </script>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
