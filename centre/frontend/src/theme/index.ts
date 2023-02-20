@@ -5,17 +5,12 @@ const config : ThemeConfig = {
   useSystemColorMode: false,
 };
 const colors = {
-  background: {
-    'primary-black': '#0B2B5A',
-    'primary-active': 'rgb(37, 150, 190)',
-    // 'primary-yellow': '#8C8E53',
-    // 'primary-green': '#175020',
-    'primary-white': 'rgb(255, 255, 255)',
-    'primary-grey': 'var(--bg-grey)',
+  custom: {
+    'white': 'rgb(255, 255, 255)',
+    'grey': 'rgb(244, 244, 244)',
+    'primary': 'rgb(97, 91, 194);',
     'focus-grey': 'rgb(230, 230, 230)',
-    'focus-orange': 'DarkMagenta',
-    // 'focus-white': 'GhostWhite',
-    // 'focus-black': 'black',
+    'black': 'rgb(10, 10, 10)',
   },
 };
 const fonts = {

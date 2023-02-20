@@ -64,7 +64,7 @@ export default function Login() {
         </Text>
       </Box>
       <Box
-        bg="background.primary-white !important"
+        bg="custom.white !important"
       >
         <Box
         p="2%"

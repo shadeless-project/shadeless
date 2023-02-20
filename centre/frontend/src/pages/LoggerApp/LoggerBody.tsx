@@ -1,25 +1,25 @@
-import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Tooltip, Button, Text } from "@chakra-ui/react";
-import React from "react";
+import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Tooltip, Text } from "@chakra-ui/react";
+import React, { useContext } from "react";
 import { getPackets, Packet, getPacketsAfterTime, defaultPacket } from "src/libs/apis/packets";
 import SearchBar from "./SearchBar";
 import { notify } from "src/libs/notify";
 import { ApiResponse } from "src/libs/apis/types";
 import PacketDetail from "./packet-detail";
 import { Query2ObjectResult } from "src/libs/query.parser";
+import { LoggerContext } from "./LoggerAppContext";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
-type LoggerProps = {
-  currentProject: string;
+type LoggerBodyProps = {
   applyingFilter: Query2ObjectResult;
   setApplyingFilter: React.Dispatch<React.SetStateAction<Query2ObjectResult>>;
 }
-export default function Logger(props: LoggerProps) {
+export default function LoggerBody(props: LoggerBodyProps) {
   const {
-    currentProject,
     applyingFilter,
     setApplyingFilter,
   } = props;
+  const currentProject = useContext(LoggerContext);
 
   const toast = useToast();
   const urlHash = location.hash.slice(1);
@@ -132,14 +132,14 @@ export default function Logger(props: LoggerProps) {
       getLatestPacket().then(() => console.log('[Interval] getting latest packets'));
     }, 4000);
     return () => clearInterval(intervalId);
-  }, [packets, applyingFilter, currentProject]);
+  }, [packets, applyingFilter]);
 
   React.useEffect(() => {
     setPackets([]);
     setIsLoadingPackets(true);
     setPacketInterval({ from: 0, to: NUM_PACKETS_PER_PAGE });
     getFirstPackets();
-  }, [applyingFilter, currentProject]);
+  }, [applyingFilter]);
 
   React.useEffect(() => {
     window.onscroll = async (ev) => {
@@ -148,13 +148,13 @@ export default function Logger(props: LoggerProps) {
         await getPacketsInInterval(packetInterval.from, packetInterval.to);
       }
     };
-  }, [isLoadingPackets, packetInterval, applyingFilter, currentProject]);
+  }, [isLoadingPackets, packetInterval, applyingFilter]);
 
   return (
     <Box
       mx="auto" mt="3vh"
-      bg="background.primary-white"
-      w="95%"
+      bg="custom.white"
+      w="var(--component-width)"
       borderRadius="3px"
       p="1em"
     >

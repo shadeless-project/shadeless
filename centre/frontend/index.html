@@ -17,7 +17,9 @@
   <title>Shadeless</title>
   <style>
     :root {
-      --bg-grey: rgb(249, 249, 249);
+      --component-width: 70%;
+      --component-distance: 2vh;
+      --component-border: 10px;
 
       font-size: 16px;
       line-height: 24px;
@@ -73,6 +75,23 @@
   </style>
 </head>
 <body>
+  <script>
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    if (!window.indexedDB) {
+      alert("Your browser doesn't support a stable version of IndexedDB. Please use new browser to use this service");
+    }
+    window.copyToClipboard = (str) => {
+      const el = document.createElement('textarea');
+      el.value = str;
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    };
+  </script>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box } from '@chakra-ui/react';
-import Logger from './Logger';
-import MiniDashboard from './MiniDashboard';
+import LoggerBody from './LoggerBody';
+import LoggerDashboard from './LoggerDashboard';
 import { defaultQuery2ObjectResult, Query2ObjectResult } from 'src/libs/query.parser';
+import { LoggerContext } from './LoggerAppContext';
 
 export type FilterBodyType = {
   body?: string;
@@ -18,21 +18,16 @@ function AppPage (props: AppPageProps) {
   const [applyingFilter, setApplyingFilter] = React.useState<Query2ObjectResult>(defaultQuery2ObjectResult);
 
   return (
-    <>
-      {project !== '' &&
-        <Box>
-          <MiniDashboard
-            currentProject={project}
-            applyingFilter={applyingFilter} 
-          />
-          <Logger
-            currentProject={project}
-            applyingFilter={applyingFilter}
-            setApplyingFilter={setApplyingFilter}
-          />
-        </Box>
-      }
-    </>
+    <LoggerContext.Provider value={project}>
+      <LoggerDashboard
+        currentProject={project}
+        applyingFilter={applyingFilter} 
+      />
+      <LoggerBody
+        applyingFilter={applyingFilter}
+        setApplyingFilter={setApplyingFilter}
+      />
+    </LoggerContext.Provider>
   );
 }
 

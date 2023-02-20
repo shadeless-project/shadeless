@@ -6,7 +6,7 @@ function Page404 () {
   const [location] = useLocation();
   return (
     <Box
-      bg="background.primary-grey"
+      bg="custom.grey"
       pb="4vh"
     >
       <Text

@@ -58,13 +58,13 @@ export default function AccountPage() {
         mt="3vh"
         p="10px"
         borderRadius="3px"
-        bg="background.primary-white"
+        bg="custom.white"
         fontSize="sm"
       >
         <Button
           id='click-add-account'
           size="sm"
-          bg="black"
+          bg="custom.black"
           mt="15px"
           color="white"
           _hover={{ opacity: ".6" }}

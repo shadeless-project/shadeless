@@ -1,98 +1,74 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Route, useLocation, Switch } from 'wouter';
 
-import AppPage from 'src/pages/MainApp/App';
-import SettingPage from 'src/pages/Setting';
+import AppPage from 'src/pages/LoggerApp/App';
+import ProjectsPage from 'src/pages/projects/ProjectsPage';
 
-import Footer from 'src/pages/common/footer';
-import storage from 'src/libs/storage';
 import Page404 from './Page404';
-import { notify } from 'src/libs/notify';
-import { Box, Progress, Text, useToast } from '@chakra-ui/react';
-import CensorPage from './censor/Censor';
-import { getAllProjects } from 'src/libs/apis/projects';
+import { Box, Link, Text } from '@chakra-ui/react';
 import Navbar from './common/navbar';
+import Footer from './common/footer';
+import SettingPage from './setting/SettingPage';
+import CensorPage from './censor/Censor';
 import AccountPage from './accounts/Accounts';
 
 function Routes () {
-  const setLocation = useLocation()[1];
-
-  const toast = useToast();
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [currentProject, setCurrentProject] = React.useState('');
+  const [location, setLocation] = useLocation();
+  const [myLocation, setMyLocation] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    const checkHasChosenProject = async () => {
-      const resp = await getAllProjects();
-      const curProject = storage.getProject() || '';
-      setIsLoading(false);
-      if (curProject === '' || !resp.data.find(p => curProject === p.name)) {
-        setLocation('/setting');
-        notify(toast, { statusCode: 404, data: '', error: `Not found project ${storage.getProject()} in database` });
-        return;
-      }
-      setCurrentProject(curProject);
-    }
-    checkHasChosenProject();
-  }, []);
+    const myLocation = location.split('/').filter(v => v !== '');
+    setMyLocation(myLocation);
+  }, [location]);
 
   return (
     <Box
-      bg="background.primary-grey"
+      bg="custom.grey"
       pb="10vh"
+      height="100vh"
     >
-      {isLoading ?
-        <Box
-          position="absolute"
-          top="40vh"
-          left="25%"
-          width="50%"
-          m="auto"
-        >
-          <Text
-            as="h2"
-            fontSize="2xl"
-            mb="7px"
-            fontWeight="bold"
-            textAlign="center"
-          >
-            Shadeless
-          </Text>
-          <Progress
-            hasStripe
-            colorScheme="black"
-            isIndeterminate
-          />
-        </Box>
-        :
-        <>
-          <Navbar />
-          <Switch>
-            <Route path="/setting">
-              <SettingPage />
-              <Footer />
-            </Route>
+      <Navbar />
+      <Box
+        fontSize="sm"
+        mx="auto"
+        width="var(--component-width)"
+        mt="var(--component-distance)"
+      >
+        /&nbsp;
+        <Link color="custom.primary" href={"/" + myLocation[0]}>
+          {myLocation[0]}
+        </Link>
+        {myLocation.length > 1 &&
+          <Box display="inline">
+            &nbsp;/&nbsp;
+            <Text as="span">
+              {myLocation[1]}
+            </Text>
+          </Box>
+        }
+      </Box>
 
-            <Route path="/">
-              <AppPage project={currentProject} />
-              <Footer />
-            </Route>
-            <Route path="/censor">
-              <CensorPage project={currentProject} />
-              <Footer />
-            </Route>
-            <Route path="/accounts">
-              <AccountPage />
-              <Footer />
-            </Route>
-            <Route>
-              <Page404 />
-              <Footer />
-            </Route>
-          </Switch>
-        </>
-      }
+      <Switch>
+        <Route path="/projects/:name">
+          {(params) => <AppPage project={params.name} />}
+        </Route>
+        <Route path="/:pageType">
+          {(params) => {
+            switch (params.pageType) {
+              case 'projects':
+                return <SettingPage body={<ProjectsPage />}/>
+              case 'censors':
+                return <SettingPage body={<CensorPage />}/>
+              case 'censors':
+                return <SettingPage body={<AccountPage />}/>
+            }
+            return <SettingPage body={<Page404 />} />
+          }}
+        </Route>
+        <Route>
+          <Page404 />
+        </Route>
+      </Switch>
     </Box>
   );
 }

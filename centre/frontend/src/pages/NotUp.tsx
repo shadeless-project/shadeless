@@ -13,9 +13,9 @@ export default function NotUp() {
     return () => clearInterval(intervalId);
   }, []);
   return (
-    <Box bg="background.primary-grey">
+    <Box bg="custom.grey">
       <Box
-        bg="background.primary-white"
+        bg="custom.white"
         p="20px"
         boxShadow="md"
         mt="30vh"

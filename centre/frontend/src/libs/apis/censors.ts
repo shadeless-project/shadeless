@@ -23,7 +23,7 @@ export const defaultCensor = {
 }
 export const CENSOR_CONDITION = ['method', 'origin', 'path'];
 
-export async function getCensors(projectName: string): Promise<ApiResponse<Censor[]>> {
+export async function getCensors(projectName?: string): Promise<ApiResponse<Censor[]>> {
   const endpoint = `${API_URL}/censors?project=${projectName}`;
   const resp = await fetch(endpoint, {
     headers: {
@@ -33,7 +33,7 @@ export async function getCensors(projectName: string): Promise<ApiResponse<Censo
   return resp.json() as unknown as ApiResponse<Censor[]>;
 }
 
-export async function createCensor(project: string, condition: any, isAll: boolean): Promise<ApiResponse<string>> {
+export async function createCensor(project: string | undefined, condition: any, isAll: boolean): Promise<ApiResponse<string>> {
   const endpoint = `${API_URL}/censors`;
   const resp = await fetch(endpoint, {
     method: 'POST',

@@ -6,8 +6,8 @@ import { API_URL } from './types';
 const NUMBER_OF_CHARACTER_NON_READDABLE = 200;
 const validator = new HeuristicValidator();
 
-export async function getFileContentFromId (id: string): Promise<[string, MyError | null]> {
-  const endpoint = `${API_URL}/files/${storage.getProject()}/${id}`;
+export async function getFileContentFromId (project: string, id: string): Promise<[string, MyError | null]> {
+  const endpoint = `${API_URL}/files/${project}/${id}`;
   const data = await fetch(endpoint, {
     headers: {
       'Authorization': localStorage.getItem('authorization') || '',

@@ -1,34 +1,9 @@
 import { ApiResponse, API_URL } from "./types";
 
-/* eslint-disable no-unused-vars */
-export enum ProjectStatus {
-  TODO = 'todo',
-  HACKING = 'hacking',
-  DONE = 'done',
-}
-
-export enum BlacklistType {
-  BLACKLIST_REGEX = 'regex',
-  BLACKLIST_VALUE = 'value',
-}
-
-export function convertStringToBlacklistType (s: string): BlacklistType {
-  if (s === BlacklistType.BLACKLIST_REGEX) return BlacklistType.BLACKLIST_REGEX;
-  return BlacklistType.BLACKLIST_VALUE;
-}
-
-export type Blacklist = {
-  value: string,
-  type: BlacklistType,
-}
-
 export const defaultProject: Project = {
   _id: '',
   name: '',
   description: '',
-  status: ProjectStatus.TODO,
-  blacklist: [],
-  whitelist: '',
   createdAt: new Date(),
 };
 
@@ -36,12 +11,8 @@ export type Project = {
   _id: string,
   name: string,
   description: string,
-  status: ProjectStatus,
-  blacklist: Blacklist[],
-  whitelist: string,
   createdAt: Date,
 };
-
 
 export async function getOneProject(name: string): Promise<ApiResponse<Project>> {
   const project = await fetch(`${API_URL}/projects/${name}`, {
@@ -71,18 +42,6 @@ export async function createProject(body: { name: string; description: string })
     body: JSON.stringify(body),
   });
   return createProject.json() as unknown as ApiResponse<string>;
-}
-
-export async function editProjectStatus(status: ProjectStatus, name: string): Promise<ApiResponse<string>> {
-  const editProject = await fetch(`${API_URL}/projects/${name}/status`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('authorization') || '',
-    },
-    body: JSON.stringify({ status }),
-  });
-  return editProject.json() as unknown as ApiResponse<string>;
 }
 
 export async function editProject (body: Partial<Project>, name: string): Promise<ApiResponse<string>> {

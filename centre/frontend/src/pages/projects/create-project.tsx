@@ -22,7 +22,7 @@ function CreateProjectBox (props: Props) {
   return (
     <Box
       mt="2vh"
-      bg="background.primary-white"
+      bg="custom.white"
       mx="10%"
       px="2%" py="2%"
       boxShadow="sm"
@@ -37,14 +37,14 @@ function CreateProjectBox (props: Props) {
       </Heading>
       <Input
         border="1px solid black"
-        bg="background.primary-white"
+        bg="custom.white"
         mb={3}
         placeholder="Project name: i.e viettel"
         onChange={(event) => setName(event.target.value)}
       />
       <Textarea
         border="1px solid black"
-        bg="background.primary-white"
+        bg="custom.white"
         mb={3}
         placeholder="Project description (your target): i.e viettel.vn, apk.com.vietteltelecom, lifebox.vn"
         onChange={(event) => setDescription(event.target.value)}

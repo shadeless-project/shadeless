@@ -5,7 +5,7 @@ import { Box,
   ModalBody, ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader, ModalOverlay, Text, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+  ModalHeader, ModalOverlay, Text, Tooltip, useDisclosure, useToast } from "@chakra-ui/react";
 import React from "react";
 import { Censor, CensorType, createCensor, defaultCensor, deleteCensor, getCensors } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
@@ -13,7 +13,7 @@ import { getUserRole } from "src/libs/storage";
 import CensorTable from "./censor-table";
 
 type CensorPageProps = {
-  project: string;
+  project?: string;
 }
 export default function CensorPage(props: CensorPageProps) {
   const { project } = props;
@@ -90,7 +90,7 @@ export default function CensorPage(props: CensorPageProps) {
       mt="3vh"
       p="10px"
       borderRadius="3px"
-      bg="background.primary-white"
+      bg="custom.white"
       fontSize="sm"
     >
       <Button

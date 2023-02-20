@@ -1,19 +1,17 @@
 import { Box, Button, Grid, SkeletonText, Spinner, Stat, StatLabel, StatNumber, Text, Tooltip, useToast } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import { DashboardAdditionalDataType, DashboardPackets, defaultDashboardPacket, getDashboardAdditionalData, getDashboardPackets, getPackets, Packet } from "src/libs/apis/packets";
 import { notify } from "src/libs/notify";
 import { Query2ObjectResult } from "src/libs/query.parser";
 import storage from 'src/libs/storage';
+import { LoggerContext } from "./LoggerAppContext";
 
-type MiniDashboardProps = {
-  currentProject: string;
+type LoggerDashboardProps = {
   applyingFilter: Query2ObjectResult;
 };
-export default function MiniDashboard (props: MiniDashboardProps) {
-  const {
-    applyingFilter,
-    currentProject,
-  } = props;
+export default function LoggerDashboard (props: LoggerDashboardProps) {
+  const { applyingFilter } = props;
+  const currentProject = useContext(LoggerContext);
 
   const toast = useToast();
 
@@ -129,27 +127,20 @@ export default function MiniDashboard (props: MiniDashboardProps) {
   }, [applyingFilter]);
 
   function clickCopyOrigins() {
-    function copyToClipboard(s: string, message: string) {
-      const el = document.createElement('textarea');
-      el.value = s;
-      el.setAttribute('readonly', '');
-      el.style.position = 'absolute';
-      el.style.left = '-9999px';
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      notify(toast, { statusCode: 200, data: message, error: '' });
-    }
-    copyToClipboard(dashboardOrigins.join(','), 'Copied matched origins');
+    window.copyToClipboard(dashboardOrigins.join(',')); 
+    notify(toast, { statusCode: 200, data: 'Copied matched origins', error: '' });
   }
   return (
-    <Box width="95%" mx="auto" mt="2vh">
+    <Box 
+      width="var(--component-width)" 
+      mx="auto" 
+      mt="1vh"
+    >
       <Grid gridTemplateColumns={{base:"1fr", lg: "1fr 1fr"}} gridGap="10px">
 
         <Grid gridTemplateColumns="1fr 1fr 1fr" gridGap="10px">
           <Stat
-            bg="background.primary-white"
+            bg="custom.white"
             p="5px"
             pl="10px"
             boxShadow="sm"
@@ -195,7 +186,7 @@ export default function MiniDashboard (props: MiniDashboardProps) {
           </Stat>
 
           <Stat
-            bg="background.primary-white"
+            bg="custom.white"
             p="5px"
             pl="10px"
             boxShadow="sm"
@@ -227,7 +218,7 @@ export default function MiniDashboard (props: MiniDashboardProps) {
           </Stat>
 
           <Stat
-            bg="background.primary-white"
+            bg="custom.white"
             p="5px"
             pl="10px"
             boxShadow="sm"
@@ -255,7 +246,7 @@ export default function MiniDashboard (props: MiniDashboardProps) {
 
         <Grid gridTemplateColumns="1fr 1fr" gridGap="10px">
           <Stat
-            bg="background.primary-white"
+            bg="custom.white"
             overflow="auto"
             p="5px"
             pl="10px"
@@ -269,7 +260,7 @@ export default function MiniDashboard (props: MiniDashboardProps) {
             >
               Most repetitive endpoint&nbsp;
               <Text as="span" fontSize="xs" opacity="1">
-                ({isMostLeastPacketsLoading ? <Spinner w="13px" h="13px"/>:(mostLeastPackets.most as any)[0].count} times)
+                ({isMostLeastPacketsLoading ? <Spinner w="13px" h="13px"/>:(mostLeastPackets.most as any)[0]?.count || 0} times)
               </Text>
             </StatLabel>
             <StatNumber
@@ -298,7 +289,7 @@ export default function MiniDashboard (props: MiniDashboardProps) {
           </Stat>
 
           <Stat
-            bg="background.primary-white"
+            bg="custom.white"
             p="5px"
             pl="10px"
             overflowY="auto"
@@ -311,7 +302,7 @@ export default function MiniDashboard (props: MiniDashboardProps) {
             >
               Least repetitive endpoint&nbsp;
               <Text as="span" fontSize="xs" opacity="1">
-                ({isMostLeastPacketsLoading ? <Spinner w="13px" h="13px"/>:(mostLeastPackets.least as any)[0].count} times) (max 50 only)
+                ({isMostLeastPacketsLoading ? <Spinner w="13px" h="13px"/>:(mostLeastPackets.least as any)[0]?.count || 0} times) (max 50 only)
               </Text>
             </StatLabel>
             <StatNumber

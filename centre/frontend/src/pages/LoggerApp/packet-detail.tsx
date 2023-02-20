@@ -1,12 +1,13 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, Grid, Text, Tooltip, useToast } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import { getFileContentFromId } from "src/libs/apis/files";
 import { Packet } from "src/libs/apis/packets";
 import { notify } from "src/libs/notify";
 import HalfPacket from "./HalfPacket";
 import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
+import { LoggerContext } from "./LoggerAppContext";
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -22,6 +23,7 @@ type PacketDetailProps = {
 }
 export default function PacketDetail(props: PacketDetailProps) {
   const { setIsShowingDetail, packet, setFilter } = props;
+  const currentProject = useContext(LoggerContext);
 
   const toast = useToast();
 
@@ -38,17 +40,8 @@ export default function PacketDetail(props: PacketDetailProps) {
     setShowChooseHeight(false);
   }
 
-  function copyToClipboard(s: string, message: string) {
-    const el = document.createElement('textarea');
-    el.value = s;
-    el.setAttribute('readonly', '');
-    el.style.position = 'absolute';
-    el.style.left = '-9999px';
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-
+  function notifyCopyClipboard(s: string, message: string) {
+    window.copyToClipboard(s);
     notify(toast, { statusCode: 200, data: message, error: '' });
   }
 
@@ -74,8 +67,8 @@ export default function PacketDetail(props: PacketDetailProps) {
 
   React.useEffect(() => {
     const getBodies = async () => {
-      const [reqBody, errReq] = await getFileContentFromId(packet.requestBodyHash);
-      const [resBody, errRes] = await getFileContentFromId(packet.responseBodyHash);
+      const [reqBody, errReq] = await getFileContentFromId(currentProject, packet.requestBodyHash);
+      const [resBody, errRes] = await getFileContentFromId(currentProject, packet.responseBodyHash);
       setRequestBody(reqBody);
       if (errReq) setErrRequest(errReq.message);
       else setErrRequest('');
@@ -108,7 +101,7 @@ export default function PacketDetail(props: PacketDetailProps) {
   return (
     <Box
       maxHeight={`${choosingHeight}vh`}
-      bg="background.primary-white"
+      bg="custom.white"
       color="black"
       position="fixed"
       bottom="0"
@@ -131,7 +124,7 @@ export default function PacketDetail(props: PacketDetailProps) {
           tooltip="Copy URL"
           bg="red.200"
           onClick={
-            () => copyToClipboard(
+            () => notifyCopyClipboard(
               `${packet.origin}${packet.path}${packet.querystring !== null ? `?${packet.querystring}` : ''}`,
               'Copied URL',
             )
@@ -142,14 +135,14 @@ export default function PacketDetail(props: PacketDetailProps) {
         <UtilityButton
           tooltip="Copy full request"
           bg="purple.200"
-          onClick={() => copyToClipboard(contentRequest, 'Copied full request')}
+          onClick={() => notifyCopyClipboard(contentRequest, 'Copied full request')}
         >
           Req
         </UtilityButton>
         <UtilityButton
           tooltip="Copy full response"
           bg="gray.100"
-          onClick={() => copyToClipboard(contentResponse, 'Copied full response')}
+          onClick={() => notifyCopyClipboard(contentResponse, 'Copied full response')}
         >
           Res
         </UtilityButton>
