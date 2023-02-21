@@ -29,6 +29,29 @@ export default function ProjectsPage() {
   React.useEffect(() => {
     uiGetAllProjects();
   }, []);
+
+  React.useEffect(() => {
+    function loadOnUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const updateProjectName = urlParams.get('editProject');
+      const updatingProject = projects.find(project => project.name === updateProjectName);
+      if (updatingProject) {
+        setEdittingProject(updatingProject);
+        window.history.pushState({}, '', location.pathname);
+        setTimeout(onOpenEdit, 150);
+      }
+
+      const deletingProjectName = urlParams.get('deleteProject');
+      const deletingProject = projects.find(project => project.name === deletingProjectName);
+      if (deletingProject) {
+        setDeletingProject(deletingProject);
+        window.history.pushState({}, '', location.pathname);
+        setTimeout(onOpen, 150);
+      }
+    }
+    loadOnUrl();
+  }, [projects]);
+
   return (
     <Box
       p="10px"
@@ -83,7 +106,14 @@ export default function ProjectsPage() {
               >
                 <Td>{idx + 1}</Td>
                 <Td>{p.name}</Td>
-                <Td>{p.description}</Td>
+                <Td
+                  maxW="500px"
+                  wordBreak="break-word"
+                  whiteSpace='pre-wrap'
+                  lineHeight="1.5em"
+                >
+                  {p.description}
+                </Td>
                 <Td><ProjectStat projectName={p.name} /></Td>
                 <Td>{window.formatDate(p.createdAt)}</Td>
                 <Td>

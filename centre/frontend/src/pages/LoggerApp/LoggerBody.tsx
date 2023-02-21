@@ -153,10 +153,11 @@ export default function LoggerBody(props: LoggerBodyProps) {
 
   return (
     <Box
-      mx="auto" mt="3vh"
+      mx="auto"
+      mt="var(--component-distance)"
       bg="custom.white"
       w="var(--component-width)"
-      borderRadius="3px"
+      borderRadius="var(--component-border)"
       p="1em"
     >
       <SearchBar
@@ -201,12 +202,12 @@ export default function LoggerBody(props: LoggerBodyProps) {
               key={`packet-${p._id}`}
               lineHeight="20px"
               cursor="pointer"
-              _hover={{ bg: 'gray.200' }}
+              _hover={{ bg: 'custom.grey' }}
               onClick={(e) => clickPacket(e, p)}
               onMouseDown={(e) => setPlaceMouseClick({ x: e.pageX, y: e.pageY })}
               {...(choosingPacket._id === p._id || urlHash === p.requestPacketId) && {
-                bg: 'black',
-                color: 'white',
+                bg: 'custom.black',
+                color: 'custom.white',
                 _hover: { 'opacity': '.7' },
                 fontWeight: "500"
               }}

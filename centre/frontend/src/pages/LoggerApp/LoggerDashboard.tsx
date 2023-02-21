@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 import { DashboardAdditionalDataType, DashboardPackets, defaultDashboardPacket, getDashboardAdditionalData, getDashboardPackets, getPackets, Packet } from "src/libs/apis/packets";
 import { notify } from "src/libs/notify";
 import { Query2ObjectResult } from "src/libs/query.parser";
-import storage from 'src/libs/storage';
 import { LoggerContext } from "./LoggerAppContext";
 
 type LoggerDashboardProps = {
@@ -134,7 +133,8 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
     <Box
       width="var(--component-width)"
       mx="auto"
-      mt="1vh"
+      mt="var(--component-distance)"
+      borderRadius="var(--component-border)"
     >
       <Grid gridTemplateColumns={{base:"1fr", lg: "1fr 1fr"}} gridGap="10px">
 
@@ -178,7 +178,9 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
                   height="100%"
                   width="1vw"
                   borderRadius="0"
-                  colorScheme="blackAlpha"
+                  bg="custom.primary"
+                  _hover={{ opacity: '.8' }}
+                  _active={{ opacity: '.9' }}
                   onClick={clickCopyOrigins}
                 ></Button>
               </Tooltip>

@@ -50,7 +50,7 @@ function Navbar () {
               _hover={{ bg: 'custom.focus-grey' }}
               _active={{ bg: 'custom.focus-grey' }}
             >
-              <HamburgerIcon />
+              {window.getUser().username}&nbsp;&nbsp;<HamburgerIcon />
             </MenuButton>
             <MenuList>
               <Link href='/projects'>

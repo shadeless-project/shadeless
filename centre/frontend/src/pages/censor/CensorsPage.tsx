@@ -32,7 +32,7 @@ export default function CensorPage() {
   const [projectCensors, setProjectCensors] = React.useState<Censor[]>([]);
   React.useEffect(() => {
     setGlobalCensors(censors.filter(c => c.type === CensorType.ALL));
-    setProjectCensors(censors.filter(c => c.type === CensorType.ONE && c.project === project));
+    setProjectCensors(censors.filter(c => c.type === CensorType.ONE && c.project === currentProject));
   }, [censors]);
 
   return (
@@ -70,19 +70,23 @@ export default function CensorPage() {
         onOpenModalDel={onOpenModalDel}
       />
 
-      <Text
-        as="h2"
-        fontSize="3xl"
-        p="15px"
-      >
-        Project censors {isLoading ? <Spinner ml="10px" /> : <Text as="span">({projectCensors.length})</Text>}
-      </Text>
-      <CensorTable
-        censors={projectCensors}
-        isLoading={isLoading}
-        setDeletingCensor={setDeletingCensor}
-        onOpenModalDel={onOpenModalDel}
-      />
+      {currentProject !== '' &&
+        <React.Fragment>
+          <Text
+            as="h2"
+            fontSize="3xl"
+            p="15px"
+          >
+            Project censors {isLoading ? <Spinner ml="10px" /> : <Text as="span">({projectCensors.length})</Text>}
+          </Text>
+          <CensorTable
+            censors={projectCensors}
+            isLoading={isLoading}
+            setDeletingCensor={setDeletingCensor}
+            onOpenModalDel={onOpenModalDel}
+          />
+        </React.Fragment>
+      }
 
       <AddCensorModal
         isOpen={isOpen}

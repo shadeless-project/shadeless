@@ -40,7 +40,6 @@ export default function AddCensorModal (props: Props) {
     if (resp.statusCode === 200) {
       callback();
       onClose();
-      window.history.pushState({}, '', location.pathname);
     }
   }
 
@@ -51,7 +50,10 @@ export default function AddCensorModal (props: Props) {
       setCensorOrigin(urlParams.get('censorOrigin') || '');
       setCensorPath(urlParams.get('censorPath') || '');
       if (urlParams.toString() !== '') {
-        setTimeout(() => document.getElementById('click-add-censor')?.click(), 150);
+        setTimeout(() => {
+          document.getElementById('click-add-censor')?.click();
+          window.history.pushState({}, '', location.pathname);
+        }, 150);
       }
     }
     loadCensorOnUrl();

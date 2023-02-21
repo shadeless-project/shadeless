@@ -102,7 +102,7 @@ export default function PacketDetail(props: PacketDetailProps) {
     <Box
       maxHeight={`${choosingHeight}vh`}
       bg="custom.white"
-      color="black"
+      color="custom.black"
       position="fixed"
       bottom="0"
       left="0"
@@ -111,10 +111,12 @@ export default function PacketDetail(props: PacketDetailProps) {
     >
       <Flex
         w="100%"
-        bg="orange.200"
-        borderTop="1px solid black"
+        bg="custom.focus-primary"
+        borderColor="custom.black"
+        borderTopWidth="1px"
         alignItems="center"
         px="1%"
+        py="2px"
       >
         <Text fontWeight="500" fontSize="2xs" mr="10px">
           <Text cursor="default" as="span">| <Tooltip placement="top" fontSize="2xs" label="Contributor">{packet.codeName}</Tooltip> | <Tooltip placement="top" fontSize="2xs" label="PacketID">{packet.requestPacketId}</Tooltip> |</Text>
@@ -160,7 +162,7 @@ export default function PacketDetail(props: PacketDetailProps) {
             tooltip="Censor this packet"
             bg="gray.100"
             fontSize="xs"
-            onClick={() => location.href = `/censor?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`}
+            onClick={() => location.href = location.pathname + `/censors?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`}
           >
             🕶️
           </UtilityButton>
