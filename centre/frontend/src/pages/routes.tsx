@@ -8,8 +8,8 @@ import Page404 from './Page404';
 import { Box, Link, Text } from '@chakra-ui/react';
 import Navbar from './common/navbar';
 import SettingPage from './setting/SettingPage';
-import CensorPage from './censor/Censor';
-import AccountPage from './accounts/Accounts';
+import CensorPage from './censor/CensorsPage';
+import AccountsPage from './accounts/AccountsPage';
 
 function Routes () {
   const [location, setLocation] = useLocation();
@@ -57,8 +57,8 @@ function Routes () {
                 return <SettingPage body={<ProjectsPage />}/>
               case 'censors':
                 return <SettingPage body={<CensorPage />}/>
-              case 'censors':
-                return <SettingPage body={<AccountPage />}/>
+              case 'accounts':
+                return <SettingPage body={<AccountsPage />}/>
             }
             return <SettingPage body={<Page404 />} />
           }}

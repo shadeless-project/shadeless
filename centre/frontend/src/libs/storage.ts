@@ -58,14 +58,3 @@ class Storage {
 
 const MyStorage = new Storage();
 export default MyStorage;
-
-export function getUserRole() {
-  const auth = localStorage.getItem('authorization') || '';
-  try {
-    const splitted = auth.split('.');
-    if (splitted.length !== 3) return '';
-    return JSON.parse(atob(splitted[1])).role;
-  } catch (err) {
-    return '';
-  }
-}

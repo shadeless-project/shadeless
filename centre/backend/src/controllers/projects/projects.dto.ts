@@ -8,7 +8,6 @@ import {
   Matches,
   Min,
 } from 'class-validator';
-import { ProjectStatus } from 'libs/schemas/project.schema';
 
 export class PostProjectDto {
   @IsString()
@@ -18,16 +17,8 @@ export class PostProjectDto {
   @IsString()
   description: string;
 }
-export class PutStatusProjectDto {
-  @IsEnum(ProjectStatus)
-  status: ProjectStatus;
-}
 
 export class PutProjectDto {
-  @IsEnum(ProjectStatus)
-  @IsOptional()
-  status?: ProjectStatus;
-
   @IsString()
   @IsOptional()
   description?: string;
@@ -130,9 +121,4 @@ export class QueryPacketAfterTimeDto {
   @IsBoolean()
   @IsOptional()
   minimal?: boolean;
-}
-
-export class DeleteProjectDto {
-  @IsBoolean()
-  all: boolean;
 }

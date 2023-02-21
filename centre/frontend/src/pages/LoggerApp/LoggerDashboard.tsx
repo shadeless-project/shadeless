@@ -63,10 +63,10 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
       setIsMostLeastPacketsLoading(true);
       setIsLoading(true);
       setDashboardData(defaultDashboardPacket);
-      const resp = await getDashboardPackets(storage.getProject(), applyingFilter);
+      const resp = await getDashboardPackets(currentProject, applyingFilter);
       if (resp.statusCode === 200) {
         if (resp.data.origins === null) {
-          getDashboardAdditionalData(storage.getProject(), {
+          getDashboardAdditionalData(currentProject, {
             ...applyingFilter,
             type: DashboardAdditionalDataType.ORIGINS
           }).then(resp => {
@@ -78,7 +78,7 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
           setDasboardOrigins(resp.data.origins);
         }
         if (resp.data.numPackets === null) {
-          getDashboardAdditionalData(storage.getProject(), {
+          getDashboardAdditionalData(currentProject, {
             ...applyingFilter,
             type: DashboardAdditionalDataType.NUM_PACKETS
           }).then(resp => {
@@ -90,7 +90,7 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
           setDasboardNumPackets(resp.data.numPackets);
         }
         if (resp.data.uniqueEndpoints === null) {
-          getDashboardAdditionalData(storage.getProject(), {
+          getDashboardAdditionalData(currentProject, {
             ...applyingFilter,
             type: DashboardAdditionalDataType.UNIQUE_ENDPOINTS
           }).then(resp => {
@@ -127,13 +127,13 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
   }, [applyingFilter]);
 
   function clickCopyOrigins() {
-    window.copyToClipboard(dashboardOrigins.join(',')); 
+    window.copyToClipboard(dashboardOrigins.join(','));
     notify(toast, { statusCode: 200, data: 'Copied matched origins', error: '' });
   }
   return (
-    <Box 
-      width="var(--component-width)" 
-      mx="auto" 
+    <Box
+      width="var(--component-width)"
+      mx="auto"
       mt="1vh"
     >
       <Grid gridTemplateColumns={{base:"1fr", lg: "1fr 1fr"}} gridGap="10px">

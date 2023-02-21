@@ -124,7 +124,6 @@ export default function Login() {
               w="100%"
               submittingText="Logging in"
               mb="10px"
-              colorScheme="purple"
             >
               Login
             </SubmitButton>

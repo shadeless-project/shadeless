@@ -11,10 +11,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
-  DeleteProjectDto,
   PostProjectDto,
   PutProjectDto,
-  PutStatusProjectDto,
   QueryMiniDashboardAdditionalDataDto,
   QueryMiniDashboardDto,
   QueryPacketAfterTimeDto,
@@ -155,19 +153,8 @@ export class ProjectsController {
     return this.projectsService.updateProject(name, body);
   }
 
-  @Put(':name/status')
-  async putStatusProject(
-    @Param('name') name: string,
-    @Body() body: PutStatusProjectDto,
-  ) {
-    return this.projectsService.updateProjectStatus(name, body.status);
-  }
-
   @Delete(':name')
-  async deleteProject(
-    @Param('name') name: string,
-    @Body() body: DeleteProjectDto,
-  ) {
-    return this.projectsService.deleteProject(name, body.all);
+  async deleteProject(@Param('name') name: string) {
+    return this.projectsService.deleteProject(name);
   }
 }

@@ -4,4 +4,4 @@
 import React from "react";
 
 // Create a context for the current theme (with "light" as the default).
-export const LoggerContext = React.createContext('projectName');
+export const LoggerContext = React.createContext('');

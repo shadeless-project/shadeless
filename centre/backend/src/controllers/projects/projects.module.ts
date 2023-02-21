@@ -10,12 +10,16 @@ import { RawPacket, RawPacketSchema } from 'libs/schemas/raw_packet.schema';
 import { File, FileSchema } from 'libs/schemas/file.schema';
 import { Path, PathSchema } from 'libs/schemas/path.schema';
 import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
+import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
 
 @Module({
   controllers: [ProjectsController],
   imports: [
     MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: Occurence.name, schema: OccurenceSchema },
+    ]),
     MongooseModule.forFeature([{ name: File.name, schema: FileSchema }]),
     MongooseModule.forFeature([{ name: Path.name, schema: PathSchema }]),
     MongooseModule.forFeature([{ name: Censor.name, schema: CensorSchema }]),

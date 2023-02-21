@@ -1,5 +1,4 @@
 import { Box, Button, Grid, Text } from '@chakra-ui/react';
-import React from 'react';
 import { Link } from 'wouter';
 
 type ButtonNavigationProps = {
@@ -17,6 +16,7 @@ function ButtonNavigation({ children }: ButtonNavigationProps) {
         _hover={{"bg": "custom.hover-grey"}}
         borderColor="custom.primary"
         borderLeftWidth={location.pathname.slice(1) === children.toLowerCase() ? "2.5px" : ""}
+        ml={location.pathname.slice(1) === children.toLowerCase() ? "-2.5px" : ""}
       >
         {children}
       </Text>

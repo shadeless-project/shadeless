@@ -114,7 +114,7 @@ export class BurpPacketService {
   async tryUpdateOccurence(p: RawPacket) {
     try {
       await this.occurenceModel.findOneAndUpdate(
-        { hash: p.hash },
+        { project: p.project, hash: p.hash },
         { $inc: { count: 1 } },
         { upsert: true },
       );

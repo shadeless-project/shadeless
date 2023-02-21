@@ -21,18 +21,23 @@ export default function CensorTable (props: CensorTableProps) {
               <Th maxW="50px">Method</Th>
               <Th>Origin</Th>
               <Th>Path</Th>
+              <Th>Description</Th>
               <Th w="60px">Action</Th>
             </Tr>
           </Thead>
           <Tbody>
             {censors.map((c, index) =>
-              <Tr key={`censor-${c._id}`}>
+              <Tr
+                key={`censor-${c._id}`}
+                _hover={{ bg: 'custom.hover-grey' }}
+              >
                 <Td textAlign="center">{index+1}</Td>
                 {CENSOR_CONDITION.map(cond =>
                   <Td key={`censor-${c._id}-cond-${cond}`}>
                     {c.condition[cond]}
                   </Td>
                 )}
+                <Td>{c.description}</Td>
                 <Td>
                   <Tooltip placement="top" fontSize="2xs" label="Delete censor">
                     <Button

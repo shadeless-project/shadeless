@@ -6,10 +6,20 @@ interface SubmitBtnProps extends ButtonProps {
   submittingText?: string;
 }
 function SubmitButton (props: SubmitBtnProps) {
-  const { isSubmitting, submittingText } = props;
+  const { isSubmitting, submittingText, colorScheme } = props;
   const submitText = submittingText || "Submitting";
   return (
     <Button
+      {...!colorScheme && {
+        bg:"custom.black",
+        color:"custom.white",
+        _hover: {
+          opacity: '.7'
+        },
+        _active:{
+          opacity: '.5'
+        }
+      }}
       {...props}
       isLoading={isSubmitting}
       loadingText={submitText}

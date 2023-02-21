@@ -23,6 +23,26 @@ function countFilteredPacketsAgg(
   isHashDistinct = false,
 ) {
   filter = JSON.parse(JSON.stringify(filter));
+  // optimize if there's no count filter
+  if (!isObjectContainKey(filter, 'count')) {
+    return [
+      { $match: filter },
+      isHashDistinct ? distinctHashAgg : {},
+      {
+        $lookup: {
+          localField: 'hash',
+          from: 'occurences',
+          foreignField: 'hash',
+          as: 'count',
+        },
+      },
+      { $unwind: '$count' },
+      projectAgg,
+      distinctCol ? { $group: { _id: '$' + distinctCol } } : {},
+      { $count: 'count' },
+    ].filter((a) => Object.entries(a).length !== 0);
+  }
+
   const matchProjectOptimize: any = {};
   if (!!filter.project) {
     const { project } = filter;
@@ -76,7 +96,7 @@ function findPacketsAggregation(
   if (!isObjectContainKey(filter, 'count')) {
     return [
       { $match: filter },
-      sort ? { $sort: { createdAt: -1 } } : {},
+      sort ? { $sort: { createdAt: -1, requestPacketIndex: -1 } } : {},
       isHashDistinct ? distinctHashAgg : {},
       skip ? { $skip: skip } : {},
       limit ? { $limit: limit } : {},
@@ -115,7 +135,7 @@ function findPacketsAggregation(
     { $unwind: '$count' },
     projectAgg,
     { $match: filter },
-    sort ? { $sort: { createdAt: -1 } } : {},
+    sort ? { $sort: { createdAt: -1, requestPacketIndex: -1 } } : {},
     isHashDistinct ? distinctHashAgg : {},
     skip ? { $skip: skip } : {},
     limit ? { $limit: limit } : {},
@@ -217,7 +237,7 @@ export class ProjectPacketsService {
     @InjectModel(Censor.name) private censorModel: Model<CensorDocument>,
     @InjectModel(RawPacket.name)
     private rawPacketModel: Model<RawPacketDocument>,
-  ) { }
+  ) {}
 
   async countPacket(filter: any, distinctCol = '', isHashDistinct = false) {
     const aggForCountPackets = countFilteredPacketsAgg(

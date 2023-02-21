@@ -20,7 +20,9 @@ export async function getOneProject(name: string): Promise<ApiResponse<Project>>
       'Authorization': localStorage.getItem('authorization') || '',
     }
   });
-  return project.json() as unknown as ApiResponse<Project>;
+  const result = await project.json() as unknown as ApiResponse<Project>;
+  result.data.createdAt = new Date(result.data.createdAt);
+  return result;
 }
 
 export async function getAllProjects(): Promise<ApiResponse<Project[]>> {
@@ -29,7 +31,12 @@ export async function getAllProjects(): Promise<ApiResponse<Project[]>> {
       'Authorization': localStorage.getItem('authorization') || '',
     }
   });
-  return projects.json() as unknown as ApiResponse<Project[]>;
+  const result = await projects.json() as unknown as ApiResponse<Project[]>;
+  result.data = result.data.map(p => ({
+    ...p,
+    createdAt: new Date(p.createdAt),
+  }));
+  return result;
 }
 
 export async function createProject(body: { name: string; description: string }): Promise<ApiResponse<string>> {
@@ -56,14 +63,13 @@ export async function editProject (body: Partial<Project>, name: string): Promis
   return editProject.json() as unknown as ApiResponse<string>;
 }
 
-export async function deleteProject (identifier: string, options: any = {}) {
-  const delProject = await fetch(`${API_URL}/projects/${identifier}`, {
+export async function deleteProject (projectName: string) {
+  const delProject = await fetch(`${API_URL}/projects/${projectName}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('authorization') || '',
     },
-    body: JSON.stringify(options),
   });
   return delProject.json() as unknown as ApiResponse<string>;
 }

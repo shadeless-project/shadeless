@@ -23,7 +23,12 @@ export async function getAllAccounts (): Promise<ApiResponse<Account[]>> {
     method: 'GET',
     headers: { 'Authorization': localStorage.getItem('authorization') || '' },
   });
-  return data.json() as unknown as ApiResponse<Account[]>;
+  const result = await data.json() as unknown as ApiResponse<Account[]>;
+  result.data = result.data.map(acc => ({
+    ...acc,
+    createdAt: new Date(acc.createdAt),
+  }));
+  return result;
 }
 
 export async function createNewAccount (username: string, password: string, passwordRecheck: string, role: AccountRole): Promise<ApiResponse<string>> {

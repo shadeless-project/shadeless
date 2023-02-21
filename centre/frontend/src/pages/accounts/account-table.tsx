@@ -1,7 +1,6 @@
 import { SmallCloseIcon } from "@chakra-ui/icons";
-import { Button, Progress, Table, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
+import { Button, Progress, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
 import { Account, AccountRole } from "src/libs/apis/account";
-import { getUserRole } from "src/libs/storage";
 
 type AccountTableProps = {
   accounts: Account[];
@@ -12,30 +11,27 @@ type AccountTableProps = {
 export default function AccountTable (props: AccountTableProps) {
   const { accounts, onOpenModalDel, setDeletingAccount, isLoading } = props;
   return (
-    <>
-      <Table
-        border="1.3px solid gray"
-        borderRadius="10px"
-        mt="20px"
-        size="xs"
-        fontSize="xs"
-      >
-        <Thead fontSize="2xs">
+    <TableContainer p="10px">
+      <Table size="sm">
+        <Thead>
           <Tr>
-            <Th pl="20px">#</Th>
+            <Th>#</Th>
             <Th>Username</Th>
             <Th>Role</Th>
             <Th>Created at</Th>
-            <Th w="60px">Action</Th>
+            <Th>Action</Th>
           </Tr>
         </Thead>
         <Tbody>
           {accounts.map((acc, index) =>
-            <Tr key={`account-${acc._id}`}>
+            <Tr
+              key={`account-${acc._id}`}
+              _hover={{ bg: 'custom.hover-grey' }}
+            >
               <Td pl="20px">{index+1}</Td>
               <Td>{acc.username}</Td>
               <Td>{acc.role}</Td>
-              <Td>{acc.createdAt.toString()}</Td>
+              <Td>{window.formatDate(acc.createdAt)}</Td>
               <Td>
                 <Tooltip placement="top" fontSize="2xs" label="Delete account">
                   <Button
@@ -44,7 +40,7 @@ export default function AccountTable (props: AccountTableProps) {
                     size="2xs"
                     p="2px"
                     borderRadius="1"
-                    disabled={getUserRole() === AccountRole.ADMIN ? false : true}
+                    disabled={window.getUserRole() !== AccountRole.ADMIN || window.getUser().username === acc.username ? true : false}
                     onClick={() => {
                       setDeletingAccount(acc);
                       onOpenModalDel();
@@ -67,6 +63,6 @@ export default function AccountTable (props: AccountTableProps) {
         size="xs"
         mt="20px"
       />
-    </>
+    </TableContainer>
   );
 }

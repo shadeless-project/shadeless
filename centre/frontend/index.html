@@ -75,23 +75,7 @@
   </style>
 </head>
 <body>
-  <script>
-    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-    if (!window.indexedDB) {
-      alert("Your browser doesn't support a stable version of IndexedDB. Please use new browser to use this service");
-    }
-    window.copyToClipboard = (str) => {
-      const el = document.createElement('textarea');
-      el.value = str;
-      el.setAttribute('readonly', '');
-      el.style.position = 'absolute';
-      el.style.left = '-9999px';
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-    };
-    if (location.pathname === '/') location = '/projects';
+  <script src="/sdk.js">
   </script>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
