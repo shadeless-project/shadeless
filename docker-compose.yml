@@ -38,8 +38,6 @@ services:
       - DATABASE_URL=mongodb://shadeless-db:27017/shadeless
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=adminpassword
-      - OPERATOR_USERNAME=operator
-      - OPERATOR_PASSWORD=operatorpassword
 volumes:
   shadeless-volume:
     external: false
