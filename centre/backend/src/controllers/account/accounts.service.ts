@@ -6,6 +6,7 @@ import {
   AccountDocument,
   AccountRole,
 } from 'libs/schemas/account.schema';
+import { PutAccountDto, ResetPasswordAccountDto } from './accounts.dto';
 
 @Injectable()
 export class AccountsService {
@@ -27,6 +28,20 @@ export class AccountsService {
       username,
       password,
       role,
+    });
+  }
+
+  async editAccount(_id: string, data: PutAccountDto) {
+    await this.accountModel.findByIdAndUpdate(_id, {
+      $set: data,
+    });
+  }
+
+  async resetAccountPassword(_id: string, data: ResetPasswordAccountDto) {
+    await this.accountModel.findByIdAndUpdate(_id, {
+      $set: {
+        password: data.password,
+      },
     });
   }
 

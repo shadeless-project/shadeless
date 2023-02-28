@@ -9,6 +9,7 @@ export class Account {
   _id?: Types.ObjectId;
   username: string;
   password: string;
+  email: string;
   role: AccountRole;
 }
 export interface AccountDocument extends Account, Document {
@@ -21,6 +22,7 @@ export const AccountSchema = new Schema<AccountDocument>(
     username: { type: Schema.Types.String, required: true, unique: true },
     password: { type: Schema.Types.String, required: true },
     role: { type: Schema.Types.String, required: true },
+    email: { type: Schema.Types.String, default: 'default@mail.com' },
   },
   { timestamps: true },
 );

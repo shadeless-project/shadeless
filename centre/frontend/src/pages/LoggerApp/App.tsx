@@ -7,6 +7,7 @@ import LoggerHeader from './logger-header';
 import { useLocation } from 'wouter';
 import CensorPage from '../censor/CensorsPage';
 import { Box } from '@chakra-ui/react';
+import Page404 from '../Page404';
 
 export const enum Tabs {
   DEFAULT,
@@ -22,21 +23,23 @@ export type FilterBodyType = {
 
 type AppPageProps = {
   project: string;
+  page: string;
 }
 function AppPage (props: AppPageProps) {
-  const { project } = props;
+  const { project, page } = props;
   const [applyingFilter, setApplyingFilter] = React.useState<Query2ObjectResult>(defaultQuery2ObjectResult);
 
-  const [myLocation] = useLocation();
   const [choosingTab, setChoosingTab] = React.useState<Tabs>(Tabs.DEFAULT);
 
   React.useEffect(() => {
-    if (myLocation.includes('censor')) {
+    if (page === 'censors') {
       setChoosingTab(Tabs.CENSORS);
-    } else {
+    } else if (page === 'logger') {
       setChoosingTab(Tabs.LOGGER);
+    } else {
+      setChoosingTab(Tabs.DEFAULT);
     }
-  }, [project, myLocation]);
+  }, [project, page]);
 
   return (
     <LoggerContext.Provider value={project}>
@@ -61,6 +64,16 @@ function AppPage (props: AppPageProps) {
           mx="auto"
         >
           <CensorPage />
+        </Box>
+      }
+
+      {choosingTab === Tabs.DEFAULT &&
+        <Box
+          mt="var(--component-distance)"
+          w="var(--component-width)"
+          mx="auto"
+        >
+          <Page404 />
         </Box>
       }
     </LoggerContext.Provider>

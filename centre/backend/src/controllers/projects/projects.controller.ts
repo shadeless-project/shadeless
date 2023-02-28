@@ -115,30 +115,6 @@ export class ProjectsController {
     return result;
   }
 
-  @Post(':name/query_after')
-  @HttpCode(200)
-  async queryPacketsAfter(
-    @Param('name') projectName: string,
-    @Body() queryCriteria: QueryPacketAfterTimeDto,
-  ) {
-    if (
-      !onlyOneExist(
-        queryCriteria.body,
-        queryCriteria.requestBody,
-        queryCriteria.responseBody,
-      )
-    )
-      throw new BadRequestException(
-        [],
-        'There should only have 1 "body" or "requestBody" or "responseBody"',
-      );
-    const result = await this.projectPacketsService.queryPacketsAfter(
-      projectName,
-      queryCriteria,
-    );
-    return result;
-  }
-
   @Post()
   @HttpCode(200)
   async createProject(@Body() project: PostProjectDto) {

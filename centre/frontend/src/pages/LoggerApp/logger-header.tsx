@@ -121,7 +121,7 @@ export default function LoggerHeader (props: Props) {
           borderBottomWidth: '3px',
           fontWeight: '600'
         }}
-        onClick={() => setLocation(`/projects/${project.name}`)}
+        onClick={() => setLocation(`/projects/${project.name}/logger`)}
       >
         Logger
       </Button>

@@ -127,7 +127,7 @@ export default function ProjectsPage() {
                     </MenuButton>
                     <MenuList>
                       <MenuItem
-                        onClick={() => window.location.href = `/projects/${p.name}`}
+                        onClick={() => window.location.href = `/projects/${p.name}/logger`}
                       >
                         Go to dashboard
                       </MenuItem>

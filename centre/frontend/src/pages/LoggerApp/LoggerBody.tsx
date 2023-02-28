@@ -1,6 +1,6 @@
 import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Tooltip, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { getPackets, Packet, getPacketsAfterTime, defaultPacket } from "src/libs/apis/packets";
+import { getPackets, Packet, defaultPacket } from "src/libs/apis/packets";
 import SearchBar from "./SearchBar";
 import { notify } from "src/libs/notify";
 import { ApiResponse } from "src/libs/apis/types";
@@ -28,6 +28,7 @@ export default function LoggerBody(props: LoggerBodyProps) {
     now: '',
   });
   const [isLoadingPackets, setIsLoadingPackets] = React.useState(true);
+  const [endOfPackets, setEndOfPackets] = React.useState(false);
   const [packetInterval, setPacketInterval] = React.useState({
     from: 0,
     to: NUM_PACKETS_PER_PAGE,
@@ -67,15 +68,6 @@ export default function LoggerBody(props: LoggerBodyProps) {
     return res.sort((a, b) => -isSmaller(a, b));
   }
 
-  async function getLatestPacket() {
-    const newPacketsResp = await getPacketsAfterTime(
-      currentProject,
-      applyingFilter,
-      packets[0]?.createdAt || (new Date(0)).toISOString(),
-    )
-    const newPackets = mergeArrPackets(newPacketsResp.data, packets);
-    setPackets(newPackets);
-  }
   async function clickPacket(e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, p: Packet) {
     if (Math.abs(e.pageX - placeMouseClick.x) < 5 && Math.abs(e.pageY - placeMouseClick.y) < 5) {
       setIsShowingDetail(true);
@@ -111,7 +103,13 @@ export default function LoggerBody(props: LoggerBodyProps) {
     else {
       if (newPacketsResponse.data.length === 0) {
         setIsLoadingPackets(false);
-        setPacketInterval({ from, to })
+        setPacketInterval({ from, to });
+        setEndOfPackets(true);
+        notify(toast, {
+          statusCode: 200,
+          error: 'End of packets',
+          data: 'End of packets',
+        }, 'get-packet-err-toast');
         return;
       }
       const newPackets = mergeArrPackets(packets, newPacketsResponse.data);
@@ -128,14 +126,8 @@ export default function LoggerBody(props: LoggerBodyProps) {
   }
 
   React.useEffect(() => {
-    const intervalId = setInterval(() => {
-      getLatestPacket().then(() => console.log('[Interval] getting latest packets'));
-    }, 4000);
-    return () => clearInterval(intervalId);
-  }, [packets, applyingFilter]);
-
-  React.useEffect(() => {
     setPackets([]);
+    setEndOfPackets(false);
     setIsLoadingPackets(true);
     setPacketInterval({ from: 0, to: NUM_PACKETS_PER_PAGE });
     getFirstPackets();
@@ -143,9 +135,10 @@ export default function LoggerBody(props: LoggerBodyProps) {
 
   React.useEffect(() => {
     window.onscroll = async (ev) => {
-      if (!isLoadingPackets && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
+      if (endOfPackets) return;
+      if (isLoadingPackets) return;
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
         setIsLoadingPackets(true);
-        console.log('ok');
         await getPacketsInInterval(packetInterval.from, packetInterval.to);
       }
     };

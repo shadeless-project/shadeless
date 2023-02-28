@@ -110,27 +110,6 @@ export async function getPackets(
   return results.json() as unknown as ApiResponse<Packet[]>;
 }
 
-export async function getPacketsAfterTime(
-  projectName: string,
-  filter: Query2ObjectResult,
-  from: string,
-  minimal: boolean = false,
-): Promise<ApiResponse<Packet[]>> {
-  const results = await fetch(`${API_URL}/projects/${projectName}/query_after`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('authorization') || '',
-    },
-    body: JSON.stringify({
-      ...filter,
-      from,
-      minimal,
-    })
-  });
-  return results.json() as unknown as ApiResponse<Packet[]>;
-}
-
 export type DashboardPackets = {
   origins: string[] | null,
   numPackets : number | null,

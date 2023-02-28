@@ -1,16 +1,25 @@
-import { SmallCloseIcon } from "@chakra-ui/icons";
-import { Button, Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
+import { Icon, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
+import { FaEllipsisV } from "react-icons/fa";
 import { Censor, CENSOR_CONDITION } from "src/libs/apis/censors";
 
 type CensorTableProps = {
   censors: Censor[];
   setDeletingCensor: React.Dispatch<React.SetStateAction<Censor>>;
   onOpenModalDel: () => void;
+  setEditingCensor: React.Dispatch<React.SetStateAction<Censor>>;
+  onOpenModalEdit: () => void;
   isLoading: boolean;
 }
 export default function CensorTable (props: CensorTableProps) {
-  const { censors, onOpenModalDel, setDeletingCensor, isLoading } = props;
+  const {
+    censors,
+    onOpenModalDel,
+    setDeletingCensor,
+    onOpenModalEdit,
+    setEditingCensor,
+    isLoading,
+  } = props;
   return (
     <React.Fragment>
       <TableContainer p="10px">
@@ -22,7 +31,7 @@ export default function CensorTable (props: CensorTableProps) {
               <Th>Origin</Th>
               <Th>Path</Th>
               <Th>Description</Th>
-              <Th w="60px">Action</Th>
+              <Th>Created at</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -38,22 +47,36 @@ export default function CensorTable (props: CensorTableProps) {
                   </Td>
                 )}
                 <Td>{c.description}</Td>
+                <Td>{window.formatDate(c['createdAt'])}</Td>
                 <Td>
-                  <Tooltip placement="top" fontSize="2xs" label="Delete censor">
-                    <Button
-                      ml="10px"
-                      colorScheme="red"
-                      size="2xs"
-                      p="2px"
-                      borderRadius="1"
-                      onClick={() => {
-                        setDeletingCensor(c);
-                        onOpenModalDel();
-                      }}
+                  <Menu>
+                    <MenuButton
+                      p={2}
+                      _hover={{ bg: 'custom.focus-grey' }}
+                      _expanded={{ bg: 'custom.focus-grey' }}
                     >
-                      <SmallCloseIcon />
-                    </Button>
-                  </Tooltip>
+                      <Icon as={FaEllipsisV} />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => {
+                          setEditingCensor(c);
+                          onOpenModalEdit();
+                        }}
+                      >
+                        Edit censor
+                      </MenuItem>
+                      <MenuItem
+                        color="red.500"
+                        onClick={() => {
+                          setDeletingCensor(c);
+                          onOpenModalDel();
+                        }}
+                      >
+                        Remove
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
                 </Td>
               </Tr>
             )}

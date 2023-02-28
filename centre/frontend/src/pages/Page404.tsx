@@ -1,13 +1,14 @@
-import React from 'react';
-import { Box, Text, Image } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useLocation } from 'wouter';
 
 function Page404 () {
   const [location] = useLocation();
   return (
     <Box
-      bg="custom.grey"
-      pb="4vh"
+      borderRadius="var(--component-border)"
+      boxShadow="sm"
+      bg="custom.white"
+      p="10px"
     >
       <Text
         mt="20vh"

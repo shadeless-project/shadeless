@@ -17,6 +17,9 @@ export default function CensorPage() {
   const { isOpen: isOpenModalDel, onOpen: onOpenModalDel, onClose: onCloseModalDel } = useDisclosure();
   const [deletingCensor, setDeletingCensor] = React.useState<Censor>(defaultCensor);
 
+  const { isOpen: isOpenModalDel, onOpen: onOpenModalDel, onClose: onCloseModalDel } = useDisclosure();
+  const [deletingCensor, setDeletingCensor] = React.useState<Censor>(defaultCensor);
+
   async function uiLoadCensors() {
     setIsLoading(true);
     setCensors([]);

@@ -15,3 +15,12 @@ export class PostCensorDto {
   @IsString()
   description: string;
 }
+
+export class PutCensorDto {
+  @IsObject()
+  condition: any;
+
+  @IsString()
+  @IsOptional()
+  description: string;
+}

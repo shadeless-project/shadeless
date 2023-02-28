@@ -83,7 +83,6 @@ export default function SearchBar (props: SearchBarProps) {
   async function applyFilter() {
     try {
       const criteria = query2Object(filter.now);
-      localStorage.setItem('savedQuery', filter.now);
       setApplyingFilter({
         criteria,
         ...showFilterBody ? filterBody : {},
@@ -117,18 +116,6 @@ export default function SearchBar (props: SearchBarProps) {
       setSuggests([]);
     }
   }, [filter, filterFocus]);
-
-  React.useEffect(() => {
-    async function applySavedQuery() {
-      const savedQuery = localStorage.getItem('savedQuery') || '';
-      try {
-        const obj = query2Object(savedQuery);
-        filter.now = savedQuery;
-        setFilter({ before: filter.now, now: savedQuery });
-      } catch (err) {}
-    }
-    applySavedQuery();
-  }, []);
 
   const suggestTypeNum = suggests.filter(s => s.type === 'Number');
   const suggestTypeString = suggests.filter(s => s.type === 'String');

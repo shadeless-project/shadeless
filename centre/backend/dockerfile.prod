@@ -1,11 +1,24 @@
-FROM node:16-buster
+FROM node:buster as builder
 
 WORKDIR /app
-
-RUN apt update -y && apt install ripgrep
 
 COPY . .
 
 RUN npm i && npm run build
 
-CMD npm run start:prod
+FROM node:buster
+
+RUN apt update -y && apt install ripgrep
+
+WORKDIR /app
+
+COPY --from=builder /app/dist/ ./dist/
+COPY --from=builder /app/node_modules ./node_modules/
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/entrypoint.sh .
+
+RUN useradd -ms /bin/bash shadelessuser
+# RUN chown -R shadelessuser:shadelessuser /app/
+
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
+CMD ["npm", "run", "start:prod"]

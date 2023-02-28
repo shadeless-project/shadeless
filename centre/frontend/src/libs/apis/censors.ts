@@ -10,9 +10,10 @@ export interface Censor {
   condition: any;
   description: string;
   type: CensorType;
+  createdAt: Date,
 }
 
-export const defaultCensor = {
+export const defaultCensor: Censor = {
   _id: '',
   project: '',
   condition: {
@@ -22,6 +23,7 @@ export const defaultCensor = {
   },
   description: '',
   type: CensorType.ONE,
+  createdAt: new Date(),
 }
 export const CENSOR_CONDITION = ['method', 'origin', 'path'];
 
@@ -32,7 +34,12 @@ export async function getCensors(projectName?: string): Promise<ApiResponse<Cens
       Authorization: localStorage.getItem('authorization') || '',
     }
   });
-  return resp.json() as unknown as ApiResponse<Censor[]>;
+  const result = await resp.json() as unknown as ApiResponse<Censor[]>;
+  result.data = result.data.map(p => ({
+    ...p,
+    createdAt: new Date(p.createdAt),
+  }));
+  return result;
 }
 
 export async function createCensor(project: string | undefined, condition: any, description: string, isAll: boolean): Promise<ApiResponse<string>> {
@@ -60,6 +67,18 @@ export async function deleteCensor(_id: string): Promise<ApiResponse<string>> {
     headers: {
       Authorization: localStorage.getItem('authorization') || '',
     },
+  });
+  return resp.json() as unknown as ApiResponse<string>;
+}
+
+export async function editCensor(_id: string, condition: any, description: string): Promise<ApiResponse<string>> {
+  const endpoint = `${API_URL}/censors/${_id}`;
+  const resp = await fetch(endpoint, {
+    method: 'PUT',
+    headers: {
+      Authorization: localStorage.getItem('authorization') || '',
+    },
+    body: JSON.stringify({ condition, description }),
   });
   return resp.json() as unknown as ApiResponse<string>;
 }

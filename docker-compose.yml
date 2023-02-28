@@ -15,7 +15,7 @@ services:
       - "shadeless-ui:app-ui"
       - "shadeless-centre:app-centre"
     ports:
-      - "127.0.0.1:13337:80"
+      - "13337:80"
 
   shadeless-ui:
     build:
@@ -38,8 +38,6 @@ services:
       - DATABASE_URL=mongodb://shadeless-db:27017/shadeless
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=adminpassword
-      - OPERATOR_USERNAME=operator
-      - OPERATOR_PASSWORD=operatorpassword
 volumes:
   shadeless-volume:
     external: false

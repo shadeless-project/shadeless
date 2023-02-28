@@ -56,10 +56,13 @@ function Routes () {
 
       <Switch>
         <Route path="/projects/:name">
-          {(params) => <AppPage project={params.name} />}
+          {(params) => {
+            setLocation(`/projects/${params.name}/logger`);
+            return <></>
+          }}
         </Route>
-        <Route path="/projects/:name/censors">
-          {(params) => <AppPage project={params.name} />}
+        <Route path="/projects/:name/:page">
+          {(params) => <AppPage project={params.name} page={params.page} />}
         </Route>
         <Route path="/:pageType">
           {(params) => {
@@ -75,7 +78,13 @@ function Routes () {
           }}
         </Route>
         <Route>
-          <Page404 />
+          <Box
+            mt="var(--component-distance)"
+            w="var(--component-width)"
+            mx="auto"
+          >
+            <Page404 />
+          </Box>
         </Route>
       </Switch>
     </Box>
