@@ -2,13 +2,14 @@ import React from 'react';
 import {
   Box, Divider, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, SkeletonText, Spinner, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure,
 } from '@chakra-ui/react';
-import { FaEllipsisV } from 'react-icons/fa';
 import { defaultProject, getAllProjects, Project } from 'src/libs/apis/projects';
 import DeleteProjectModal from './delete-project';
 import AddProjectModal from './add-project';
 import SubmitButton from '../common/submit-button';
 import ProjectStat from './project-stat';
 import EditProjectModal from './edit-project';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import ConfigIcon from '../common/config-icon';
 
 export default function ProjectsPage() {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -123,7 +124,7 @@ export default function ProjectsPage() {
                       _hover={{ bg: 'custom.focus-grey' }}
                       _expanded={{ bg: 'custom.focus-grey' }}
                     >
-                      <Icon as={FaEllipsisV} />
+                      <ConfigIcon />
                     </MenuButton>
                     <MenuList>
                       <MenuItem

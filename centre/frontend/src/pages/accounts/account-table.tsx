@@ -1,6 +1,8 @@
 import { SmallCloseIcon } from "@chakra-ui/icons";
-import { Button, Progress, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
+import { Button, Progress, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
 import { Account, AccountRole } from "src/libs/apis/account";
+import MyTooltip from "../common/tooltip";
+import RoleTag from "./role-tag";
 
 type AccountTableProps = {
   accounts: Account[];
@@ -30,10 +32,12 @@ export default function AccountTable (props: AccountTableProps) {
             >
               <Td pl="20px">{index+1}</Td>
               <Td>{acc.username}</Td>
-              <Td>{acc.role}</Td>
+              <Td>
+                <RoleTag role={acc.role} />
+              </Td>
               <Td>{window.formatDate(acc.createdAt)}</Td>
               <Td>
-                <Tooltip placement="top" fontSize="2xs" label="Delete account">
+                <MyTooltip label="Delete account">
                   <Button
                     ml="10px"
                     colorScheme="red"
@@ -48,7 +52,7 @@ export default function AccountTable (props: AccountTableProps) {
                   >
                     <SmallCloseIcon />
                   </Button>
-                </Tooltip>
+                </MyTooltip>
               </Td>
             </Tr>
           )}

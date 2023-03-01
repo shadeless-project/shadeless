@@ -10,8 +10,7 @@ function logHeader() {
   return '[Worker process]';
 }
 
-const numCPUs = os.cpus().length;
-// const numCPUs = 1;
+const numCPUs = process.env.NODE_ENV === 'production' ? os.cpus().length : 1;
 if (cluster.isPrimary) {
   console.log(`${logHeader()} Number of cpus: ${numCPUs}`);
 }

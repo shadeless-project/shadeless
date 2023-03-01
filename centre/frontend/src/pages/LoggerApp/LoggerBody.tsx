@@ -131,10 +131,10 @@ export default function LoggerBody(props: LoggerBodyProps) {
     setIsLoadingPackets(true);
     setPacketInterval({ from: 0, to: NUM_PACKETS_PER_PAGE });
     getFirstPackets();
-  }, [applyingFilter]);
+  }, [applyingFilter, currentProject]);
 
   React.useEffect(() => {
-    window.onscroll = async (ev) => {
+    async function handleScrollBottomPage() {
       if (endOfPackets) return;
       if (isLoadingPackets) return;
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
@@ -142,7 +142,9 @@ export default function LoggerBody(props: LoggerBodyProps) {
         await getPacketsInInterval(packetInterval.from, packetInterval.to);
       }
     };
-  }, [isLoadingPackets, packetInterval, applyingFilter]);
+    window.addEventListener("onscroll", handleScrollBottomPage);
+    return () => window.removeEventListener("onscroll", handleScrollBottomPage);
+  }, [isLoadingPackets, packetInterval, applyingFilter, currentProject]);
 
   return (
     <Box

@@ -73,9 +73,11 @@ export async function deleteCensor(_id: string): Promise<ApiResponse<string>> {
 
 export async function editCensor(_id: string, condition: any, description: string): Promise<ApiResponse<string>> {
   const endpoint = `${API_URL}/censors/${_id}`;
+  console.log(condition)
   const resp = await fetch(endpoint, {
     method: 'PUT',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: localStorage.getItem('authorization') || '',
     },
     body: JSON.stringify({ condition, description }),

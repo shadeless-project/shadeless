@@ -3,7 +3,9 @@ import { Checkbox, Code, Divider, FormLabel, Input, Modal, ModalBody, ModalClose
 import React, { useContext } from "react";
 import { Censor, editCensor } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
+import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
+import MyTooltip from "../common/tooltip";
 import { LoggerContext } from "../LoggerApp/LoggerAppContext";
 
 type Props = {
@@ -22,13 +24,15 @@ export default function EditCensorModal(props: Props) {
   const [censorPath, setCensorPath] = React.useState('');
   const [censorDescription, setCensorDescription] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isCensorAllProject, setIsCensorAllProject] = React.useState(false);
 
   React.useEffect(() => {
     setCensorMethod(editingCensor.condition.method);
     setCensorOrigin(editingCensor.condition.origin);
     setCensorPath(editingCensor.condition.path);
     setCensorDescription(editingCensor.description);
-  }, [editingCensor]);
+    if (currentProject === '') setIsCensorAllProject(true);
+  }, [editingCensor, currentProject]);
 
   async function uiEditCensor() {
     setIsSubmitting(true);
@@ -64,7 +68,7 @@ export default function EditCensorModal(props: Props) {
             fontWeight="700"
           >
             Method&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </Text>
           <Input
             size="sm"
@@ -79,7 +83,7 @@ export default function EditCensorModal(props: Props) {
             fontWeight="700"
           >
             Origin&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </Text>
           <Input
             size="sm"
@@ -94,7 +98,7 @@ export default function EditCensorModal(props: Props) {
             fontWeight="700"
           >
             Path&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </Text>
           <Input
             size="sm"
@@ -129,16 +133,18 @@ export default function EditCensorModal(props: Props) {
             fontSize="sm"
             placeholder="This endpoint is login for SSO"
             _placeholder={{opacity: '0.6'}}
+            defaultValue={censorDescription}
+            onChange={(e) => setCensorDescription(e.target.value)}
           />
           <Checkbox
             mt="20px"
-            // isChecked={editingCensor.type} TODO
-            onChange={(e) => {
-              if (currentProject === '') alert('Could not unset this because you are at setting page');
-              else setIsCensorAllProject(e.target.checked)
-            }}
+            isChecked={isCensorAllProject}
+            isDisabled={currentProject === ''}
+            onChange={(e) => setIsCensorAllProject(e.target.checked)}
           >
-            <Text fontSize="sm">Apply this censor for all projects</Text>
+            <MyTooltip label={currentProject === '' ? "Please go to project specific to apply censor for that project" : ''}>
+              <Text fontSize="sm">Apply this censor for all projects</Text>
+            </MyTooltip>
           </Checkbox>
         </ModalBody>
 
@@ -146,9 +152,9 @@ export default function EditCensorModal(props: Props) {
           <SubmitButton
             mr={3}
             isSubmitting={isSubmitting}
-            onClick={uiCreateCensor}
+            onClick={uiEditCensor}
           >
-            Submit
+            Edit
           </SubmitButton>
         </ModalFooter>
       </ModalContent>

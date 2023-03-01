@@ -1,6 +1,6 @@
-import { Box, Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Text, useDisclosure, useToast } from '@chakra-ui/react';
+import { Box, Flex, Spinner, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import React from 'react';
-import { Account, AccountRole, defaultAccount, deleteAccount, getAllAccounts } from 'src/libs/apis/account';
+import { Account, AccountRole, defaultAccount, getAllAccounts } from 'src/libs/apis/account';
 import { notify } from 'src/libs/notify';
 import SubmitButton from '../common/submit-button';
 import AccountTable from './account-table';

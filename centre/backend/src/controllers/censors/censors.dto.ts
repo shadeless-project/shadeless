@@ -1,4 +1,10 @@
-import { IsEnum, IsObject, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsObject,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import { CensorType } from 'libs/schemas/censor.schema';
 
 export class PostCensorDto {
@@ -10,6 +16,7 @@ export class PostCensorDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(100)
   project: string;
 
   @IsString()
@@ -22,5 +29,6 @@ export class PutCensorDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(1000)
   description: string;
 }

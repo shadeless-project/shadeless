@@ -1,7 +1,8 @@
-import { FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useToast } from "@chakra-ui/react";
 import React from "react";
 import { AccountRole, createNewAccount } from "src/libs/apis/account";
 import { notify } from "src/libs/notify";
+import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 
 type Props = {
@@ -19,9 +20,10 @@ export default function AddAccountModal(props: Props) {
     setIsSubmitting(true);
     const username = (document.getElementById('username') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
+    const email = (document.getElementById('email') as HTMLInputElement).value;
     const passwordRecheck = (document.getElementById('password-recheck') as HTMLInputElement).value;
     const role = (document.getElementById('role') as HTMLInputElement).value;
-    const resp = await createNewAccount(username, password, passwordRecheck, role as AccountRole);
+    const resp = await createNewAccount(username, password, passwordRecheck, email, role as AccountRole);
     notify(toast, resp);
     setIsSubmitting(false);
     if (resp.statusCode === 200) {
@@ -39,8 +41,9 @@ export default function AddAccountModal(props: Props) {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody fontSize="sm">
-          <FormLabel fontSize="sm">Username&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+          <FormLabel fontSize="sm">
+            Username&nbsp;
+            <RequiredTooltip />
           </FormLabel>
           <Input
             id="username"
@@ -52,7 +55,7 @@ export default function AddAccountModal(props: Props) {
           />
           <FormLabel mt="17px" fontSize="sm">
             Password&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </FormLabel>
           <Input
             id="password"
@@ -63,7 +66,7 @@ export default function AddAccountModal(props: Props) {
           />
           <FormLabel mt="17px" fontSize="sm">
             Password recheck&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </FormLabel>
           <Input
             id="password-recheck"
@@ -72,7 +75,20 @@ export default function AddAccountModal(props: Props) {
             size="md"
             placeholder="***********"
           />
-          <Select id="role" mt="13px" w="150px">
+          <FormLabel mt="17px" fontSize="sm">
+            Email&nbsp;
+          </FormLabel>
+          <Input
+            id="email"
+            mt="-3px"
+            size="md"
+            placeholder="default@mail.com"
+          />
+          <FormLabel mt="17px" fontSize="sm">
+            Role&nbsp;
+            <RequiredTooltip />
+          </FormLabel>
+          <Select id="role" w="150px">
             <option value={AccountRole.NORMAL}>{AccountRole.NORMAL}</option>
             <option value={AccountRole.ADMIN}>{AccountRole.ADMIN}</option>
           </Select>

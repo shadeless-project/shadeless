@@ -7,7 +7,8 @@ const HTTP_STATUS_OK = 200;
 export function notify<T>(toast: any, response: ApiResponse<T>, id: string = 'default') {
   const status = (response.statusCode === HTTP_STATUS_OK) ? 'success' : 'error';
   const title = (status === 'success') ? 'Success' : 'Error';
-  const description = (status === 'success') ? response.data : response.error;
+  let description = (status === 'success') ? response.data : response.error;
+  if (description === 'Bad Request') description = (response.data as any)[0];
   if (!(toast.isActive(id))) {
     toast({
       position: 'top-right',

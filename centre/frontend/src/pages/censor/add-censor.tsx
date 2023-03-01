@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { createCensor } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
 import SubmitButton from "../common/submit-button";
+import MyTooltip from "../common/tooltip";
 import { LoggerContext } from "../LoggerApp/LoggerAppContext";
 
 type Props = {
@@ -146,16 +147,17 @@ export default function AddCensorModal (props: Props) {
             placeholder="This endpoint is login for SSO"
             _placeholder={{opacity: '0.6'}}
           />
-          <Checkbox
-            mt="20px"
-            isChecked={isCensorAllProject}
-            onChange={(e) => {
-              if (currentProject === '') alert('Could not unset this because you are at setting page');
-              else setIsCensorAllProject(e.target.checked)
-            }}
-          >
-            <Text fontSize="sm">Apply this censor for all projects</Text>
-          </Checkbox>
+            <Checkbox
+              mt="20px"
+              isChecked={isCensorAllProject}
+              isDisabled={currentProject === ''}
+              onChange={(e) => setIsCensorAllProject(e.target.checked)}
+            >
+              <MyTooltip label={currentProject === '' ? "Please go to project specific to apply censor for that project" : ''}>
+                <Text fontSize="sm">Apply this censor for all projects</Text>
+              </MyTooltip>
+            </Checkbox>
+
         </ModalBody>
 
         <ModalFooter>

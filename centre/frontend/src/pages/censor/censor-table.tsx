@@ -1,8 +1,13 @@
-import { Icon, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { Code, Icon, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { Censor, CENSOR_CONDITION } from "src/libs/apis/censors";
+import ConfigIcon from "../common/config-icon";
 
+function getCensorConditionCode(condition: any) {
+  return CENSOR_CONDITION.reduce((prev, cur, index) => prev + `${index > 0 ? ' && ' : ''}${cur} == '${condition[cur]}'`, '');
+}
 type CensorTableProps = {
   censors: Censor[];
   setDeletingCensor: React.Dispatch<React.SetStateAction<Censor>>;
@@ -27,9 +32,7 @@ export default function CensorTable (props: CensorTableProps) {
           <Thead>
             <Tr>
               <Th w="40px" textAlign="center">#</Th>
-              <Th maxW="50px">Method</Th>
-              <Th>Origin</Th>
-              <Th>Path</Th>
+              <Th>Condition</Th>
               <Th>Description</Th>
               <Th>Created at</Th>
             </Tr>
@@ -41,13 +44,25 @@ export default function CensorTable (props: CensorTableProps) {
                 _hover={{ bg: 'custom.hover-grey' }}
               >
                 <Td textAlign="center">{index+1}</Td>
-                {CENSOR_CONDITION.map(cond =>
-                  <Td key={`censor-${c._id}-cond-${cond}`}>
-                    {c.condition[cond]}
-                  </Td>
-                )}
+                <Td>
+                  <Code
+                    p="5px"
+                    fontSize="xs"
+                    borderRadius='5px'
+                  >
+                    {getCensorConditionCode(c.condition)}
+                  </Code>
+                </Td>
                 <Td>{c.description}</Td>
-                <Td>{window.formatDate(c['createdAt'])}</Td>
+                <Td>
+                  <Text
+                    fontSize="sm"
+                    opacity='.7'
+                    fontWeight='500'
+                  >
+                    {window.formatDate(c['createdAt'])}
+                  </Text>
+                </Td>
                 <Td>
                   <Menu>
                     <MenuButton
@@ -55,7 +70,7 @@ export default function CensorTable (props: CensorTableProps) {
                       _hover={{ bg: 'custom.focus-grey' }}
                       _expanded={{ bg: 'custom.focus-grey' }}
                     >
-                      <Icon as={FaEllipsisV} />
+                      <ConfigIcon />
                     </MenuButton>
                     <MenuList>
                       <MenuItem

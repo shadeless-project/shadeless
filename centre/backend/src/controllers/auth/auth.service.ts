@@ -13,7 +13,6 @@ export class AuthService {
 
   async login(username: string, password: string) {
     const account = await this.accountModel.findOne({ username });
-    console.log(account);
     if (account && (await account.validatePassword(password))) {
       const data = JSON.parse(JSON.stringify(account));
       delete data.password;
