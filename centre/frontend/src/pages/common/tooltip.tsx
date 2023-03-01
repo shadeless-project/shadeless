@@ -1,14 +1,15 @@
-import { Tooltip } from "@chakra-ui/react";
+import { Tooltip, TooltipProps } from "@chakra-ui/react";
 
-type Props = {
-  label: string;
+interface Props extends TooltipProps {
   children: any;
 }
 export default function MyTooltip(props: Props) {
   const { label, children } = props;
   return (
     <Tooltip
-      placement="top" fontSize="2xs" label={label}
+      placement="top"
+      fontSize="2xs"
+      {...props}
     >
       {children}
     </Tooltip>

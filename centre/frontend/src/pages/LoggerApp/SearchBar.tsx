@@ -4,6 +4,7 @@ import React from "react";
 import { INSTRUCTION_FILTER_URL } from "src/libs/apis/types";
 import { notify } from "src/libs/notify";
 import { ParserError, query2Object, ParserPacketProperties, Query2ObjectResult } from "src/libs/query.parser";
+import MyTooltip from "../common/tooltip";
 import { FilterBodyType } from "./App";
 
 type SuggestBtnProps = {
@@ -128,9 +129,9 @@ export default function SearchBar (props: SearchBarProps) {
           Filter
           <Text as="span" cursor="pointer" onClick={() => window.open(INSTRUCTION_FILTER_URL, 'githubWindow', 'noopener noreferrer')}>
             &nbsp;
-            <Tooltip fontSize="2xs" label="Click to learn how to write filter" aria-label='Filter tutorial'>
+            <MyTooltip label="Click to learn how to write filter">
               <QuestionIcon />
-            </Tooltip>
+            </MyTooltip>
           </Text>
         </Text>
         <Box mx="auto" display="inline-block" w={{ base:"60%", lg:"80%"}}>

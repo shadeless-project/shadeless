@@ -111,6 +111,10 @@ export default function CensorPage() {
         editingCensor={editingCensor}
         callback={uiLoadCensors}
       />
+
+      <Text fontSize="2xs" ml="3em" opacity=".7">
+        Note: want to edit or delete existing censor ? Please ask admin account
+      </Text>
     </Box>
   );
 }

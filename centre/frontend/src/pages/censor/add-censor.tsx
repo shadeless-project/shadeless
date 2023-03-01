@@ -3,6 +3,7 @@ import { Checkbox, Code, Divider, FormLabel, Input, Modal, ModalBody, ModalClose
 import React, { useContext } from "react";
 import { createCensor } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
+import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 import MyTooltip from "../common/tooltip";
 import { LoggerContext } from "../LoggerApp/LoggerAppContext";
@@ -81,7 +82,7 @@ export default function AddCensorModal (props: Props) {
             fontWeight="700"
           >
             Method&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </Text>
           <Input
             size="sm"
@@ -96,7 +97,7 @@ export default function AddCensorModal (props: Props) {
             fontWeight="700"
           >
             Origin&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </Text>
           <Input
             size="sm"
@@ -111,7 +112,7 @@ export default function AddCensorModal (props: Props) {
             fontWeight="700"
           >
             Path&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </Text>
           <Input
             size="sm"

@@ -10,6 +10,7 @@ export class Account {
   username: string;
   password: string;
   email: string;
+  description: string;
   role: AccountRole;
 }
 export interface AccountDocument extends Account, Document {
@@ -23,22 +24,31 @@ export const AccountSchema = new Schema<AccountDocument>(
     password: { type: Schema.Types.String, required: true },
     role: { type: Schema.Types.String, required: true },
     email: { type: Schema.Types.String, default: 'default@mail.com' },
+    description: { type: Schema.Types.String, default: '' },
   },
   { timestamps: true },
 );
 
-AccountSchema.pre('save', function (next) {
-  const user = this;
-  if (!user.isModified('password')) return next();
-
-  bcrypt.genSalt(10, function (err, salt) {
-    if (err) return next(err);
-    bcrypt.hash(user.password, salt, function (err, hash) {
-      if (err) return next(err);
-      user.password = hash;
-      next();
+export function hashBcrypt(s: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, function (err, salt) {
+      if (err) return reject(err);
+      bcrypt.hash(s, salt, function (err, hash) {
+        if (err) return reject(err);
+        resolve(hash);
+      });
     });
   });
+}
+AccountSchema.pre('save', async function (next) {
+  const user = this;
+  if (!user.isModified('password')) return next();
+  try {
+    user.password = await hashBcrypt(user.password);
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 AccountSchema.methods.validatePassword = async function validatePassword(

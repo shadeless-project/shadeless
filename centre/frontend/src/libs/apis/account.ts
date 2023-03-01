@@ -8,12 +8,16 @@ export interface Account {
   _id?: string;
   username: string;
   role: AccountRole;
+  email: string;
+  description: string;
   createdAt: Date;
 }
 
 export const defaultAccount: Account = {
   username: '',
   role: AccountRole.NORMAL,
+  email: '',
+  description: '',
   createdAt: new Date(),
 }
 
@@ -32,10 +36,11 @@ export async function getAllAccounts (): Promise<ApiResponse<Account[]>> {
 }
 
 export async function createNewAccount (
-  username: string, 
-  password: string, 
-  passwordRecheck: string, 
+  username: string,
+  password: string,
+  passwordRecheck: string,
   email: string,
+  description: string,
   role: AccountRole,
 ): Promise<ApiResponse<string>> {
   const endpoint = `${API_URL}/accounts`;
@@ -50,6 +55,7 @@ export async function createNewAccount (
       password,
       passwordRecheck,
       email,
+      description,
       role,
     }),
   });
@@ -77,6 +83,19 @@ export async function resetPasswordAccount (_id: string, password: string, passw
       'Authorization': localStorage.getItem('authorization') || '',
     },
     body: JSON.stringify({ password, passwordRecheck }),
+  });
+  return data.json() as unknown as ApiResponse<string>;
+}
+
+export async function editAccount (_id: string, username: string, email: string, description: string, role: AccountRole): Promise<ApiResponse<string>> {
+  const endpoint = `${API_URL}/accounts/${_id}`;
+  const data = await fetch(endpoint, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('authorization') || '',
+    },
+    body: JSON.stringify({ username, email, description, role }),
   });
   return data.json() as unknown as ApiResponse<string>;
 }

@@ -10,7 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
-import { PostAccountDto, PutAccountDto, ResetPasswordAccountDto } from './accounts.dto';
+import {
+  PostAccountDto,
+  PutAccountDto,
+  ResetPasswordAccountDto,
+} from './accounts.dto';
 import { AccountsService } from './accounts.service';
 
 @Controller('accounts')
@@ -32,11 +36,7 @@ export class AccountsController {
         'password and passwordRecheck mismatched',
       );
 
-    await this.accountsService.createAccount(
-      account.username,
-      account.password,
-      account.role,
-    );
+    await this.accountsService.createAccount(account);
     return 'Successfully create new account';
   }
 

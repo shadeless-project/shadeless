@@ -24,6 +24,11 @@ export class PostCensorDto {
 }
 
 export class PutCensorDto {
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  project: string;
+
   @IsObject()
   condition: any;
 
@@ -31,4 +36,7 @@ export class PutCensorDto {
   @IsOptional()
   @MaxLength(1000)
   description: string;
+
+  @IsEnum(CensorType)
+  type: CensorType;
 }

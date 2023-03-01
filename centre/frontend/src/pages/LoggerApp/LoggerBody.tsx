@@ -7,6 +7,7 @@ import { ApiResponse } from "src/libs/apis/types";
 import PacketDetail from "./packet-detail";
 import { Query2ObjectResult } from "src/libs/query.parser";
 import { LoggerContext } from "./LoggerAppContext";
+import MyTooltip from "../common/tooltip";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
@@ -170,24 +171,20 @@ export default function LoggerBody(props: LoggerBodyProps) {
         <Thead fontSize="2xs">
           <Tr>
             <Th textAlign="center">
-              <Tooltip fontSize="2xs" placement="top" label="The index correspond with Burpsuite Shadeless log">ID</Tooltip>
+              <MyTooltip label="The index correspond with Burpsuite Shadeless log">ID</MyTooltip>
             </Th>
             <Th textAlign="center">
-              <Tooltip fontSize="2xs" placement="top" label="Number of packets look-alike with this packet">CNT</Tooltip>
+              <MyTooltip label="Number of packets look-alike with this packet">CNT</MyTooltip>
             </Th>
             <Th textAlign="center">
-              <Tooltip fontSize="2xs" placement="top" label="Heuristical static score of the packet (from 0 to 100)">Score</Tooltip>
+              <MyTooltip label="Heuristical static score of the packet (from 0 to 100)">Score</MyTooltip>
             </Th>
             <Th textAlign="center">Status</Th>
             <Th>Method</Th>
             <Th>Origin</Th>
             <Th>Path</Th>
-            <Th>
-              <Tooltip fontSize="2xs" placement="top" label="parameters">Params</Tooltip>
-            </Th>
-            <Th>
-              <Tooltip fontSize="2xs" placement="top" label="reflectedParameters">Reflected</Tooltip>
-            </Th>
+            <Th><MyTooltip label="parameters">Params</MyTooltip></Th>
+            <Th><MyTooltip label="reflectedParameters">Reflected</MyTooltip></Th>
           </Tr>
         </Thead>
         <Tbody>

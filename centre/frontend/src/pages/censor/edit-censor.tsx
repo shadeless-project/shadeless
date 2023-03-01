@@ -1,7 +1,7 @@
 import { QuestionIcon } from "@chakra-ui/icons";
 import { Checkbox, Code, Divider, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, Tooltip, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { Censor, editCensor } from "src/libs/apis/censors";
+import { Censor, CensorType, editCensor } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
 import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
@@ -32,15 +32,22 @@ export default function EditCensorModal(props: Props) {
     setCensorPath(editingCensor.condition.path);
     setCensorDescription(editingCensor.description);
     if (currentProject === '') setIsCensorAllProject(true);
+    else setIsCensorAllProject(editingCensor.type === CensorType.ALL);
   }, [editingCensor, currentProject]);
 
   async function uiEditCensor() {
     setIsSubmitting(true);
-    const resp = await editCensor(editingCensor._id || '', {
-      method: censorMethod,
-      origin: censorOrigin,
-      path: censorPath,
-    }, censorDescription);
+    const resp = await editCensor(
+      editingCensor._id || '',
+      currentProject,
+      {
+        method: censorMethod,
+        origin: censorOrigin,
+        path: censorPath,
+      },
+      censorDescription,
+      isCensorAllProject ? CensorType.ALL : CensorType.ONE,
+    );
     setIsSubmitting(false);
     notify(toast, resp);
     if (resp.statusCode === 200) {

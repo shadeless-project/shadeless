@@ -2,6 +2,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Code, Icon, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
+import { AccountRole } from "src/libs/apis/account";
 import { Censor, CENSOR_CONDITION } from "src/libs/apis/censors";
 import ConfigIcon from "../common/config-icon";
 
@@ -63,36 +64,38 @@ export default function CensorTable (props: CensorTableProps) {
                     {window.formatDate(c['createdAt'])}
                   </Text>
                 </Td>
-                <Td>
-                  <Menu>
-                    <MenuButton
-                      p={2}
-                      _hover={{ bg: 'custom.focus-grey' }}
-                      _expanded={{ bg: 'custom.focus-grey' }}
-                    >
-                      <ConfigIcon />
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        onClick={() => {
-                          setEditingCensor(c);
-                          onOpenModalEdit();
-                        }}
+                {window.getUserRole() === AccountRole.ADMIN &&
+                  <Td>
+                    <Menu>
+                      <MenuButton
+                        p={2}
+                        _hover={{ bg: 'custom.focus-grey' }}
+                        _expanded={{ bg: 'custom.focus-grey' }}
                       >
-                        Edit censor
-                      </MenuItem>
-                      <MenuItem
-                        color="red.500"
-                        onClick={() => {
-                          setDeletingCensor(c);
-                          onOpenModalDel();
-                        }}
-                      >
-                        Remove
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Td>
+                        <ConfigIcon />
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem
+                          onClick={() => {
+                            setEditingCensor(c);
+                            onOpenModalEdit();
+                          }}
+                        >
+                          Edit censor
+                        </MenuItem>
+                        <MenuItem
+                          color="red.500"
+                          onClick={() => {
+                            setDeletingCensor(c);
+                            onOpenModalDel();
+                          }}
+                        >
+                          Remove
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Td>
+                }
               </Tr>
             )}
           </Tbody>
