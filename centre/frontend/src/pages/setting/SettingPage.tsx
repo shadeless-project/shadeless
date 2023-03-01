@@ -1,4 +1,5 @@
-import { Box, Button, Grid, Text } from '@chakra-ui/react';
+import { Box, Divider, Grid, Text } from '@chakra-ui/react';
+import { SHADELESS_VERSION } from 'src/libs/apis/types';
 import { Link } from 'wouter';
 
 type ButtonNavigationProps = {
@@ -41,11 +42,16 @@ export default function SettingPage ({ body }: SettingPageProps) {
         bg="custom.white"
         alignSelf="start"
         borderRadius="var(--component-border)"
-        padding="15px"
       >
-        <ButtonNavigation>Projects</ButtonNavigation>
-        <ButtonNavigation>Censors</ButtonNavigation>
-        <ButtonNavigation>Accounts</ButtonNavigation>
+        <Box p="15px">
+          <ButtonNavigation>Projects</ButtonNavigation>
+          <ButtonNavigation>Censors</ButtonNavigation>
+          <ButtonNavigation>Accounts</ButtonNavigation>
+        </Box>
+        <Divider />
+        <Box cursor="default" p="15px" fontSize="2xs" opacity=".7">
+          Version: {SHADELESS_VERSION}
+        </Box>
       </Box>
       {body}
     </Grid>

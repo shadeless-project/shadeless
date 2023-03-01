@@ -21,7 +21,7 @@ import {
 import { ProjectPacketsService } from './project-packets/project-packets.service';
 import { ProjectUsersService } from './project-users/project-users.service';
 import { ProjectsService } from './projects/projects.service';
-import { AuthGuard } from 'libs/middlewares/auth.guard';
+import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -130,6 +130,7 @@ export class ProjectsController {
   }
 
   @Delete(':name')
+  @UseGuards(AdminGuard)
   async deleteProject(@Param('name') name: string) {
     return this.projectsService.deleteProject(name);
   }

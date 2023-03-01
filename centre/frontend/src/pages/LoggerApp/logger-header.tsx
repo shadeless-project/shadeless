@@ -34,7 +34,7 @@ export default function LoggerHeader (props: Props) {
       }
     }
     uiLoadProject();
-  }, [currentProject, myLocation]);
+  }, [currentProject]);
 
   return (
     <Box

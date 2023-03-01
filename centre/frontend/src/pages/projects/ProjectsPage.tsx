@@ -10,6 +10,7 @@ import ProjectStat from './project-stat';
 import EditProjectModal from './edit-project';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import ConfigIcon from '../common/config-icon';
+import { AccountRole } from 'src/libs/apis/account';
 
 export default function ProjectsPage() {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -140,15 +141,17 @@ export default function ProjectsPage() {
                       >
                         Edit project
                       </MenuItem>
-                      <MenuItem
-                        color="red.500"
-                        onClick={() => {
-                          setDeletingProject(p);
-                          onOpen();
-                        }}
-                      >
-                        Remove
-                      </MenuItem>
+                      {window.getUserRole() === AccountRole.ADMIN &&
+                        <MenuItem
+                          color="red.500"
+                          onClick={() => {
+                            setDeletingProject(p);
+                            onOpen();
+                          }}
+                        >
+                          Remove
+                        </MenuItem>
+                      }
                     </MenuList>
                   </Menu>
                 </Td>

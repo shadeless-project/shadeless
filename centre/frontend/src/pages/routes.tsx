@@ -30,63 +30,67 @@ function Routes () {
       bg="custom.grey"
       pb="10vh"
     >
-      <Navbar />
       <Box
-        fontSize="sm"
-        mx="auto"
-        width="var(--component-width)"
-        mt="var(--component-distance)"
+        minH="90vh" //TODO
       >
-        {myLocation.map((loc,idx) =>
-          <React.Fragment key={`location-${loc}-${idx}`}>
-            &nbsp;/&nbsp;
-            <Link href={myLocationHref[idx]}>
-              <Text
-                cursor="pointer"
-                as="span"
-                color="custom.primary"
-                _hover={{ textDecor: 'underline' }}
-              >
-                {loc}
-              </Text>
-            </Link>
-          </React.Fragment>
-        )}
-      </Box>
+        <Navbar />
+        <Box
+          fontSize="sm"
+          mx="auto"
+          width="var(--component-width)"
+          mt="var(--component-distance)"
+        >
+          {myLocation.map((loc,idx) =>
+            <React.Fragment key={`location-${loc}-${idx}`}>
+              &nbsp;/&nbsp;
+              <Link href={myLocationHref[idx]}>
+                <Text
+                  cursor="pointer"
+                  as="span"
+                  color="custom.primary"
+                  _hover={{ textDecor: 'underline' }}
+                >
+                  {loc}
+                </Text>
+              </Link>
+            </React.Fragment>
+          )}
+        </Box>
 
-      <Switch>
-        <Route path="/projects/:name">
-          {(params) => {
-            setLocation(`/projects/${params.name}/logger`);
-            return <></>
-          }}
-        </Route>
-        <Route path="/projects/:name/:page">
-          {(params) => <AppPage project={params.name} page={params.page} />}
-        </Route>
-        <Route path="/:pageType">
-          {(params) => {
-            switch (params.pageType) {
-              case 'projects':
-                return <SettingPage body={<ProjectsPage />}/>
-              case 'censors':
-                return <SettingPage body={<CensorPage />}/>
-              case 'accounts':
-                return <SettingPage body={<AccountsPage />}/>
-            }
-            return <SettingPage body={<Page404 />} />
-          }}
-        </Route>
-        <Route>
-          <Box
-            mt="var(--component-distance)"
-            w="var(--component-width)"
-            mx="auto"
-          >
-            <Page404 />
-          </Box>
-        </Route>
-      </Switch>
+        <Switch>
+          <Route path="/projects/:name">
+            {(params) => {
+              setLocation(`/projects/${params.name}/logger`);
+              return <></>
+            }}
+          </Route>
+          <Route path="/projects/:name/:page">
+            {(params) => <AppPage project={params.name} page={params.page} />}
+          </Route>
+          <Route path="/:pageType">
+            {(params) => {
+              switch (params.pageType) {
+                case 'projects':
+                  return <SettingPage body={<ProjectsPage />}/>
+                case 'censors':
+                  return <SettingPage body={<CensorPage />}/>
+                case 'accounts':
+                  return <SettingPage body={<AccountsPage />}/>
+              }
+              return <SettingPage body={<Page404 />} />
+            }}
+          </Route>
+          <Route>
+            <Box
+              mt="var(--component-distance)"
+              w="var(--component-width)"
+              mx="auto"
+            >
+              <Page404 />
+            </Box>
+          </Route>
+        </Switch>
+      </Box>
     </Box>
   );
 }
