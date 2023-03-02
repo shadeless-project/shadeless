@@ -31,7 +31,7 @@ services:
     container_name: shadeless-centre
     restart: always
     volumes:
-      - ./files-prod/:/files/
+      - "centre-secret-volume:/files/"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
@@ -41,3 +41,5 @@ services:
 volumes:
   shadeless-volume:
     external: false
+  centre-secret-volume:
+      external: false

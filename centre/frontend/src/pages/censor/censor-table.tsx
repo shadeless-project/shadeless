@@ -1,7 +1,5 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Code, Icon, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { Code, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
-import { FaEllipsisV } from "react-icons/fa";
 import { AccountRole } from "src/libs/apis/account";
 import { Censor, CENSOR_CONDITION } from "src/libs/apis/censors";
 import ConfigIcon from "../common/config-icon";
