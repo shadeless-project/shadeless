@@ -15,7 +15,7 @@ services:
       - "shadeless-ui:app-ui"
       - "shadeless-centre:app-centre"
     ports:
-      - "13337:80"
+      - "127.0.0.1:13337:80"
 
   shadeless-ui:
     build:
