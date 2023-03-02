@@ -1,4 +1,5 @@
-import { Button, Tooltip } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import MyTooltip from "../common/tooltip";
 
 type UtilBtnProps = {
   tooltip: string;
@@ -14,7 +15,7 @@ export default function UtilityButton(props: UtilBtnProps) {
   const fontSize = props.fontSize || '2xs';
   const ml = props.ml || '0px';
   return (
-    <Tooltip fontSize="2xs" placement="top" label={tooltip}>
+    <MyTooltip label={tooltip}>
       <Button
         size="2xs"
         fontSize={fontSize}
@@ -27,6 +28,6 @@ export default function UtilityButton(props: UtilBtnProps) {
       >
         {children}
       </Button>
-    </Tooltip>
+    </MyTooltip>
   )
 }

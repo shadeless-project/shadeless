@@ -6,6 +6,7 @@ import { LoggerContext } from "./LoggerAppContext";
 import { useLocation } from "wouter";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Tabs } from "./App";
+import MyTooltip from "../common/tooltip";
 
 type Props = {
   choosingTab: Tabs;
@@ -34,14 +35,15 @@ export default function LoggerHeader (props: Props) {
       }
     }
     uiLoadProject();
-  }, [currentProject, myLocation]);
+  }, [currentProject]);
 
   return (
     <Box
+      zIndex="2"
+      bg="custom.white"
       width="var(--component-width)"
       mx="auto"
       mt="var(--component-distance)"
-      bg="custom.white"
       borderRadius="var(--component-border)"
       px="1.5%"
     >
@@ -93,7 +95,9 @@ export default function LoggerHeader (props: Props) {
             _active={{'opacity': '.8'}}
             onClick={() => setLocation(`/projects?editProject=${currentProject}`)}
           >
-            <EditIcon />
+            <MyTooltip label="Edit project">
+              <EditIcon />
+            </MyTooltip>
           </Button>
           <Button
             p="0"
@@ -101,8 +105,11 @@ export default function LoggerHeader (props: Props) {
             _hover={{'opacity': '.6'}}
             _active={{'opacity': '.8'}}
             onClick={() => setLocation(`/projects?deleteProject=${currentProject}`)}
+            color="red.600"
           >
-            <DeleteIcon />
+            <MyTooltip label="Delete project">
+              <DeleteIcon />
+            </MyTooltip>
           </Button>
         </Box>
       </Flex>
@@ -121,7 +128,7 @@ export default function LoggerHeader (props: Props) {
           borderBottomWidth: '3px',
           fontWeight: '600'
         }}
-        onClick={() => setLocation(`/projects/${project.name}`)}
+        onClick={() => setLocation(`/projects/${project.name}/logger`)}
       >
         Logger
       </Button>

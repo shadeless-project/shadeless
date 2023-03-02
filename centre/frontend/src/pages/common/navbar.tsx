@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Flex,
   HStack,
@@ -9,14 +8,19 @@ import {
   MenuItem,
   Text,
   Box,
+  Img,
 } from '@chakra-ui/react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import DocumentationIcon from './documentation-icon';
+import MyTooltip from './tooltip';
+import { INSTRUCTION_SHADELESS } from "src/libs/apis/types";
 
 function Navbar () {
+  const setLocation = useLocation()[1];
   function logout() {
     localStorage.setItem('authorization', '');
-    location.href = '/';
+    setLocation('/');
     location.reload();
   }
   return (
@@ -44,30 +48,42 @@ function Navbar () {
             </Text>
           </HStack>
 
-          <Menu>
-            <MenuButton as={Button}
-              bg="custom.white"
-              _hover={{ bg: 'custom.focus-grey' }}
-              _active={{ bg: 'custom.focus-grey' }}
-            >
-              {window.getUser().username}&nbsp;&nbsp;<HamburgerIcon />
-            </MenuButton>
-            <MenuList>
-              <Link href='/projects'>
-                <MenuItem>
-                  Choose project
+          <Box>
+            <MyTooltip label="View source code">
+              <Button mr="20px" bg="inherit" p="0" onClick={() => location.href = "https://github.com/shadeless-project/"}>
+                <Img src="/github.svg" w="20px" h="20px" />
+              </Button>
+            </MyTooltip>
+            <MyTooltip label="View documentation">
+              <Button mr="20px" bg="inherit" p="0" onClick={() => location.href = INSTRUCTION_SHADELESS}>
+                <DocumentationIcon w="20px" h="20px" />
+              </Button>
+            </MyTooltip>
+            <Menu>
+              <MenuButton as={Button}
+                bg="custom.white"
+                _hover={{ bg: 'custom.focus-grey' }}
+                _active={{ bg: 'custom.focus-grey' }}
+              >
+                {window.getUser().username}&nbsp;&nbsp;<HamburgerIcon />
+              </MenuButton>
+              <MenuList>
+                <Link href='/projects'>
+                  <MenuItem>
+                    Choose project
+                  </MenuItem>
+                </Link>
+                <Link href='/accounts'>
+                  <MenuItem>
+                    Accounts setting
+                  </MenuItem>
+                </Link>
+                <MenuItem onClick={logout}>
+                  Logout
                 </MenuItem>
-              </Link>
-              <Link href='/accounts'>
-                <MenuItem>
-                  Accounts setting
-                </MenuItem>
-              </Link>
-              <MenuItem onClick={logout}>
-                Logout
-              </MenuItem>
-            </MenuList>
-          </Menu>
+              </MenuList>
+            </Menu>
+          </Box>
         </Flex>
       </Box>
     </>

@@ -21,7 +21,7 @@ import {
 import { ProjectPacketsService } from './project-packets/project-packets.service';
 import { ProjectUsersService } from './project-users/project-users.service';
 import { ProjectsService } from './projects/projects.service';
-import { AuthGuard } from 'libs/middlewares/auth.guard';
+import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -115,30 +115,6 @@ export class ProjectsController {
     return result;
   }
 
-  @Post(':name/query_after')
-  @HttpCode(200)
-  async queryPacketsAfter(
-    @Param('name') projectName: string,
-    @Body() queryCriteria: QueryPacketAfterTimeDto,
-  ) {
-    if (
-      !onlyOneExist(
-        queryCriteria.body,
-        queryCriteria.requestBody,
-        queryCriteria.responseBody,
-      )
-    )
-      throw new BadRequestException(
-        [],
-        'There should only have 1 "body" or "requestBody" or "responseBody"',
-      );
-    const result = await this.projectPacketsService.queryPacketsAfter(
-      projectName,
-      queryCriteria,
-    );
-    return result;
-  }
-
   @Post()
   @HttpCode(200)
   async createProject(@Body() project: PostProjectDto) {
@@ -154,6 +130,7 @@ export class ProjectsController {
   }
 
   @Delete(':name')
+  @UseGuards(AdminGuard)
   async deleteProject(@Param('name') name: string) {
     return this.projectsService.deleteProject(name);
   }

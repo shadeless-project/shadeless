@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { DashboardAdditionalDataType, DashboardPackets, defaultDashboardPacket, getDashboardAdditionalData, getDashboardPackets, getPackets, Packet } from "src/libs/apis/packets";
 import { notify } from "src/libs/notify";
 import { Query2ObjectResult } from "src/libs/query.parser";
+import MyTooltip from "../common/tooltip";
 import { LoggerContext } from "./LoggerAppContext";
 
 type LoggerDashboardProps = {
@@ -170,7 +171,7 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
                 </Text>
                 <Text fontSize="xs" opacity='.5' as="span">&nbsp;records</Text>
               </StatNumber>
-              <Tooltip fontSize="2xs" placement="top" label="Copy to clipboard all origins">
+              <MyTooltip label='Copy to clipboard all origins'>
                 <Button
                   position="absolute"
                   top="0"
@@ -182,8 +183,8 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
                   _hover={{ opacity: '.8' }}
                   _active={{ opacity: '.9' }}
                   onClick={clickCopyOrigins}
-                ></Button>
-              </Tooltip>
+                />
+              </MyTooltip>
             </Box>
           </Stat>
 

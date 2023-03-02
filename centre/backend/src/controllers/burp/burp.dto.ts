@@ -54,12 +54,17 @@ export class UploadPacketDto {
 
   @IsString()
   @MinLength(1)
+  @MaxLength(1000)
   requestHttpVersion: string;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(200)
   requestContentType: string;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(1000)
   referer: string;
 
   @IsString()
@@ -72,16 +77,18 @@ export class UploadPacketDto {
   @Max(65535)
   port: number;
 
-  // No Max length for path
   @IsString()
   @MinLength(1)
+  @MaxLength(10000)
   path: string;
 
   @IsBoolean()
+  @IsOptional()
   hasBodyParam: boolean;
 
   @IsString()
   @IsOptional()
+  @MaxLength(10000)
   querystring: string;
 
   @IsString()
@@ -97,6 +104,8 @@ export class UploadPacketDto {
   requestHeaders: string[];
 
   @IsString()
+  @IsOptional()
+  @MaxLength(10000)
   requestCookies: string;
 
   @IsNumber()
@@ -105,9 +114,13 @@ export class UploadPacketDto {
   responseStatus: number;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(1024)
   responseContentType: string;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(1024)
   responseStatusText: string;
 
   @IsNumber()
@@ -115,15 +128,23 @@ export class UploadPacketDto {
   responseLength: number;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(1024)
   responseMimeType: string;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(1024)
   responseHttpVersion: string;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(1024)
   responseInferredMimeType: string;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(1024)
   responseCookies: string;
 
   @IsString()
@@ -135,6 +156,7 @@ export class UploadPacketDto {
   responseHeaders: string[];
 
   @IsNumber()
+  @IsOptional()
   rtt: number;
 
   @IsObject()

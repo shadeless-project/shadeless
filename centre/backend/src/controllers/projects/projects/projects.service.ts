@@ -10,6 +10,7 @@ import { User, UserDocument } from 'libs/schemas/user.schema';
 import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
 import { Path, PathDocument } from 'libs/schemas/path.schema';
 import { Occurence, OccurenceDocument } from 'libs/schemas/occurence.schema';
+import { Censor, CensorDocument } from 'libs/schemas/censor.schema';
 
 @Injectable()
 export class ProjectsService {
@@ -18,6 +19,7 @@ export class ProjectsService {
     @InjectModel(Occurence.name)
     private occurenceModel: Model<OccurenceDocument>,
     @InjectModel(File.name) private fileModel: Model<FileDocument>,
+    @InjectModel(Censor.name) private censorModel: Model<CensorDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Path.name) private pathModel: Model<PathDocument>,
     @InjectModel(RawPacket.name)
@@ -61,6 +63,7 @@ export class ProjectsService {
       this.rawPacketModel.deleteMany({ project: projectName }),
       this.occurenceModel.deleteMany({ project: projectName }),
       this.pathModel.deleteMany({ project: projectName }),
+      this.censorModel.deleteMany({ project: projectName }),
     ]);
     return 'Successfully deleted project';
   }

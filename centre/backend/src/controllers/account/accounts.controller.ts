@@ -6,10 +6,15 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
-import { PostAccountDto } from './accounts.dto';
+import {
+  PostAccountDto,
+  PutAccountDto,
+  ResetPasswordAccountDto,
+} from './accounts.dto';
 import { AccountsService } from './accounts.service';
 
 @Controller('accounts')
@@ -31,12 +36,30 @@ export class AccountsController {
         'password and passwordRecheck mismatched',
       );
 
-    await this.accountsService.createAccount(
-      account.username,
-      account.password,
-      account.role,
-    );
+    await this.accountsService.createAccount(account);
     return 'Successfully create new account';
+  }
+
+  @Put('/:_id')
+  @UseGuards(AdminGuard)
+  async editAccount(@Param('_id') _id: string, @Body() data: PutAccountDto) {
+    await this.accountsService.editAccount(_id, data);
+    return 'Successfully edit account';
+  }
+
+  @Put('/:_id/resetPassword')
+  @UseGuards(AdminGuard)
+  async resetAccountPassword(
+    @Param('_id') _id: string,
+    @Body() data: ResetPasswordAccountDto,
+  ) {
+    if (data.password !== data.passwordRecheck)
+      throw new BadRequestException(
+        '{}',
+        'password and passwordRecheck mismatched',
+      );
+    await this.accountsService.resetAccountPassword(_id, data);
+    return 'Successfully reset password of account';
   }
 
   @Delete('/:_id')

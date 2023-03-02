@@ -1,7 +1,7 @@
 import { QuestionIcon } from "@chakra-ui/icons";
 import { Checkbox, Code, Divider, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, Tooltip, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { createCensor } from "src/libs/apis/censors";
+import { Censor, CensorType, editCensor } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
 import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
@@ -12,62 +12,55 @@ type Props = {
   isOpen: boolean;
   onClose: () => any;
   callback: (...args: any[]) => any;
+  editingCensor: Censor;
 }
-export default function AddCensorModal (props: Props) {
-  const { isOpen, onClose, callback } = props;
-
+export default function EditCensorModal(props: Props) {
+  const { isOpen, onClose, editingCensor, callback } = props;
   const toast = useToast();
-  const currentProject = useContext(LoggerContext);
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const currentProject = useContext(LoggerContext);
   const [censorMethod, setCensorMethod] = React.useState('');
   const [censorOrigin, setCensorOrigin] = React.useState('');
   const [censorPath, setCensorPath] = React.useState('');
+  const [censorDescription, setCensorDescription] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isCensorAllProject, setIsCensorAllProject] = React.useState(false);
 
-  async function uiCreateCensor() {
+  React.useEffect(() => {
+    setCensorMethod(editingCensor.condition.method);
+    setCensorOrigin(editingCensor.condition.origin);
+    setCensorPath(editingCensor.condition.path);
+    setCensorDescription(editingCensor.description);
+    if (currentProject === '') setIsCensorAllProject(true);
+    else setIsCensorAllProject(editingCensor.type === CensorType.ALL);
+  }, [editingCensor, currentProject]);
+
+  async function uiEditCensor() {
     setIsSubmitting(true);
-    const resp = await createCensor(
+    const resp = await editCensor(
+      editingCensor._id || '',
       currentProject,
       {
         method: censorMethod,
         origin: censorOrigin,
         path: censorPath,
       },
-      (document.getElementById('create-censor-description') as HTMLInputElement).value || '',
-      isCensorAllProject,
+      censorDescription,
+      isCensorAllProject ? CensorType.ALL : CensorType.ONE,
     );
     setIsSubmitting(false);
     notify(toast, resp);
     if (resp.statusCode === 200) {
-      callback();
       onClose();
+      callback();
     }
   }
-
-  React.useEffect(() => {
-    function loadCensorOnUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      setCensorMethod(urlParams.get('censorMethod') || '');
-      setCensorOrigin(urlParams.get('censorOrigin') || '');
-      setCensorPath(urlParams.get('censorPath') || '');
-      if (urlParams.toString() !== '') {
-        setTimeout(() => {
-          document.getElementById('click-add-censor')?.click();
-          window.history.pushState({}, '', location.pathname);
-        }, 150);
-      }
-    }
-    loadCensorOnUrl();
-    if (currentProject === '') setIsCensorAllProject(true);
-  }, [currentProject]);
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          Adding censor
+          Editing censor
           <Text as="span" cursor="pointer">
           &nbsp;
           <Tooltip fontSize="2xs" label="Packets matched with below conditions will have their body censored in logs. This prevent username/password leak to other collaborators" aria-label='Filter tutorial'>
@@ -147,27 +140,28 @@ export default function AddCensorModal (props: Props) {
             fontSize="sm"
             placeholder="This endpoint is login for SSO"
             _placeholder={{opacity: '0.6'}}
+            defaultValue={censorDescription}
+            onChange={(e) => setCensorDescription(e.target.value)}
           />
-            <Checkbox
-              mt="20px"
-              isChecked={isCensorAllProject}
-              isDisabled={currentProject === ''}
-              onChange={(e) => setIsCensorAllProject(e.target.checked)}
-            >
-              <MyTooltip label={currentProject === '' ? "Please go to project specific to apply censor for that project" : ''}>
-                <Text fontSize="sm">Apply this censor for all projects</Text>
-              </MyTooltip>
-            </Checkbox>
-
+          <Checkbox
+            mt="20px"
+            isChecked={isCensorAllProject}
+            isDisabled={currentProject === ''}
+            onChange={(e) => setIsCensorAllProject(e.target.checked)}
+          >
+            <MyTooltip label={currentProject === '' ? "Please go to project specific to apply censor for that project" : ''}>
+              <Text fontSize="sm">Apply this censor for all projects</Text>
+            </MyTooltip>
+          </Checkbox>
         </ModalBody>
 
         <ModalFooter>
           <SubmitButton
             mr={3}
             isSubmitting={isSubmitting}
-            onClick={uiCreateCensor}
+            onClick={uiEditCensor}
           >
-            Submit
+            Edit
           </SubmitButton>
         </ModalFooter>
       </ModalContent>

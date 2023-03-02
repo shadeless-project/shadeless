@@ -2,6 +2,7 @@ import { FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, Mod
 import React from "react";
 import { createProject } from "src/libs/apis/projects";
 import { notify } from "src/libs/notify";
+import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 
 type DeleteModalProjectProps = {
@@ -45,7 +46,7 @@ export default function AddProjectModal(props: DeleteModalProjectProps) {
             fontWeight="600"
           >
             Project name&nbsp;
-            <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+            <RequiredTooltip />
           </FormLabel>
           <Input
             bg="custom.white"

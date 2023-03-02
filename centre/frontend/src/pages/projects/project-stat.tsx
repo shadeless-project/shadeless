@@ -1,7 +1,8 @@
-import { Spinner, Tag, Tooltip } from "@chakra-ui/react";
+import { Spinner, Tag } from "@chakra-ui/react";
 import React from "react";
 import { DashboardPackets, defaultDashboardPacket, getDashboardPackets } from "src/libs/apis/packets";
 import { defaultQuery2ObjectResult } from "src/libs/query.parser";
+import MyTooltip from "../common/tooltip";
 
 type ProjectStatProps = {
   projectName: string;
@@ -25,16 +26,16 @@ export default function ProjectStat (props: ProjectStatProps) {
     <React.Fragment>
       {isLoading ? <Spinner /> :
         <React.Fragment>
-          <Tooltip placement="top" fontSize="2xs" label="Number of origins">
+          <MyTooltip label="Number of origins">
             <Tag colorScheme='blue' borderRadius='full'>
               {stats.numAllOrigins}
             </Tag>
-          </Tooltip>
-          <Tooltip placement="top" fontSize="2xs" label="Number of packets">
+          </MyTooltip>
+          <MyTooltip label="Number of packets">
             <Tag bg="custom.black" color="custom.white" borderRadius='full' mx="2px">
               {stats.numAllPackets}
             </Tag>
-          </Tooltip>
+          </MyTooltip>
         </React.Fragment>
       }
     </React.Fragment>

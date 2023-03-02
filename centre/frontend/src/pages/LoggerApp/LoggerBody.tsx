@@ -1,12 +1,13 @@
 import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Tooltip, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { getPackets, Packet, getPacketsAfterTime, defaultPacket } from "src/libs/apis/packets";
+import { getPackets, Packet, defaultPacket } from "src/libs/apis/packets";
 import SearchBar from "./SearchBar";
 import { notify } from "src/libs/notify";
 import { ApiResponse } from "src/libs/apis/types";
 import PacketDetail from "./packet-detail";
 import { Query2ObjectResult } from "src/libs/query.parser";
 import { LoggerContext } from "./LoggerAppContext";
+import MyTooltip from "../common/tooltip";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
@@ -28,6 +29,7 @@ export default function LoggerBody(props: LoggerBodyProps) {
     now: '',
   });
   const [isLoadingPackets, setIsLoadingPackets] = React.useState(true);
+  const [endOfPackets, setEndOfPackets] = React.useState(false);
   const [packetInterval, setPacketInterval] = React.useState({
     from: 0,
     to: NUM_PACKETS_PER_PAGE,
@@ -67,15 +69,6 @@ export default function LoggerBody(props: LoggerBodyProps) {
     return res.sort((a, b) => -isSmaller(a, b));
   }
 
-  async function getLatestPacket() {
-    const newPacketsResp = await getPacketsAfterTime(
-      currentProject,
-      applyingFilter,
-      packets[0]?.createdAt || (new Date(0)).toISOString(),
-    )
-    const newPackets = mergeArrPackets(newPacketsResp.data, packets);
-    setPackets(newPackets);
-  }
   async function clickPacket(e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, p: Packet) {
     if (Math.abs(e.pageX - placeMouseClick.x) < 5 && Math.abs(e.pageY - placeMouseClick.y) < 5) {
       setIsShowingDetail(true);
@@ -111,7 +104,13 @@ export default function LoggerBody(props: LoggerBodyProps) {
     else {
       if (newPacketsResponse.data.length === 0) {
         setIsLoadingPackets(false);
-        setPacketInterval({ from, to })
+        setPacketInterval({ from, to });
+        setEndOfPackets(true);
+        notify(toast, {
+          statusCode: 200,
+          error: 'End of packets',
+          data: 'End of packets',
+        }, 'get-packet-err-toast');
         return;
       }
       const newPackets = mergeArrPackets(packets, newPacketsResponse.data);
@@ -128,28 +127,25 @@ export default function LoggerBody(props: LoggerBodyProps) {
   }
 
   React.useEffect(() => {
-    const intervalId = setInterval(() => {
-      getLatestPacket().then(() => console.log('[Interval] getting latest packets'));
-    }, 4000);
-    return () => clearInterval(intervalId);
-  }, [packets, applyingFilter]);
-
-  React.useEffect(() => {
     setPackets([]);
+    setEndOfPackets(false);
     setIsLoadingPackets(true);
     setPacketInterval({ from: 0, to: NUM_PACKETS_PER_PAGE });
     getFirstPackets();
-  }, [applyingFilter]);
+  }, [applyingFilter, currentProject]);
 
   React.useEffect(() => {
-    window.onscroll = async (ev) => {
-      if (!isLoadingPackets && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
+    async function handleScrollBottomPage() {
+      if (endOfPackets) return;
+      if (isLoadingPackets) return;
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
         setIsLoadingPackets(true);
-        console.log('ok');
         await getPacketsInInterval(packetInterval.from, packetInterval.to);
       }
     };
-  }, [isLoadingPackets, packetInterval, applyingFilter]);
+    window.addEventListener("scroll", handleScrollBottomPage);
+    return () => window.removeEventListener("scroll", handleScrollBottomPage);
+  }, [isLoadingPackets, packetInterval, applyingFilter, currentProject]);
 
   return (
     <Box
@@ -175,24 +171,20 @@ export default function LoggerBody(props: LoggerBodyProps) {
         <Thead fontSize="2xs">
           <Tr>
             <Th textAlign="center">
-              <Tooltip fontSize="2xs" placement="top" label="The index correspond with Burpsuite Shadeless log">ID</Tooltip>
+              <MyTooltip label="The index correspond with Burpsuite Shadeless log">ID</MyTooltip>
             </Th>
             <Th textAlign="center">
-              <Tooltip fontSize="2xs" placement="top" label="Number of packets look-alike with this packet">CNT</Tooltip>
+              <MyTooltip label="Number of packets look-alike with this packet">CNT</MyTooltip>
             </Th>
             <Th textAlign="center">
-              <Tooltip fontSize="2xs" placement="top" label="Heuristical static score of the packet (from 0 to 100)">Score</Tooltip>
+              <MyTooltip label="Heuristical static score of the packet (from 0 to 100)">Score</MyTooltip>
             </Th>
             <Th textAlign="center">Status</Th>
             <Th>Method</Th>
             <Th>Origin</Th>
             <Th>Path</Th>
-            <Th>
-              <Tooltip fontSize="2xs" placement="top" label="parameters">Params</Tooltip>
-            </Th>
-            <Th>
-              <Tooltip fontSize="2xs" placement="top" label="reflectedParameters">Reflected</Tooltip>
-            </Th>
+            <Th><MyTooltip label="parameters">Params</MyTooltip></Th>
+            <Th><MyTooltip label="reflectedParameters">Reflected</MyTooltip></Th>
           </Tr>
         </Thead>
         <Tbody>

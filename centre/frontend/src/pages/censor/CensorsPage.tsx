@@ -1,5 +1,5 @@
 import { Box,
-  Flex, Spinner, Text, useDisclosure, useToast } from "@chakra-ui/react";
+  Flex, Spinner, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Censor, CensorType, defaultCensor, getCensors } from "src/libs/apis/censors";
 import SubmitButton from "../common/submit-button";
@@ -7,6 +7,7 @@ import { LoggerContext } from "../LoggerApp/LoggerAppContext";
 import AddCensorModal from "./add-censor";
 import CensorTable from "./censor-table";
 import DeleteCensorModal from "./delete-censor";
+import EditCensorModal from "./edit-censor";
 
 export default function CensorPage() {
   const currentProject = useContext(LoggerContext);
@@ -17,15 +18,16 @@ export default function CensorPage() {
   const { isOpen: isOpenModalDel, onOpen: onOpenModalDel, onClose: onCloseModalDel } = useDisclosure();
   const [deletingCensor, setDeletingCensor] = React.useState<Censor>(defaultCensor);
 
+  const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
+  const [editingCensor, setEditingCensor] = React.useState<Censor>(defaultCensor);
+
   async function uiLoadCensors() {
     setIsLoading(true);
     setCensors([]);
     const resp = await getCensors(currentProject);
     setIsLoading(false);
     setCensors(resp.data);
-    console.log(resp.data);
   }
-
   React.useEffect(() => { uiLoadCensors() }, [currentProject]);
 
   const [globalCensors, setGlobalCensors] = React.useState<Censor[]>([]);
@@ -68,6 +70,8 @@ export default function CensorPage() {
         isLoading={isLoading}
         setDeletingCensor={setDeletingCensor}
         onOpenModalDel={onOpenModalDel}
+        setEditingCensor={setEditingCensor}
+        onOpenModalEdit={onOpenModalEdit}
       />
 
       {currentProject !== '' &&
@@ -84,6 +88,8 @@ export default function CensorPage() {
             isLoading={isLoading}
             setDeletingCensor={setDeletingCensor}
             onOpenModalDel={onOpenModalDel}
+            setEditingCensor={setEditingCensor}
+            onOpenModalEdit={onOpenModalEdit}
           />
         </React.Fragment>
       }
@@ -99,6 +105,16 @@ export default function CensorPage() {
         deletingCensor={deletingCensor}
         callback={uiLoadCensors}
       />
+      <EditCensorModal
+        isOpen={isOpenModalEdit}
+        onClose={onCloseModalEdit}
+        editingCensor={editingCensor}
+        callback={uiLoadCensors}
+      />
+
+      <Text fontSize="2xs" ml="3em" opacity=".7">
+        Note: wants to edit or delete existing censor ? Please ask admin account
+      </Text>
     </Box>
   );
 }

@@ -8,6 +8,8 @@ import HalfPacket from "./HalfPacket";
 import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
 import { LoggerContext } from "./LoggerAppContext";
+import MyTooltip from "../common/tooltip";
+import { useLocation } from "wouter";
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -26,6 +28,7 @@ export default function PacketDetail(props: PacketDetailProps) {
   const currentProject = useContext(LoggerContext);
 
   const toast = useToast();
+  const setLocation = useLocation()[1];
 
   const storageHeight = localStorage.getItem('detailHeight') || '45';
   const [choosingHeight, setChoosingHeight] = React.useState(storageHeight);
@@ -119,7 +122,7 @@ export default function PacketDetail(props: PacketDetailProps) {
         py="2px"
       >
         <Text fontWeight="500" fontSize="2xs" mr="10px">
-          <Text cursor="default" as="span">| <Tooltip placement="top" fontSize="2xs" label="Contributor">{packet.codeName}</Tooltip> | <Tooltip placement="top" fontSize="2xs" label="PacketID">{packet.requestPacketId}</Tooltip> |</Text>
+          <Text cursor="default" as="span">| <MyTooltip label="Contributor">{packet.codeName}</MyTooltip> | <MyTooltip label="PacketID">{packet.requestPacketId}</MyTooltip> |</Text>
         </Text>
 
         <UtilityButton
@@ -162,7 +165,7 @@ export default function PacketDetail(props: PacketDetailProps) {
             tooltip="Censor this packet"
             bg="gray.100"
             fontSize="xs"
-            onClick={() => location.href = location.pathname + `/censors?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`}
+            onClick={() => setLocation(`/projects/${currentProject}/censors?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`)}
           >
             🕶️
           </UtilityButton>

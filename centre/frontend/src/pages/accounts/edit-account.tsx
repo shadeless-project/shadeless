@@ -1,42 +1,34 @@
 import { FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, Textarea, useToast } from "@chakra-ui/react";
 import React from "react";
-import { AccountRole, createNewAccount } from "src/libs/apis/account";
+import { Account, AccountRole, deleteAccount, editAccount } from "src/libs/apis/account";
 import { notify } from "src/libs/notify";
 import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 
 type Props = {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (...args: any[]) => any;
+  account: Account;
   callback: (...args: any[]) => any;
 }
-export default function AddAccountModal(props: Props) {
-  const { isOpen, onClose, callback } = props;
+export default function EditAccountModal (props: Props) {
+  const { isOpen, onClose, account, callback } = props;
 
   const toast = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  async function uiCreateAccount() {
+  async function uiEditAccount() {
     setIsSubmitting(true);
     const username = (document.getElementById('username') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
     const email = (document.getElementById('email') as HTMLInputElement).value;
-    const passwordRecheck = (document.getElementById('password-recheck') as HTMLInputElement).value;
     const description = (document.getElementById('description') as HTMLInputElement).value;
     const role = (document.getElementById('role') as HTMLInputElement).value;
-    const resp = await createNewAccount(
-      username,
-      password,
-      passwordRecheck,
-      email,
-      description,
-      role as AccountRole
-    );
-    notify(toast, resp);
+    const resp = await editAccount(account._id || '', username, email, description, role as AccountRole);
     setIsSubmitting(false);
+    notify(toast, resp);
     if (resp.statusCode === 200) {
-      callback();
       onClose();
+      callback();
     }
   }
 
@@ -45,52 +37,32 @@ export default function AddAccountModal(props: Props) {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          Adding new account
+          Edit account <strong>{account.username}</strong>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody fontSize="sm">
           <FormLabel fontSize="sm">
-            Username&nbsp;
-            <RequiredTooltip />
+            Username
           </FormLabel>
           <Input
             id="username"
             size="md"
             mt="-3px"
             fontSize="xs"
-            placeholder="admin"
+            placeholder={account.username}
             _placeholder={{opacity: '0.6'}}
+            defaultValue={account.username}
           />
           <FormLabel mt="17px" fontSize="sm">
-            Password&nbsp;
-            <RequiredTooltip />
-          </FormLabel>
-          <Input
-            id="password"
-            type="password"
-            mt="-3px"
-            size="md"
-            placeholder="***********"
-          />
-          <FormLabel mt="17px" fontSize="sm">
-            Password recheck&nbsp;
-            <RequiredTooltip />
-          </FormLabel>
-          <Input
-            id="password-recheck"
-            type="password"
-            mt="-3px"
-            size="md"
-            placeholder="***********"
-          />
-          <FormLabel mt="17px" fontSize="sm">
-            Email&nbsp;
+            Email
           </FormLabel>
           <Input
             id="email"
             mt="-3px"
             size="md"
+            fontSize="xs"
             placeholder="default@mail.com"
+            defaultValue={account.email}
           />
           <FormLabel mt="17px" fontSize="sm">
             Description
@@ -99,13 +71,14 @@ export default function AddAccountModal(props: Props) {
             id="description"
             mt="-3px"
             size="xs"
+            defaultValue={account.description}
             placeholder="Purpose of this account is ..."
           />
           <FormLabel mt="17px" fontSize="sm">
             Role&nbsp;
             <RequiredTooltip />
           </FormLabel>
-          <Select id="role" w="150px">
+          <Select id="role" w="150px" defaultValue={account.role}>
             <option value={AccountRole.NORMAL}>{AccountRole.NORMAL}</option>
             <option value={AccountRole.ADMIN}>{AccountRole.ADMIN}</option>
           </Select>
@@ -113,10 +86,10 @@ export default function AddAccountModal(props: Props) {
 
         <ModalFooter>
           <SubmitButton
-            onClick={uiCreateAccount}
+            onClick={uiEditAccount}
             isSubmitting={isSubmitting}
           >
-            Submit
+            Edit
           </SubmitButton>
         </ModalFooter>
       </ModalContent>

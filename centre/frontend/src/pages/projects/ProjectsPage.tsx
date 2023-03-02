@@ -2,13 +2,15 @@ import React from 'react';
 import {
   Box, Divider, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, SkeletonText, Spinner, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure,
 } from '@chakra-ui/react';
-import { FaEllipsisV } from 'react-icons/fa';
 import { defaultProject, getAllProjects, Project } from 'src/libs/apis/projects';
 import DeleteProjectModal from './delete-project';
 import AddProjectModal from './add-project';
 import SubmitButton from '../common/submit-button';
 import ProjectStat from './project-stat';
 import EditProjectModal from './edit-project';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import ConfigIcon from '../common/config-icon';
+import { AccountRole } from 'src/libs/apis/account';
 
 export default function ProjectsPage() {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -123,11 +125,11 @@ export default function ProjectsPage() {
                       _hover={{ bg: 'custom.focus-grey' }}
                       _expanded={{ bg: 'custom.focus-grey' }}
                     >
-                      <Icon as={FaEllipsisV} />
+                      <ConfigIcon />
                     </MenuButton>
                     <MenuList>
                       <MenuItem
-                        onClick={() => window.location.href = `/projects/${p.name}`}
+                        onClick={() => window.location.href = `/projects/${p.name}/logger`}
                       >
                         Go to dashboard
                       </MenuItem>
@@ -139,15 +141,17 @@ export default function ProjectsPage() {
                       >
                         Edit project
                       </MenuItem>
-                      <MenuItem
-                        color="red.500"
-                        onClick={() => {
-                          setDeletingProject(p);
-                          onOpen();
-                        }}
-                      >
-                        Remove
-                      </MenuItem>
+                      {window.getUserRole() === AccountRole.ADMIN &&
+                        <MenuItem
+                          color="red.500"
+                          onClick={() => {
+                            setDeletingProject(p);
+                            onOpen();
+                          }}
+                        >
+                          Remove
+                        </MenuItem>
+                      }
                     </MenuList>
                   </Menu>
                 </Td>
@@ -174,6 +178,10 @@ export default function ProjectsPage() {
         deletingProject={deletingProject}
         callback={uiGetAllProjects}
       />
+
+      <Text fontSize="2xs" ml="3em" opacity=".7">
+        Note: just use Shadeless Burp and config with your desired project's name. Shadeless automatically create project for you.
+      </Text>
     </Box>
   );
 }

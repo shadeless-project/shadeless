@@ -1,0 +1,51 @@
+:root {
+    --component-width: 85%;
+    --component-distance: 2vh;
+    --component-border: 10px;
+
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+
+    min-height:100%;
+    position:relative;
+
+    color-scheme: light dark;
+    background-color: #242424;
+
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body, html {
+    background-color: rgb(244, 244, 244) !important;
+    font-family: 'Sen', sans-serif !important;
+  }
+
+  :root {
+    flex: 1 0 auto;
+  }
+
+  footer {
+    flex-shrink: 0;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      color: #213547;
+      background-color: #ffffff;
+    }
+    button {
+      background-color: #f9f9f9;
+    }
+  }
+
+  @keyframes newAddedRow {
+    0% {
+      background-color: black;
+      color: red;
+    }
+    40% {}
+  }

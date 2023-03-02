@@ -1,10 +1,12 @@
 import { ChevronDownIcon, QuestionIcon, SettingsIcon } from "@chakra-ui/icons";
-import { Box, Button, Checkbox, Divider, Input, Menu, MenuButton, MenuItem, MenuList, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Divider, Input, Menu, MenuButton, MenuItem, MenuList, Text, Textarea, Tooltip, useToast } from "@chakra-ui/react";
 import React from "react";
 import { INSTRUCTION_FILTER_URL } from "src/libs/apis/types";
 import { notify } from "src/libs/notify";
 import { ParserError, query2Object, ParserPacketProperties, Query2ObjectResult } from "src/libs/query.parser";
+import MyTooltip from "../common/tooltip";
 import { FilterBodyType } from "./App";
+import OptionCheckBox from "./option-checkbox";
 
 type SuggestBtnProps = {
   onClick: (...args: any[]) => any;
@@ -53,6 +55,13 @@ function getValueBody(cur: FilterBodyType): string {
   return casted[key];
 }
 
+function auto_grow() {
+  const element = document.getElementById('search-bar');
+  if (!element) return;
+  element.style.height = "5px";
+  element.style.height = (element.scrollHeight)+"px";
+}
+
 type SearchBarProps = {
   setApplyingFilter: React.Dispatch<React.SetStateAction<Query2ObjectResult>>;
   filter: {
@@ -83,7 +92,6 @@ export default function SearchBar (props: SearchBarProps) {
   async function applyFilter() {
     try {
       const criteria = query2Object(filter.now);
-      localStorage.setItem('savedQuery', filter.now);
       setApplyingFilter({
         criteria,
         ...showFilterBody ? filterBody : {},
@@ -118,46 +126,62 @@ export default function SearchBar (props: SearchBarProps) {
     }
   }, [filter, filterFocus]);
 
-  React.useEffect(() => {
-    async function applySavedQuery() {
-      const savedQuery = localStorage.getItem('savedQuery') || '';
-      try {
-        const obj = query2Object(savedQuery);
-        filter.now = savedQuery;
-        setFilter({ before: filter.now, now: savedQuery });
-      } catch (err) {}
-    }
-    applySavedQuery();
-  }, []);
-
   const suggestTypeNum = suggests.filter(s => s.type === 'Number');
   const suggestTypeString = suggests.filter(s => s.type === 'String');
   const suggestTypeComplex = suggests.filter(s => s.type !== 'Number' && s.type !== 'String');
 
   return (
     <Box w="95%" ml="2.5%">
+      <Box mb="15px">
+        <OptionCheckBox
+          isChecked={showFilterBody}
+          onClick={(e) => {
+            const newVal = !showFilterBody;
+            setShowFilterBody(newVal);
+            localStorage.setItem('showFilterBody', newVal.toString());
+          }}
+          bg="custom.black"
+        >
+          Query with body
+        </OptionCheckBox>
+        <OptionCheckBox
+          isChecked={uniqueEndpointsToggle}
+          bg="orange.600"
+          ml="15px"
+          onClick={(e) => {
+              const newVal = !uniqueEndpointsToggle;
+              setUniqueEndpointsToggle(newVal);
+              localStorage.setItem('uniqueEndpointsToggle', newVal.toString());
+            }}
+          >
+          Unique endpoints only
+        </OptionCheckBox>
+      </Box>
+      <Divider my="var(--component-distance)" />
       <Box>
-        <Text fontWeight="bold" as="span" mr="10px" fontSize="sm">
+        <Text as="span" mr="10px">
           Filter
           <Text as="span" cursor="pointer" onClick={() => window.open(INSTRUCTION_FILTER_URL, 'githubWindow', 'noopener noreferrer')}>
             &nbsp;
-            <Tooltip fontSize="2xs" label="Click to learn how to write filter" aria-label='Filter tutorial'>
+            <MyTooltip label="Click to learn how to write filter">
               <QuestionIcon />
-            </Tooltip>
+            </MyTooltip>
           </Text>
         </Text>
         <Box mx="auto" display="inline-block" w={{ base:"60%", lg:"80%"}}>
-          <Input
+          <Textarea
+            id="search-bar"
+            mt="-6px"
             size="sm"
+            rows={1}
+            overflow="hidden"
             onBlur={(e) => {
               if (!e.relatedTarget?.className.includes('suggest-btn')) setFilterFocus(false)
             }}
             onFocus={() => setFilterFocus(true)}
-            onChange={(e) => setFilter({ before: filter.now, now: e.target.value} )}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                document.getElementById('apply-filter-btn')?.click();
-              }
+            onChange={ (e) => {
+              auto_grow();
+              setFilter({ before: filter.now, now: e.target.value} );
             }}
             placeholder="(staticScore <= 50 && responseHeaders contains 'text/html') || reflectedParameters != null"
             _placeholder={{ opacity: '.6' }}
@@ -253,26 +277,6 @@ export default function SearchBar (props: SearchBarProps) {
           <MenuList
             fontSize="sm"
           >
-            <MenuItem
-              onClick={(e) => {
-                if (e.target.toString().includes('object HTMLSpanElement')) return;
-                const newVal = !showFilterBody;
-                setShowFilterBody(newVal);
-                localStorage.setItem('showFilterBody', newVal.toString());
-              }}
-            >
-              <Checkbox isChecked={showFilterBody}>Query with body</Checkbox>
-            </MenuItem>
-            <MenuItem
-              onClick={(e) => {
-                if (e.target.toString().includes('object HTMLSpanElement')) return;
-                const newVal = !uniqueEndpointsToggle;
-                setUniqueEndpointsToggle(newVal);
-                localStorage.setItem('uniqueEndpointsToggle', newVal.toString());
-              }}
-            >
-              <Checkbox isChecked={uniqueEndpointsToggle}>Unique endpoints only</Checkbox>
-            </MenuItem>
             <MenuItem color="red">Delete matched packets</MenuItem>
           </MenuList>
         </Menu>

@@ -6,6 +6,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -13,7 +14,7 @@ import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
 import { Censor, CensorDocument, CensorType } from 'libs/schemas/censor.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PostCensorDto } from './censors.dto';
+import { PostCensorDto, PutCensorDto } from './censors.dto';
 
 @Controller('censors')
 @UseGuards(AuthGuard)
@@ -36,10 +37,19 @@ export class CensorsController {
     return 'Successfully created censor';
   }
 
+  @Put('/:id')
+  @UseGuards(AdminGuard)
+  async editCensor(@Param('id') _id: string, @Body() body: PutCensorDto) {
+    await this.censorModel.findByIdAndUpdate(_id, {
+      $set: body,
+    });
+    return 'Successfully deleted censor';
+  }
+
   @Delete('/:id')
   @UseGuards(AdminGuard)
   async deleteCensor(@Param('id') _id: string) {
-    await this.censorModel.findOneAndDelete({ _id });
+    await this.censorModel.findByIdAndDelete(_id);
     return 'Successfully deleted censor';
   }
 }

@@ -37,7 +37,8 @@ export default function DeleteAccountModal (props: Props) {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody fontSize="sm">
-          <Text>Are you sure to delete {deletingAccount.username} ?</Text>
+          <Text fontSize="md">Are you sure to delete account <strong>{deletingAccount.username}</strong> ?</Text>
+          <Text fontSize="sm" opacity=".7" mt="15px">This action is not reversible</Text>
         </ModalBody>
 
         <ModalFooter>

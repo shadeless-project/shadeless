@@ -14,6 +14,7 @@ const colors = {
     'grey': 'rgb(244, 244, 244)',
     'focus-grey': 'rgb(230, 230, 230)',
     'black': 'rgb(10, 10, 10)',
+    'orange': '#F7B155',
   },
 };
 const fonts = {

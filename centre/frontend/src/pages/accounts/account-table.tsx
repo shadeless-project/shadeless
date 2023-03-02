@@ -1,15 +1,29 @@
-import { SmallCloseIcon } from "@chakra-ui/icons";
-import { Button, Progress, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
 import { Account, AccountRole } from "src/libs/apis/account";
+import ConfigIcon from "../common/config-icon";
+import RoleTag from "./role-tag";
 
 type AccountTableProps = {
   accounts: Account[];
+  isLoading: boolean;
   setDeletingAccount: React.Dispatch<React.SetStateAction<Account>>;
   onOpenModalDel: () => void;
-  isLoading: boolean;
+  setResetingPassAccount: React.Dispatch<React.SetStateAction<Account>>;
+  onOpenResetPassword: () => void;
+  setEditingAccount: React.Dispatch<React.SetStateAction<Account>>;
+  onOpenEditModal: () => void;
 }
 export default function AccountTable (props: AccountTableProps) {
-  const { accounts, onOpenModalDel, setDeletingAccount, isLoading } = props;
+  const {
+    accounts,
+    isLoading,
+    onOpenModalDel,
+    setDeletingAccount,
+    onOpenResetPassword,
+    setResetingPassAccount,
+    onOpenEditModal,
+    setEditingAccount,
+  } = props;
   return (
     <TableContainer p="10px">
       <Table size="sm">
@@ -18,8 +32,9 @@ export default function AccountTable (props: AccountTableProps) {
             <Th>#</Th>
             <Th>Username</Th>
             <Th>Role</Th>
+            <Th>Email</Th>
+            <Th>Description</Th>
             <Th>Created at</Th>
-            <Th>Action</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -30,26 +45,55 @@ export default function AccountTable (props: AccountTableProps) {
             >
               <Td pl="20px">{index+1}</Td>
               <Td>{acc.username}</Td>
-              <Td>{acc.role}</Td>
-              <Td>{window.formatDate(acc.createdAt)}</Td>
               <Td>
-                <Tooltip placement="top" fontSize="2xs" label="Delete account">
-                  <Button
-                    ml="10px"
-                    colorScheme="red"
-                    size="2xs"
-                    p="2px"
-                    borderRadius="1"
-                    disabled={window.getUserRole() !== AccountRole.ADMIN || window.getUser().username === acc.username ? true : false}
-                    onClick={() => {
-                      setDeletingAccount(acc);
-                      onOpenModalDel();
-                    }}
-                  >
-                    <SmallCloseIcon />
-                  </Button>
-                </Tooltip>
+                <RoleTag role={acc.role} />
               </Td>
+              <Td>{acc.email}</Td>
+              <Td>{acc.description}</Td>
+              <Td>{window.formatDate(acc.createdAt)}</Td>
+              {window.getUserRole() === AccountRole.ADMIN &&
+                <Td>
+                  <Menu>
+                    <MenuButton
+                      p={2}
+                      _hover={{ bg: 'custom.focus-grey' }}
+                      _expanded={{ bg: 'custom.focus-grey' }}
+                    >
+                      <ConfigIcon />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        disabled
+                        onClick={() => {
+                          setEditingAccount(acc);
+                          onOpenEditModal();
+                        }}
+                      >
+                        Edit account
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setResetingPassAccount(acc);
+                          onOpenResetPassword();
+                        }}
+                      >
+                        Reset password
+                      </MenuItem>
+                      {window.getUser().username !== acc.username &&
+                        <MenuItem
+                          color="red.500"
+                          onClick={() => {
+                            setDeletingAccount(acc);
+                            onOpenModalDel();
+                          }}
+                        >
+                          Remove
+                        </MenuItem>
+                      }
+                    </MenuList>
+                  </Menu>
+                </Td>
+              }
             </Tr>
           )}
         </Tbody>

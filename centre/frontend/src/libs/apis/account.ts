@@ -8,12 +8,16 @@ export interface Account {
   _id?: string;
   username: string;
   role: AccountRole;
+  email: string;
+  description: string;
   createdAt: Date;
 }
 
 export const defaultAccount: Account = {
   username: '',
   role: AccountRole.NORMAL,
+  email: '',
+  description: '',
   createdAt: new Date(),
 }
 
@@ -31,7 +35,14 @@ export async function getAllAccounts (): Promise<ApiResponse<Account[]>> {
   return result;
 }
 
-export async function createNewAccount (username: string, password: string, passwordRecheck: string, role: AccountRole): Promise<ApiResponse<string>> {
+export async function createNewAccount (
+  username: string,
+  password: string,
+  passwordRecheck: string,
+  email: string,
+  description: string,
+  role: AccountRole,
+): Promise<ApiResponse<string>> {
   const endpoint = `${API_URL}/accounts`;
   const data = await fetch(endpoint, {
     method: 'POST',
@@ -43,6 +54,8 @@ export async function createNewAccount (username: string, password: string, pass
       username,
       password,
       passwordRecheck,
+      email,
+      description,
       role,
     }),
   });
@@ -57,6 +70,32 @@ export async function deleteAccount (_id: string): Promise<ApiResponse<string>> 
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('authorization') || '',
     }
+  });
+  return data.json() as unknown as ApiResponse<string>;
+}
+
+export async function resetPasswordAccount (_id: string, password: string, passwordRecheck: string): Promise<ApiResponse<string>> {
+  const endpoint = `${API_URL}/accounts/${_id}/resetPassword`;
+  const data = await fetch(endpoint, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('authorization') || '',
+    },
+    body: JSON.stringify({ password, passwordRecheck }),
+  });
+  return data.json() as unknown as ApiResponse<string>;
+}
+
+export async function editAccount (_id: string, username: string, email: string, description: string, role: AccountRole): Promise<ApiResponse<string>> {
+  const endpoint = `${API_URL}/accounts/${_id}`;
+  const data = await fetch(endpoint, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('authorization') || '',
+    },
+    body: JSON.stringify({ username, email, description, role }),
   });
   return data.json() as unknown as ApiResponse<string>;
 }

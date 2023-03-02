@@ -3,6 +3,7 @@ import React from "react";
 import { login } from "src/libs/apis/auth";
 import { INSTRUCTION_SHADELESS } from "src/libs/apis/types";
 import { useLocation } from "wouter";
+import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 
 export default function Login() {
@@ -77,7 +78,7 @@ export default function Login() {
               fontWeight="600"
             >
               Username&nbsp;
-              <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+              <RequiredTooltip />
             </FormLabel>
             <Input
               bg="custom.white"
@@ -94,7 +95,7 @@ export default function Login() {
               fontWeight="600"
             >
               Password&nbsp;
-              <Tooltip placement="top" fontSize="2xs" label="Required"><Text as="span" color="red.600">*</Text></Tooltip>
+              <RequiredTooltip />
             </FormLabel>
             <Input
               type="password"

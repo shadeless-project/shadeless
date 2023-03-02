@@ -13,6 +13,7 @@ services:
     container_name: app-nginx
     build:
       context: ./centre/nginx/
+      dockerfile: dockerfile
     ports:
       - "3000:80"
     depends_on:
