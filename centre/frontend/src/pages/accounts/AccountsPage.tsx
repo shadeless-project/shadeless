@@ -103,6 +103,9 @@ export default function AccountsPage() {
         callback={uiLoadAccounts}
       />
 
+      <Text fontSize="2xs" ml="3em" opacity=".7">
+        Note: wants to handle accounts ? Ask admin !
+      </Text>
     </Box>
   );
 }

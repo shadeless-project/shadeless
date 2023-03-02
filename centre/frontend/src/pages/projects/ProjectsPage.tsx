@@ -178,6 +178,10 @@ export default function ProjectsPage() {
         deletingProject={deletingProject}
         callback={uiGetAllProjects}
       />
+
+      <Text fontSize="2xs" ml="3em" opacity=".7">
+        Note: just use Shadeless Burp and config with your desired project's name. Shadeless automatically create project for you.
+      </Text>
     </Box>
   );
 }

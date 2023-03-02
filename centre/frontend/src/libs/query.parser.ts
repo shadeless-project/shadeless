@@ -50,12 +50,10 @@ export const ParserPacketProperties = [
   { name: 'parameters', type: 'String[]' },
   { name: 'requestHeaders', type: 'String[]' },
   { name: 'responseStatus', type: 'Number' },
-  { name: 'responseInferredMimeType', type: 'String' },
   { name: 'responseHeaders', type: 'String[]' },
   { name: 'rtt', type: 'Number' },
   { name: 'reflectedParameters', type: 'Map<String,String>' },
   { name: 'codeName', type: 'String' },
-  { name: 'createdAt', type: 'Date' },
   { name: 'staticScore', type: 'Number' },
 ];
 const ParserOperations = {

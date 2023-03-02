@@ -6,6 +6,7 @@ import Routes from './pages/routes';
 import { checkLogin } from './libs/apis/auth';
 import Login from './pages/auth/Login';
 import NotUp from './pages/NotUp';
+import './theme/index.css';
 
 async function main() {
   const domRoot = document.getElementById('root') as HTMLElement;

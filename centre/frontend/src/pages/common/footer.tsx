@@ -1,18 +1,25 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
+import { SHADELESS_VERSION } from 'src/libs/apis/types';
 
 function Footer () {
   return (
     <Box
       as="footer"
-      textAlign="center"
-      bg="black"
-      color="white"
-      p="10px"
+      bg="custom.white"
       boxShadow="md"
-      zIndex={10}
-      mt="30px"
+      borderTop="1px"
+      borderColor="custom.focus-grey"
+      height="10vh"
+      w="100%"
+      pt="25px"
     >
-      @ 2021 Shadeless reconnaissance application
+      <Box textAlign='center'>
+        <Text>
+          Shadeless @ 2023<br/>
+          Version {SHADELESS_VERSION}
+        </Text>
+      </Box>
+
     </Box>
   );
 }

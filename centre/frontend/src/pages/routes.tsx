@@ -10,6 +10,34 @@ import Navbar from './common/navbar';
 import SettingPage from './setting/SettingPage';
 import CensorPage from './censor/CensorsPage';
 import AccountsPage from './accounts/AccountsPage';
+import Footer from './common/footer';
+
+function BottomFooter () {
+  const [h, setH] = React.useState(document.body.offsetHeight);
+
+  React.useEffect(() => {
+    const resizeObserver = new ResizeObserver(entries => {
+      setH(entries[0].target.clientHeight);
+    });
+    resizeObserver.observe(document.body)
+    return () => resizeObserver.unobserve(document.body);
+  }, []);
+
+  if (window.innerHeight > h) {
+    return (
+      <Box position="fixed" bottom="0" left="0" w="100%">
+        <Footer />
+      </Box>
+    );
+  }
+  else {
+    return (
+      <Box mt="50px" position="absolute" bottom="0" w="100%">
+        <Footer />
+      </Box>
+    );
+  }
+}
 
 function Routes () {
   const [location, setLocation] = useLocation();
@@ -30,9 +58,7 @@ function Routes () {
       bg="custom.grey"
       pb="10vh"
     >
-      <Box
-        minH="90vh" //TODO
-      >
+      <Box mb="var(--component-distance)">
         <Navbar />
         <Box
           fontSize="sm"
@@ -91,6 +117,7 @@ function Routes () {
           </Route>
         </Switch>
       </Box>
+      <BottomFooter />
     </Box>
   );
 }

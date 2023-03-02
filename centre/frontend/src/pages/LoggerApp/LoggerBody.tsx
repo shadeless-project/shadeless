@@ -143,8 +143,8 @@ export default function LoggerBody(props: LoggerBodyProps) {
         await getPacketsInInterval(packetInterval.from, packetInterval.to);
       }
     };
-    window.addEventListener("onscroll", handleScrollBottomPage);
-    return () => window.removeEventListener("onscroll", handleScrollBottomPage);
+    window.addEventListener("scroll", handleScrollBottomPage);
+    return () => window.removeEventListener("scroll", handleScrollBottomPage);
   }, [isLoadingPackets, packetInterval, applyingFilter, currentProject]);
 
   return (
