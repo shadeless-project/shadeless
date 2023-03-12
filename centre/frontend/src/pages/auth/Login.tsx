@@ -8,12 +8,21 @@ import EyeIcon from "../common/eye-icon";
 import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 
+function parseSafeUrl(url: string): string {
+  try {
+    const u = new URL(url, 'http://localhost/');
+    return u.pathname;
+  } catch (err) {
+    return '/';
+  }
+}
+
 export default function Login() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [location, setLocation] = useLocation();
-  if (location !== '/login') setLocation('/login');
+  if (location !== '/login') setLocation(`/login?redirect=${location}`);
 
   async function submit() {
     setIsSubmitting(true);
@@ -24,7 +33,10 @@ export default function Login() {
     if (resp.statusCode === 200) {
       const jwt = resp.data;
       localStorage.setItem('authorization', jwt);
-      window.location.href = '/';
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect') || '';
+      alert(parseSafeUrl(redirect));
+      window.location.href = parseSafeUrl(redirect);
     } else {
       setError(resp.error);
       setTimeout(() => {setError('')}, 4000);
