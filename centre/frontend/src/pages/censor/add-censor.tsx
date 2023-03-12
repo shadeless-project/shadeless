@@ -11,11 +11,12 @@ import { LoggerContext } from "../LoggerApp/LoggerAppContext";
 
 type Props = {
   isOpen: boolean;
+  onOpen: () => any;
   onClose: () => any;
   callback: (...args: any[]) => any;
 }
 export default function AddCensorModal (props: Props) {
-  const { isOpen, onClose, callback } = props;
+  const { isOpen, onClose, callback, onOpen } = props;
 
   const toast = useToast();
   const myLocation = useLocation()[0];
@@ -55,7 +56,7 @@ export default function AddCensorModal (props: Props) {
       setCensorPath(urlParams.get('censorPath') || '');
       if (urlParams.toString() !== '') {
         setTimeout(() => {
-          document.getElementById('click-add-censor')?.click();
+          onOpen();
           window.history.pushState({}, '', location.pathname);
         }, 150);
       }

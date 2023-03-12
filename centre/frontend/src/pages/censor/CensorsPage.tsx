@@ -95,6 +95,7 @@ export default function CensorPage() {
       }
 
       <AddCensorModal
+        onOpen={onOpen}
         isOpen={isOpen}
         onClose={onClose}
         callback={uiLoadCensors}
