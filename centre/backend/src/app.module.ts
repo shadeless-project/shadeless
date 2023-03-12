@@ -37,25 +37,4 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     // consumer.apply(AppLoggerMiddleware).forRoutes('*');
   }
-
-  async initdb() {
-    const adminAccount = await this.accountModel.findOne({
-      role: AccountRole.ADMIN,
-    });
-    if (!adminAccount) {
-      await this.accountModel.create({
-        username: process.env.ADMIN_USERNAME || 'admin',
-        password: process.env.ADMIN_PASSWORD || 'adminpassword',
-        role: AccountRole.ADMIN,
-      });
-    }
-  }
-
-  onApplicationBootstrap() {
-    this.initdb()
-      .catch((e) => console.log(e))
-      .then(() => {
-        console.log('Done initdb');
-      });
-  }
 }

@@ -14,9 +14,15 @@ More documentation can be found at:
 ## How to run (for dev only)
 
 - 1: Check file docker-compose.yml
-- 2: Change the username and password for admin and operator. You can also change the `DATABASE_URL` to another existed mongoDB.
+- 2: You can change the `DATABASE_URL` to another existed mongoDB.
 - 3: run:
 
 ```sh
 bash run.prod.sh
+```
+
+## Configure server's account
+
+```
+bash config_account.sh
 ```

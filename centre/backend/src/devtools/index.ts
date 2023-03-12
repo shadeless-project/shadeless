@@ -1,6 +1,7 @@
 // getting-started.js
 import mongoose from 'mongoose';
-import { gentest } from './gentest';
+import { gentest } from './gen-tests';
+import { handleAccounts } from './handle-accounts';
 
 async function main() {
   if (process.argv.length !== 3) {
@@ -11,6 +12,9 @@ async function main() {
   switch (action) {
     case 'gentest':
       await gentest();
+      break;
+    case 'acc':
+      await handleAccounts();
       break;
     default:
       console.log(`[devtool] Error: not found action ${action}`);

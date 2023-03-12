@@ -1,4 +1,3 @@
-// getting-started.js
 import RawPackets from 'libs/schemas/raw_packet.schema';
 import { getRandomString } from '@drstrain/drutil';
 

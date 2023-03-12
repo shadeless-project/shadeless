@@ -3,6 +3,7 @@ import { Checkbox, Code, Divider, FormLabel, Input, Modal, ModalBody, ModalClose
 import React, { useContext } from "react";
 import { createCensor } from "src/libs/apis/censors";
 import { notify } from "src/libs/notify";
+import { useLocation } from "wouter";
 import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 import MyTooltip from "../common/tooltip";
@@ -17,6 +18,7 @@ export default function AddCensorModal (props: Props) {
   const { isOpen, onClose, callback } = props;
 
   const toast = useToast();
+  const myLocation = useLocation()[0];
   const currentProject = useContext(LoggerContext);
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -60,7 +62,7 @@ export default function AddCensorModal (props: Props) {
     }
     loadCensorOnUrl();
     if (currentProject === '') setIsCensorAllProject(true);
-  }, [currentProject]);
+  }, [currentProject, myLocation]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

@@ -15,7 +15,7 @@ services:
       - "shadeless-ui:app-ui"
       - "shadeless-centre:app-centre"
     ports:
-      - "127.0.0.1:13337:80"
+      - "13337:80"
     restart: always
 
   shadeless-ui:
@@ -37,8 +37,6 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - DATABASE_URL=mongodb://shadeless-db:27017/shadeless
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=adminpassword
 volumes:
   shadeless-volume:
     external: false

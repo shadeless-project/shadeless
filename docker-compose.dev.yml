@@ -42,8 +42,6 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - DATABASE_URL=mongodb://host.docker.internal:27017/shadeless
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=Alo123!@#
 volumes:
   app-volume:
     external: false

@@ -7,7 +7,7 @@ NC='\033[0m' # No Color
 #   ------------
 
 myPrint () {
-    printf "${PURPLE}[run.prod.sh]${NC} $1\n"
+    printf "${PURPLE}[`basename $0`]${NC} $1\n"
 }
 
 stopDockers() {
