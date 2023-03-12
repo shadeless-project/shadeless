@@ -15,7 +15,7 @@ type Props = {
   onClose: () => any;
   callback: (...args: any[]) => any;
 }
-export default function AddCensorModal (props: Props) {
+export default function AddCensorModal(props: Props) {
   const { isOpen, onClose, callback, onOpen } = props;
 
   const toast = useToast();
@@ -51,14 +51,12 @@ export default function AddCensorModal (props: Props) {
   React.useEffect(() => {
     function loadCensorOnUrl() {
       const urlParams = new URLSearchParams(window.location.search);
-      setCensorMethod(urlParams.get('censorMethod') || '');
-      setCensorOrigin(urlParams.get('censorOrigin') || '');
-      setCensorPath(urlParams.get('censorPath') || '');
       if (urlParams.toString() !== '') {
-        setTimeout(() => {
-          onOpen();
-          window.history.pushState({}, '', location.pathname);
-        }, 150);
+        setCensorMethod(urlParams.get('censorMethod') || '');
+        setCensorOrigin(urlParams.get('censorOrigin') || '');
+        setCensorPath(urlParams.get('censorPath') || '');
+        window.history.pushState({}, '', location.pathname);
+        setTimeout(onOpen, 150);
       }
     }
     loadCensorOnUrl();
@@ -72,11 +70,11 @@ export default function AddCensorModal (props: Props) {
         <ModalHeader>
           Adding censor
           <Text as="span" cursor="pointer">
-          &nbsp;
-          <Tooltip fontSize="2xs" label="Packets matched with below conditions will have their body censored in logs. This prevent username/password leak to other collaborators" aria-label='Filter tutorial'>
-            <QuestionIcon />
-          </Tooltip>
-        </Text>
+            &nbsp;
+            <Tooltip fontSize="2xs" label="Packets matched with below conditions will have their body censored in logs. This prevent username/password leak to other collaborators" aria-label='Filter tutorial'>
+              <QuestionIcon />
+            </Tooltip>
+          </Text>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody fontSize="sm">
@@ -149,18 +147,18 @@ export default function AddCensorModal (props: Props) {
             mt="-3px"
             fontSize="sm"
             placeholder="This endpoint is login for SSO"
-            _placeholder={{opacity: '0.6'}}
+            _placeholder={{ opacity: '0.6' }}
           />
-            <Checkbox
-              mt="20px"
-              isChecked={isCensorAllProject}
-              isDisabled={currentProject === ''}
-              onChange={(e) => setIsCensorAllProject(e.target.checked)}
-            >
-              <MyTooltip label={currentProject === '' ? "Please go to project specific to apply censor for that project" : ''}>
-                <Text fontSize="sm">Apply this censor for all projects</Text>
-              </MyTooltip>
-            </Checkbox>
+          <Checkbox
+            mt="20px"
+            isChecked={isCensorAllProject}
+            isDisabled={currentProject === ''}
+            onChange={(e) => setIsCensorAllProject(e.target.checked)}
+          >
+            <MyTooltip label={currentProject === '' ? "Please go to project specific to apply censor for that project" : ''}>
+              <Text fontSize="sm">Apply this censor for all projects</Text>
+            </MyTooltip>
+          </Checkbox>
 
         </ModalBody>
 
