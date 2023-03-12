@@ -3,8 +3,8 @@ import React, { useContext } from "react";
 import { DashboardAdditionalDataType, DashboardPackets, defaultDashboardPacket, getDashboardAdditionalData, getDashboardPackets, getPackets, Packet } from "src/libs/apis/packets";
 import { notify } from "src/libs/notify";
 import { Query2ObjectResult } from "src/libs/query.parser";
-import MyTooltip from "../common/tooltip";
-import { LoggerContext } from "./LoggerAppContext";
+import MyTooltip from "../../common/tooltip";
+import { LoggerContext } from "../LoggerAppContext";
 
 type LoggerDashboardProps = {
   applyingFilter: Query2ObjectResult;

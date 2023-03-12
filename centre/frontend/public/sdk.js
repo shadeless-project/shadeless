@@ -43,3 +43,14 @@ window.getUserRole = () => {
     return '';
   }
 }
+window.sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+window.escapeHtml = (unsafe) => {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}

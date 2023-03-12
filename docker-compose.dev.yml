@@ -9,6 +9,11 @@ services:
     ports:
       - "27017:27017"
 
+  app-redis:
+    container_name: app-redis
+    image: redis:alpine
+    restart: always
+
   app-nginx:
     container_name: app-nginx
     build:
@@ -42,6 +47,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - DATABASE_URL=mongodb://host.docker.internal:27017/shadeless
+      - REDIS_HOST=app-redis
 volumes:
   app-volume:
     external: false

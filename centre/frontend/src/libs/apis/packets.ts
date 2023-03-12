@@ -1,4 +1,4 @@
-import { NUM_PACKETS_PER_PAGE } from "src/pages/LoggerApp/LoggerBody";
+import { NUM_PACKETS_PER_PAGE } from "src/pages/LoggerApp/Logger/Logger";
 import { Query2ObjectResult } from "../query.parser";
 import { ApiResponse, API_URL } from "./types";
 

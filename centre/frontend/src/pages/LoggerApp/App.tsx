@@ -1,10 +1,9 @@
 import React from 'react';
-import LoggerBody from './LoggerBody';
-import LoggerDashboard from './LoggerDashboard';
+import Logger from './Logger/Logger';
+import LoggerDashboard from './Logger/LoggerDashboard';
 import { defaultQuery2ObjectResult, Query2ObjectResult } from 'src/libs/query.parser';
 import { LoggerContext } from './LoggerAppContext';
-import LoggerHeader from './logger-header';
-import { useLocation } from 'wouter';
+import AppHeader from './app-header';
 import CensorPage from '../censor/CensorsPage';
 import { Box } from '@chakra-ui/react';
 import Page404 from '../Page404';
@@ -15,10 +14,16 @@ export const enum Tabs {
   CENSORS,
 };
 
-export type FilterBodyType = {
+export type FilterBodyJsonType = {
   body?: string;
   requestBody?: string;
   responseBody?: string;
+}
+
+export enum FilterBodyTypes {
+  BODY = 'body',
+  REQUEST_BODY = 'requestBody',
+  RESPONSE_BODY = 'responseBody',
 }
 
 type AppPageProps = {
@@ -43,14 +48,14 @@ function AppPage (props: AppPageProps) {
 
   return (
     <LoggerContext.Provider value={project}>
-      <LoggerHeader choosingTab={choosingTab} />
+      <AppHeader choosingTab={choosingTab} />
 
       {choosingTab === Tabs.LOGGER &&
         <React.Fragment>
           <LoggerDashboard
             applyingFilter={applyingFilter}
           />
-          <LoggerBody
+          <Logger
             applyingFilter={applyingFilter}
             setApplyingFilter={setApplyingFilter}
           />

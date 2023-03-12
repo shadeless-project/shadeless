@@ -14,6 +14,7 @@ import {
 } from 'libs/schemas/account.schema';
 import { Model } from 'mongoose';
 import { AccountsModule } from 'controllers/account/accounts.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -25,6 +26,12 @@ import { AccountsModule } from 'controllers/account/accounts.module';
     CensorsModule,
     StaticFileModule,
     AccountsModule,
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST,
+        port: 6379,
+      },
+    }),
   ],
   controllers: [HealthcheckController],
   providers: [],

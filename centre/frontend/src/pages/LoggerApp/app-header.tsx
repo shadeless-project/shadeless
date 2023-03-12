@@ -11,11 +11,11 @@ import MyTooltip from "../common/tooltip";
 type Props = {
   choosingTab: Tabs;
 }
-export default function LoggerHeader (props: Props) {
+export default function AppHeader (props: Props) {
   const { choosingTab } = props;
 
   const currentProject = useContext(LoggerContext);
-  const [myLocation, setLocation] = useLocation();
+  const setLocation = useLocation()[1];
 
   const toast = useToast();
   const [isLoading, setIsLoading] = React.useState(true);

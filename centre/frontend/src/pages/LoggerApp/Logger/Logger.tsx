@@ -1,21 +1,21 @@
-import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Tooltip, Text } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getPackets, Packet, defaultPacket } from "src/libs/apis/packets";
-import SearchBar from "./SearchBar";
+import SearchBar from "./SearchBar/SearchBar";
 import { notify } from "src/libs/notify";
 import { ApiResponse } from "src/libs/apis/types";
-import PacketDetail from "./packet-detail";
 import { Query2ObjectResult } from "src/libs/query.parser";
-import { LoggerContext } from "./LoggerAppContext";
-import MyTooltip from "../common/tooltip";
+import { LoggerContext } from "../LoggerAppContext";
+import MyTooltip from "../../common/tooltip";
+import BodyViewer from "./BodyViewer/BodyViewer";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
-type LoggerBodyProps = {
+type LoggerProps = {
   applyingFilter: Query2ObjectResult;
   setApplyingFilter: React.Dispatch<React.SetStateAction<Query2ObjectResult>>;
 }
-export default function LoggerBody(props: LoggerBodyProps) {
+export default function Logger(props: LoggerProps) {
   const {
     applyingFilter,
     setApplyingFilter,
@@ -239,7 +239,7 @@ export default function LoggerBody(props: LoggerBodyProps) {
       />
 
       {isShowingDetail &&
-        <PacketDetail
+        <BodyViewer
           setIsShowingDetail={setIsShowingDetail}
           setFilter={setFilter}
           packet={choosingPacket}

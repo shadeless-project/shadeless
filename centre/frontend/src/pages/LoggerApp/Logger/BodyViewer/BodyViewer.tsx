@@ -4,16 +4,12 @@ import React, { useContext } from "react";
 import { getFileContentFromId } from "src/libs/apis/files";
 import { Packet } from "src/libs/apis/packets";
 import { notify } from "src/libs/notify";
-import HalfPacket from "./HalfPacket";
+import HalfPacket from "./packet-body-detail";
 import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
-import { LoggerContext } from "./LoggerAppContext";
-import MyTooltip from "../common/tooltip";
+import { LoggerContext } from "../../LoggerAppContext";
+import MyTooltip from "src/pages/common/tooltip";
 import { useLocation } from "wouter";
-
-export async function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 type PacketDetailProps = {
   setIsShowingDetail: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,7 +19,7 @@ type PacketDetailProps = {
     now: string;
   }>>;
 }
-export default function PacketDetail(props: PacketDetailProps) {
+export default function BodyViewer(props: PacketDetailProps) {
   const { setIsShowingDetail, packet, setFilter } = props;
   const currentProject = useContext(LoggerContext);
 
@@ -54,7 +50,7 @@ export default function PacketDetail(props: PacketDetailProps) {
     try {
       const query = `requestPacketPrefix == "${packet.requestPacketPrefix}" and requestPacketIndex >= ${packet.requestPacketIndex - 20} and requestPacketIndex <= ${packet.requestPacketIndex + 20}`;
       setFilter({ now: query, before: '' });
-      await sleep(300);
+      await window.sleep(300);
       document.getElementById('apply-filter-btn')?.click();
     } catch (err) {
       const e = err as ParserError;

@@ -34,7 +34,12 @@ function get1stGroupParenthese(query: string, prefixIndex: number): string {
     return query.slice(1, end);
   } else throw new ParserError(QueryParserErr.PARENTHESES, `At ql[${prefixIndex}] must be an open parenthese "(" but found ${query[0]}`);
 }
-export const ParserPacketProperties = [
+
+export type PacketColumnProperty = {
+  name: string;
+  type: string;
+}
+export const ParserPacketProperties: PacketColumnProperty[] = [
   { name: 'requestPacketId', type: 'String' },
   { name: 'requestPacketPrefix', type: 'String' },
   { name: 'requestPacketIndex', type: 'Number' },

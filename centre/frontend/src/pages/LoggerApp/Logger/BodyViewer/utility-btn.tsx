@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import MyTooltip from "../common/tooltip";
+import MyTooltip from "../../../common/tooltip";
 
 type UtilBtnProps = {
   tooltip: string;

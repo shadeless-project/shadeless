@@ -4,28 +4,19 @@ import React from 'react';
 const MARK_OPENING = '<mark style="background-color: green; color: white; padding: 1px">';
 const MARK_CLOSING = '</mark>';
 
-function escapeHtml (unsafe: string): string {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-type HalfPacketProps = {
+type PacketBodyDetailProps = {
   error: string;
   content: string;
   reflected: any;
   isLoading: boolean;
   maxHeight: string;
 }
-export default function HalfPacket(props: HalfPacketProps) {
+export default function PacketBodyDetail(props: PacketBodyDetailProps) {
   const { content, reflected, isLoading, error, maxHeight } = props;
   const [htmlContent, setHtmlContent] = React.useState('');
 
   React.useEffect(() => {
-    let contentResult = escapeHtml(content);
+    let contentResult = window.escapeHtml(content);
     const checkMarkedValue = new Map<string, boolean>();
     for (const key in reflected) {
       const val = reflected[key];

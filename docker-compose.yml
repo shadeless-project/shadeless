@@ -7,6 +7,11 @@ services:
       - "shadeless-volume:/data/db"
     restart: always
 
+  shadeless-redis:
+    container_name: shadeless-redis
+    image: redis:alpine
+    restart: always
+
   shadeless-nginx:
     container_name: shadeless-nginx
     build:
@@ -37,6 +42,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - DATABASE_URL=mongodb://shadeless-db:27017/shadeless
+      - REDIS_URL=mongodb://shadeless-db:27017/shadeless
 volumes:
   shadeless-volume:
     external: false
