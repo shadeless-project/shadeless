@@ -1,14 +1,17 @@
-import { Box, FormControl, FormLabel, Grid, Image, Input, Link, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Grid, Image, Input, Link, Text, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { login } from "src/libs/apis/auth";
 import { INSTRUCTION_SHADELESS } from "src/libs/apis/types";
 import { useLocation } from "wouter";
+import ClosedEyeIcon from "../common/closed-eye-icon";
+import EyeIcon from "../common/eye-icon";
 import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
 
 export default function Login() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const [location, setLocation] = useLocation();
   if (location !== '/login') setLocation('/login');
 
@@ -97,16 +100,28 @@ export default function Login() {
               Password&nbsp;
               <RequiredTooltip />
             </FormLabel>
+
             <Input
-              type="password"
+              type={!showPassword ? "password" : 'text' }
               bg="custom.white"
               id="password"
               size="md"
               mt="-3px"
               fontSize="sm"
               placeholder="***********"
+              pr="10%"
               onKeyDown={(e) => { if (e.key === 'Enter') document.getElementById('login-btn')?.click() }}
             />
+            <Button
+              bg="inherit"
+              mt="-3px"
+              position="absolute"
+              zIndex={3}
+              right="0"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <ClosedEyeIcon /> : <EyeIcon />}
+            </Button>
 
             {error !== '' &&
               <Text
