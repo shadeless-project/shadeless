@@ -165,7 +165,7 @@ export default function PacketDetail(props: PacketDetailProps) {
             tooltip="Censor this packet"
             bg="gray.100"
             fontSize="xs"
-            onClick={() => setLocation(`/projects/${currentProject}/censors?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`)}
+            onClick={() => window.location.href = `/projects/${currentProject}/censors?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`}
           >
             🕶️
           </UtilityButton>
