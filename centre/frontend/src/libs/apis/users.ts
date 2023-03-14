@@ -14,10 +14,13 @@ export const defaultUser: User = {
 };
 
 export async function getProjectUsers(projectName: string): Promise<ApiResponse<User[]>> {
-  const resp = await fetch(`${API_URL}/projects/${projectName}/users`, {
-    headers: {
-      'Authorization': localStorage.getItem('authorization') || '',
-    }
-  });
+  const resp = await fetch(`${API_URL}/projects/${projectName}/users`);
   return resp.json() as unknown as ApiResponse<User[]>;
+}
+
+export async function apiLogout(): Promise<ApiResponse<string>> {
+  const resp = await fetch(`${API_URL}/auth/logout`, {
+    method: 'POST',
+  });
+  return resp.json() as unknown as ApiResponse<string>;
 }

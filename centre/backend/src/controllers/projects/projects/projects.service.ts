@@ -5,7 +5,6 @@ import fs from 'fs/promises';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { Model } from 'mongoose';
 import { PostProjectDto, PutProjectDto } from '../projects.dto';
-import { File, FileDocument } from 'libs/schemas/file.schema';
 import { User, UserDocument } from 'libs/schemas/user.schema';
 import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
 import { Path, PathDocument } from 'libs/schemas/path.schema';
@@ -18,7 +17,6 @@ export class ProjectsService {
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
     @InjectModel(Occurence.name)
     private occurenceModel: Model<OccurenceDocument>,
-    @InjectModel(File.name) private fileModel: Model<FileDocument>,
     @InjectModel(Censor.name) private censorModel: Model<CensorDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Path.name) private pathModel: Model<PathDocument>,
@@ -58,7 +56,6 @@ export class ProjectsService {
     const filePath = path.join('/files', projectName);
     await fs.rm(filePath, { recursive: true, force: true });
     await Promise.all([
-      this.fileModel.deleteMany({ project: projectName }),
       this.userModel.deleteMany({ project: projectName }),
       this.rawPacketModel.deleteMany({ project: projectName }),
       this.occurenceModel.deleteMany({ project: projectName }),

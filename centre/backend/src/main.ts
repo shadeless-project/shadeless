@@ -7,12 +7,12 @@ import { LoggingInterceptor } from 'libs/middlewares/logger.interceptor';
 import { HttpExceptionFilter } from 'libs/middlewares/exception.filter';
 import { ResponseInterceptor } from 'libs/middlewares/response.interceptor';
 import { AppClusterService } from './clusterize.service';
-import { GLOBAL } from 'libs/global';
+import cookieParser from 'cookie-parser';
 
-async function bootstrap(jwtSecret: string) {
-  GLOBAL.jwtSecret = jwtSecret;
+async function bootstrap() {
   await fs.mkdir('/files', { recursive: true });
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

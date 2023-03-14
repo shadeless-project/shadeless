@@ -31,13 +31,15 @@ export default function Login() {
     const resp = await login(username, password);
     setIsSubmitting(false);
     if (resp.statusCode === 200) {
-      const jwt = resp.data;
-      localStorage.setItem('authorization', jwt);
+      const { data } = resp;
+      console.log(data);
+      localStorage.setItem('account', JSON.stringify(data));
       const urlParams = new URLSearchParams(window.location.search);
       const redirect = urlParams.get('redirect') || '';
-      alert(parseSafeUrl(redirect));
+      alert(redirect);
       window.location.href = parseSafeUrl(redirect);
     } else {
+      alert(resp.error);
       setError(resp.error);
       setTimeout(() => {setError('')}, 4000);
     }

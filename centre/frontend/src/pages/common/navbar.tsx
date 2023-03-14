@@ -15,11 +15,14 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import DocumentationIcon from './documentation-icon';
 import MyTooltip from './tooltip';
 import { INSTRUCTION_SHADELESS } from "src/libs/apis/types";
+import { apiLogout } from 'src/libs/apis/users';
 
 function Navbar () {
   const setLocation = useLocation()[1];
-  function logout() {
-    localStorage.setItem('authorization', '');
+
+  async function logout() {
+    localStorage.setItem('account', '');
+    await apiLogout();
     setLocation('/');
     location.reload();
   }

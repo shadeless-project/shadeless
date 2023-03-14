@@ -43,6 +43,8 @@ services:
     environment:
       - DATABASE_URL=mongodb://shadeless-db:27017/shadeless
       - REDIS_URL=mongodb://shadeless-db:27017/shadeless
+    links:
+      - "shadeless-redis:app-redis"
 volumes:
   shadeless-volume:
     external: false

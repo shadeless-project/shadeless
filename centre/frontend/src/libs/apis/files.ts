@@ -7,12 +7,7 @@ const NUMBER_OF_CHARACTER_NON_READDABLE = 200;
 const validator = new HeuristicValidator();
 
 export async function getFileContentFromId (project: string, id: string): Promise<[string, MyError | null]> {
-  const endpoint = `${API_URL}/files/${project}/${id}`;
-  const data = await fetch(endpoint, {
-    headers: {
-      'Authorization': localStorage.getItem('authorization') || '',
-    }
-  });
+  const data = await fetch(`${API_URL}/files/${project}/${id}`);
   const header = data.status;
   if (header === 404) {
     return ['', new MyError(ErrorType.FILE_RESPONSE_NOT_FOUND)];

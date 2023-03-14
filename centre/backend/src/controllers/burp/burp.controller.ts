@@ -9,15 +9,13 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UploadFileDto, UploadPacketDto } from './burp.dto';
-import { BurpFileService } from './burp-file/burp-file.service';
-import { BurpPacketService } from './burp-packet/burp-packet.service';
+import { InjectQueue } from '@nestjs/bull';
+import { BurpQueue } from 'message-queue/burp.queue';
+import { Queue } from 'bull';
 
 @Controller('burp')
 export class BurpController {
-  constructor(
-    private fileService: BurpFileService,
-    private packetService: BurpPacketService,
-  ) {}
+  constructor(@InjectQueue(BurpQueue.name) private burpQueue: Queue) {}
 
   @Post('files')
   @HttpCode(200)
@@ -30,14 +28,17 @@ export class BurpController {
     @Body() body: UploadFileDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    this.fileService.handleFileUpload(body, file);
+    await this.burpQueue.add(BurpQueue.prototype.handleFileUpload.name, {
+      ...body,
+      path: file.path,
+    });
     return 'OK';
   }
 
   @Post('packets')
   @HttpCode(200)
   async uploadPackets(@Body() body: UploadPacketDto) {
-    this.packetService.handlePacketUpload(body);
+    await this.burpQueue.add(BurpQueue.prototype.handlePacket.name, body);
     return 'OK';
   }
 }

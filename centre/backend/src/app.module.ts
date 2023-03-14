@@ -1,25 +1,36 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { InjectModel, MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { HealthcheckController } from './controllers/healthcheck/healthcheck.controller';
 import { BurpModule } from './controllers/burp/burp.module';
 import { ProjectsModule } from './controllers/projects/projects.module';
 import { AuthModule } from 'controllers/auth/auth.module';
 import { StaticFileModule } from 'controllers/static-file/static-file.module';
 import { CensorsModule } from 'controllers/censors/censors.module';
-import {
-  Account,
-  AccountDocument,
-  AccountRole,
-  AccountSchema,
-} from 'libs/schemas/account.schema';
-import { Model } from 'mongoose';
 import { AccountsModule } from 'controllers/account/accounts.module';
 import { BullModule } from '@nestjs/bull';
+import { DebugModule } from 'controllers/debug/debug.module';
+import { BurpQueue } from 'message-queue/burp.queue';
+import { BurpPacketService } from 'message-queue/burp.queue.service';
+import { Project, ProjectSchema } from 'libs/schemas/project.schema';
+import { User, UserSchema } from 'libs/schemas/user.schema';
+import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
+import { Path, PathSchema } from 'libs/schemas/path.schema';
+import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
+import { RawPacket, RawPacketSchema } from 'libs/schemas/raw_packet.schema';
 
-@Module({
-  imports: [
+function getAppModuleImports() {
+  const modules = [
     MongooseModule.forRoot(process.env.DATABASE_URL),
-    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
+    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: Occurence.name, schema: OccurenceSchema },
+    ]),
+    MongooseModule.forFeature([{ name: Path.name, schema: PathSchema }]),
+    MongooseModule.forFeature([{ name: Censor.name, schema: CensorSchema }]),
+    MongooseModule.forFeature([
+      { name: RawPacket.name, schema: RawPacketSchema },
+    ]),
     BurpModule,
     ProjectsModule,
     AuthModule,
@@ -32,15 +43,17 @@ import { BullModule } from '@nestjs/bull';
         port: 6379,
       },
     }),
-  ],
+  ];
+  if (process.env.NODE_ENV !== 'production') modules.push(DebugModule);
+  return modules;
+}
+
+@Module({
+  imports: getAppModuleImports(),
   controllers: [HealthcheckController],
-  providers: [],
+  providers: [BurpQueue, BurpPacketService],
 })
 export class AppModule implements NestModule {
-  constructor(
-    @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
-  ) {}
-
   configure(consumer: MiddlewareConsumer): void {
     // consumer.apply(AppLoggerMiddleware).forRoutes('*');
   }

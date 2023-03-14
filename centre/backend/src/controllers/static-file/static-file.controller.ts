@@ -7,7 +7,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'libs/middlewares/auth.guard';
+import { LoginGuard } from 'libs/middlewares/auth.guard';
 import path from 'path';
 import { Response } from 'express';
 import fs from 'fs';
@@ -57,7 +57,7 @@ export class StaticFileController {
   }
 
   @Get('/:projectName/:fileHash')
-  @UseGuards(AuthGuard)
+  @UseGuards(LoginGuard)
   async getFile(
     @Param('projectName') projectName: string,
     @Param('fileHash') fileHash: string,

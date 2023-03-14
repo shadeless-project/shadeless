@@ -97,10 +97,7 @@ export async function getPackets(
 ): Promise<ApiResponse<Packet[]>> {
   const results = await fetch(`${API_URL}/projects/${projectName}/query`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('authorization') || '',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       ...filter,
       limit, offset,
@@ -143,10 +140,7 @@ export type DashboardAdditionalDataDto = Omit<Query2ObjectResult, 'body' | 'requ
 export async function getDashboardPackets(projectName: string, filter: Query2ObjectResult): Promise<ApiResponse<DashboardPackets>> {
   const results = await fetch(`${API_URL}/projects/${projectName}/query_mini_dashboard`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('authorization') || '',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(filter)
   });
   return results.json() as unknown as ApiResponse<DashboardPackets>;
@@ -154,10 +148,7 @@ export async function getDashboardPackets(projectName: string, filter: Query2Obj
 export async function getDashboardAdditionalData(projectName: string, filter: DashboardAdditionalDataDto): Promise<ApiResponse<any>> {
   const results = await fetch(`${API_URL}/projects/${projectName}/query_mini_dashboard_additional_data`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('authorization') || '',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(filter)
   });
   return results.json() as unknown as ApiResponse<any>;

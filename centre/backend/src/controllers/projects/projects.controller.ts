@@ -21,7 +21,7 @@ import {
 import { ProjectPacketsService } from './project-packets/project-packets.service';
 import { ProjectUsersService } from './project-users/project-users.service';
 import { ProjectsService } from './projects/projects.service';
-import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
+import { AdminGuard, LoginGuard } from 'libs/middlewares/auth.guard';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -30,7 +30,7 @@ function onlyOneExist(...arr: string[]): boolean {
 }
 
 @Controller('projects')
-@UseGuards(AuthGuard)
+@UseGuards(LoginGuard)
 export class ProjectsController {
   constructor(
     private projectPacketsService: ProjectPacketsService,

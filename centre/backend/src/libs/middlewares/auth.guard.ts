@@ -1,25 +1,47 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { Request } from 'express';
-import jwt from 'jsonwebtoken';
-import { GLOBAL } from 'libs/global';
-import { AccountRole } from 'libs/schemas/account.schema';
+import redis from 'libs/redis';
+import {
+  Account,
+  AccountDocument,
+  AccountRole,
+} from 'libs/schemas/account.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest<Request>();
-    const authToken = request.header('Authorization');
-    const decoded = jwt.verify(authToken, GLOBAL.jwtSecret);
-    return true;
+export class LoginGuard implements CanActivate {
+  constructor(
+    @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
+  ) {}
+
+  async getAccountFromCtx(ctx: ExecutionContext) {
+    const request = ctx.switchToHttp().getRequest<Request>();
+    const authToken = request.cookies['id'];
+    const accountId = await redis.get(`cookieId:${authToken}`);
+    return this.accountModel.findById(accountId);
+  }
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const account = await this.getAccountFromCtx(context);
+    return !!account;
   }
 }
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest<Request>();
-    const authToken = request.header('Authorization');
-    const decoded = jwt.verify(authToken, GLOBAL.jwtSecret) as any;
-    return decoded?.role === AccountRole.ADMIN;
+  constructor(
+    @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
+  ) {}
+
+  async getAccountFromCtx(ctx: ExecutionContext) {
+    const request = ctx.switchToHttp().getRequest<Request>();
+    const authToken = request.cookies['id'];
+    const accountId = await redis.get(`cookieId:${authToken}`);
+    return this.accountModel.findById(accountId);
+  }
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const account = await this.getAccountFromCtx(context);
+    return account?.role === AccountRole.ADMIN;
   }
 }

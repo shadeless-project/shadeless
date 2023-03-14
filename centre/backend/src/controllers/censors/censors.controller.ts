@@ -10,14 +10,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
+import { AdminGuard, LoginGuard } from 'libs/middlewares/auth.guard';
 import { Censor, CensorDocument, CensorType } from 'libs/schemas/censor.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PostCensorDto, PutCensorDto } from './censors.dto';
 
 @Controller('censors')
-@UseGuards(AuthGuard)
+@UseGuards(LoginGuard)
 export class CensorsController {
   constructor(
     @InjectModel(Censor.name) private censorModel: Model<CensorDocument>,

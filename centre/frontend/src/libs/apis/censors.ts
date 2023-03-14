@@ -29,11 +29,7 @@ export const CENSOR_CONDITION = ['method', 'origin', 'path'];
 
 export async function getCensors(projectName?: string): Promise<ApiResponse<Censor[]>> {
   const endpoint = `${API_URL}/censors?project=${projectName}`;
-  const resp = await fetch(endpoint, {
-    headers: {
-      Authorization: localStorage.getItem('authorization') || '',
-    }
-  });
+  const resp = await fetch(endpoint);
   const result = await resp.json() as unknown as ApiResponse<Censor[]>;
   result.data = result.data.map(p => ({
     ...p,
@@ -43,13 +39,9 @@ export async function getCensors(projectName?: string): Promise<ApiResponse<Cens
 }
 
 export async function createCensor(project: string | undefined, condition: any, description: string, isAll: boolean): Promise<ApiResponse<string>> {
-  const endpoint = `${API_URL}/censors`;
-  const resp = await fetch(endpoint, {
+  const resp = await fetch(`${API_URL}/censors`, {
     method: 'POST',
-    headers: {
-      Authorization: localStorage.getItem('authorization') || '',
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       condition,
       project,
@@ -61,24 +53,14 @@ export async function createCensor(project: string | undefined, condition: any, 
 }
 
 export async function deleteCensor(_id: string): Promise<ApiResponse<string>> {
-  const endpoint = `${API_URL}/censors/${_id}`;
-  const resp = await fetch(endpoint, {
-    method: 'DELETE',
-    headers: {
-      Authorization: localStorage.getItem('authorization') || '',
-    },
-  });
+  const resp = await fetch(`${API_URL}/censors/${_id}`, { method: 'DELETE' });
   return resp.json() as unknown as ApiResponse<string>;
 }
 
 export async function editCensor(_id: string, project: string, condition: any, description: string, type: CensorType): Promise<ApiResponse<string>> {
-  const endpoint = `${API_URL}/censors/${_id}`;
-  const resp = await fetch(endpoint, {
+  const resp = await fetch(`${API_URL}/censors/${_id}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('authorization') || '',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ project, condition, description, type }),
   });
   return resp.json() as unknown as ApiResponse<string>;

@@ -9,7 +9,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { AdminGuard, AuthGuard } from 'libs/middlewares/auth.guard';
+import { AdminGuard, LoginGuard } from 'libs/middlewares/auth.guard';
 import {
   PostAccountDto,
   PutAccountDto,
@@ -18,7 +18,7 @@ import {
 import { AccountsService } from './accounts.service';
 
 @Controller('accounts')
-@UseGuards(AuthGuard)
+@UseGuards(LoginGuard)
 export class AccountsController {
   constructor(private accountsService: AccountsService) {}
 

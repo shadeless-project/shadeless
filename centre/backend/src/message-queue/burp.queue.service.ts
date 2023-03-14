@@ -1,8 +1,7 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { UploadPacketDto } from '../burp.dto';
 import { Path, PathDocument } from 'libs/schemas/path.schema';
 import { User, UserDocument } from 'libs/schemas/user.schema';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
@@ -13,9 +12,12 @@ import {
 } from 'libs/schemas/raw_packet.schema';
 import { Occurence, OccurenceDocument } from 'libs/schemas/occurence.schema';
 import { calculateHash } from 'libs/helper';
+import { UploadPacketDto } from 'controllers/burp/burp.dto';
 
 @Injectable()
 export class BurpPacketService {
+  private logger = new Logger(BurpPacketService.name);
+
   constructor(
     @InjectModel(RawPacket.name)
     private rawPacketModel: Model<RawPacketDocument>,

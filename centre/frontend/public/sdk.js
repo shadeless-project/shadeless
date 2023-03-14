@@ -24,24 +24,12 @@ window.formatDate = (dateObj) => {
   return day + '/' + month + '/' + year;
 }
 window.getUser = () => {
-  const auth = localStorage.getItem('authorization') || '';
-  try {
-    const splitted = auth.split('.');
-    if (splitted.length !== 3) return '';
-    return JSON.parse(atob(splitted[1]));
-  } catch (err) {
-    return {};
-  }
+  const user = JSON.parse(localStorage.getItem('account') || '{}');
+  return user;
 }
 window.getUserRole = () => {
-  const auth = localStorage.getItem('authorization') || '';
-  try {
-    const splitted = auth.split('.');
-    if (splitted.length !== 3) return '';
-    return JSON.parse(atob(splitted[1])).role;
-  } catch (err) {
-    return '';
-  }
+  const user = window.getUser();
+  return user?.role;
 }
 window.sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
