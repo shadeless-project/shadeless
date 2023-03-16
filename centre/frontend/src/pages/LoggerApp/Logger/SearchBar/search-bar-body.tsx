@@ -32,7 +32,7 @@ export default function SearchBarBody(props: SearchBarBodyProps) {
           as={Button}
           rightIcon={<ChevronDownIcon />}
         >
-          && {filterBodyType} contains
+          && {filterBodyType} matches regex
         </MenuButton>
         <MenuList>
           <MenuItem onClick={() => setFilterBodyType(FilterBodyTypes.BODY)}>body</MenuItem>
@@ -41,7 +41,7 @@ export default function SearchBarBody(props: SearchBarBodyProps) {
         </MenuList>
       </Menu>
       <Input
-        placeholder={'something'}
+        placeholder={'(sentAt|timestamp|[a-z0-9]{32})'}
         w="30%"
         size="sm"
         ml="5px"

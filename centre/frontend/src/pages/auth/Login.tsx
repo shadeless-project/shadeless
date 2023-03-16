@@ -36,7 +36,6 @@ export default function Login() {
       localStorage.setItem('account', JSON.stringify(data));
       const urlParams = new URLSearchParams(window.location.search);
       const redirect = urlParams.get('redirect') || '';
-      alert(redirect);
       window.location.href = parseSafeUrl(redirect);
     } else {
       alert(resp.error);
