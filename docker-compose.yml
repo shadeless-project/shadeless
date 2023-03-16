@@ -42,7 +42,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - DATABASE_URL=mongodb://shadeless-db:27017/shadeless
-      - REDIS_URL=mongodb://shadeless-db:27017/shadeless
+      - REDIS_HOST=app-redis
     links:
       - "shadeless-redis:app-redis"
 volumes:
