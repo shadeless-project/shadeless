@@ -1,4 +1,4 @@
-import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Text, Divider, Button } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Text, Divider, Button, Tooltip } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getPackets, Packet, defaultPacket } from "src/libs/apis/packets";
 import SearchBar from "./SearchBar/SearchBar";
@@ -9,7 +9,8 @@ import { LoggerContext } from "../LoggerAppContext";
 import BodyViewer from "./BodyViewer/BodyViewer";
 import LoggerOptions from "./logger-options";
 import LoggerColumnsChooser, { ChoosingColumnType } from "./logger-columns-chooser";
-import { MinusIcon } from "@chakra-ui/icons";
+import { MinusIcon, QuestionIcon } from "@chakra-ui/icons";
+import MyTooltip from "src/pages/common/tooltip";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
@@ -178,8 +179,16 @@ export default function Logger(props: LoggerProps) {
       p="1em"
     >
       <Box w="95%" ml="2.5%" mb="15px" display={showConfigColumns ? "block" : 'none'}>
-        <Text>
+        <Text mb="10px">
           Config columns
+
+          <Text as="span" cursor="pointer" mt="-10px">
+            &nbsp;&nbsp;
+            <MyTooltip label="Config how to show column in table below">
+              <QuestionIcon />
+            </MyTooltip>
+          </Text>
+
           <Button
             bg="inherit"
             p="0"
@@ -190,6 +199,7 @@ export default function Logger(props: LoggerProps) {
           >
             <MinusIcon />
           </Button>
+
         </Text>
         <LoggerColumnsChooser
           callbackUpdateColumns={callbackUpdateColumns}
