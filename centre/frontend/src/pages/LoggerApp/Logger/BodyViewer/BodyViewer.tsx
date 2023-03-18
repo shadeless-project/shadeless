@@ -50,7 +50,7 @@ export default function BodyViewer(props: PacketDetailProps) {
     try {
       const query = `requestPacketPrefix == "${packet.requestPacketPrefix}" and requestPacketIndex >= ${packet.requestPacketIndex - 20} and requestPacketIndex <= ${packet.requestPacketIndex + 20}`;
       setFilter({ now: query, before: '' });
-      await window.sleep(300);
+      await window.sleep(200);
       document.getElementById('apply-filter-btn')?.click();
     } catch (err) {
       const e = err as ParserError;

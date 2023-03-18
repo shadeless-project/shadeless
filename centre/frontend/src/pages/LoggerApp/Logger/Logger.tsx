@@ -85,6 +85,7 @@ export default function Logger(props: LoggerProps) {
     }
   }
   async function getFirstPackets() {
+    console.log(applyingFilter);
     const packets = await getPackets(
       currentProject,
       applyingFilter,
@@ -152,7 +153,7 @@ export default function Logger(props: LoggerProps) {
     setIsLoadingPackets(true);
     setPacketInterval({ from: 0, to: NUM_PACKETS_PER_PAGE });
     getFirstPackets();
-  }, [applyingFilter, currentProject]);
+  }, [applyingFilter, currentProject, uniqueEndpointsToggle]);
 
   React.useEffect(() => {
     async function handleScrollBottomPage() {
@@ -165,9 +166,7 @@ export default function Logger(props: LoggerProps) {
     };
     window.addEventListener("scroll", handleScrollBottomPage);
     return () => window.removeEventListener("scroll", handleScrollBottomPage);
-  }, [isLoadingPackets, packetInterval, applyingFilter, currentProject]);
-
-  console.log(tableColumns);
+  }, [isLoadingPackets, packetInterval, applyingFilter, currentProject, uniqueEndpointsToggle]);
 
   return (
     <Box

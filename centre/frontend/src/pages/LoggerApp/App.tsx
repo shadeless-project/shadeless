@@ -32,7 +32,10 @@ type AppPageProps = {
 }
 function AppPage (props: AppPageProps) {
   const { project, page } = props;
-  const [applyingFilter, setApplyingFilter] = React.useState<Query2ObjectResult>(defaultQuery2ObjectResult);
+  const [applyingFilter, setApplyingFilter] = React.useState<Query2ObjectResult>({
+    ...defaultQuery2ObjectResult,
+    queryDistinct: localStorage.getItem('uniqueEndpointsToggle') === "true",
+  });
 
   const [choosingTab, setChoosingTab] = React.useState<Tabs>(Tabs.DEFAULT);
 

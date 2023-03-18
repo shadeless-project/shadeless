@@ -2,7 +2,7 @@ import { DeleteIcon, DownloadIcon, QuestionIcon, SettingsIcon } from "@chakra-ui
 import { Box, Button, Divider, Flex, Menu, MenuButton, MenuItem, MenuList, Text, Textarea, useToast } from "@chakra-ui/react";
 import React from "react";
 import { INSTRUCTION_FILTER_URL } from "src/libs/apis/types";
-import { notify } from "src/libs/notify";
+import { notify, notifyErr } from "src/libs/notify";
 import { ParserError, query2Object, ParserPacketProperties, Query2ObjectResult, PacketColumnProperty } from "src/libs/query.parser";
 import MyTooltip from "../../../common/tooltip";
 import { FilterBodyTypes } from "../../App";
@@ -30,10 +30,10 @@ type SearchBarProps = {
   }>>;
 }
 export default function SearchBar (props: SearchBarProps) {
-  const { 
-    setApplyingFilter, 
-    filter, 
-    setFilter, 
+  const {
+    setApplyingFilter,
+    filter,
+    setFilter,
     showFilterBody,
     uniqueEndpointsToggle,
   } = props;
@@ -65,7 +65,7 @@ export default function SearchBar (props: SearchBarProps) {
       });
     } catch (err) {
       const e = err as ParserError;
-      notify(toast, { statusCode: 500, data: '', error: `${e.type}: ${e.message}` }, 'filter-error-toast');
+      notifyErr(toast, `${e.type}: ${e.message}` , 'filter-error-toast');
     }
   }
 
