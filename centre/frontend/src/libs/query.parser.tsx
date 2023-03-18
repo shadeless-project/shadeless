@@ -1,5 +1,4 @@
 import { Td, Th } from "@chakra-ui/react";
-import { ReactComponentElement } from "react";
 import MyTooltip from "src/pages/common/tooltip";
 import { Packet } from "./apis/packets";
 
@@ -47,167 +46,167 @@ export type PacketColumnProperty = {
   showCol: () => JSX.Element;
 }
 export const ParserPacketProperties: PacketColumnProperty[] = [
-  { 
-    name: 'requestPacketId', 
-    type: 'String', 
-    showBody: (p: Packet) => <Td>{p.requestPacketId.slice(0, 4) + '...' + p.requestPacketId.slice(-4)}</Td>,
-    showCol: () => 
-      <Th textAlign="center">
+  {
+    name: 'requestPacketId',
+    type: 'String',
+    showBody: (p: Packet) => <Td>{p.requestPacketId.slice(0, 5) + '...' + p.requestPacketId.slice(-5)}</Td>,
+    showCol: () =>
+      <Th>
         <MyTooltip label="The ID correspond with Burpsuite Shadeless log">ID</MyTooltip>
       </Th>
   },
-  { 
-    name: 'requestPacketPrefix', 
-    type: 'String', 
-    showBody: (p: Packet) => <Td>{p.requestPacketPrefix.slice(0, 7) + '...'}</Td>,
-    showCol: () => 
-      <Th textAlign="center">
+  {
+    name: 'requestPacketPrefix',
+    type: 'String',
+    showBody: (p: Packet) => <Td>{p.requestPacketPrefix.slice(0, 5) + '...' + p.requestPacketPrefix.slice(-5)}</Td>,
+    showCol: () =>
+      <Th>
         <MyTooltip label="The ID prefix correspond with Burpsuite Shadeless log">Prefix</MyTooltip>
       </Th>
   },
-  { 
+  {
     name: 'requestPacketIndex',
-    type: 'Number', 
-    showBody: (p: Packet) => <Td textAlign="center">{p.requestPacketIndex}</Td>,
-    showCol: () => 
-      <Th textAlign="center">
+    type: 'Number',
+    showBody: (p: Packet) => <Td>{p.requestPacketIndex}</Td>,
+    showCol: () =>
+      <Th>
         <MyTooltip label="The ID index correspond with Burpsuite Shadeless log">Index</MyTooltip>
       </Th>
   },
-  { 
-    name: 'count', 
-    type: 'Number', 
-    showBody: (p: Packet) => <Td textAlign="center">{p.count}</Td>,
+  {
+    name: 'count',
+    type: 'Number',
+    showBody: (p: Packet) => <Td>{p.count}</Td>,
     showCol: () =>
-      <Th textAlign="center">
-        <MyTooltip label="Heuristical static score of the packet (from 0 to 100)">Score</MyTooltip>
+      <Th>
+        <MyTooltip label="Count number of look-alike request">CNT</MyTooltip>
       </Th>
   },
-  { 
-    name: 'toolName', 
-    type: 'String', 
+  {
+    name: 'toolName',
+    type: 'String',
     showBody: (p: Packet) => <Td>{p.toolName}</Td>,
     showCol: () =>
-      <Th textAlign="center">
+      <Th>
         <MyTooltip label="The request is captured by">Tool</MyTooltip>
       </Th>
   },
-  { 
-    name: 'method', 
-    type: 'String', 
+  {
+    name: 'method',
+    type: 'String',
     showBody: (p: Packet) => <Td>{p.method}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Request's method">Method</MyTooltip>
       </Th>
   },
-  { 
-    name: 'referer', 
-    type: 'String', 
-    showBody: (p: Packet) => <Td maxW="320px">{p.referer}</Td>,
+  {
+    name: 'referer',
+    type: 'String',
+    showBody: (p: Packet) => <Td maxW="200px">{p.referer}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Request's referer">Referer</MyTooltip>
       </Th>
   },
-  { 
-    name: 'protocol', 
-    type: 'String', 
+  {
+    name: 'protocol',
+    type: 'String',
     showBody: (p: Packet) => <Td>{p.protocol}</Td>,
     showCol: () =>
       <Th>
-        <MyTooltip label="Request's referer">Protocol</MyTooltip>
+        <MyTooltip label="Request's protocol">Protocol</MyTooltip>
       </Th>
   },
-  { 
-    name: 'origin', 
-    type: 'String', 
-    showBody: (p: Packet) => <Td minW="200px">{p.protocol}</Td>,
+  {
+    name: 'origin',
+    type: 'String',
+    showBody: (p: Packet) => <Td maxW="300px">{p.protocol}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Request's origin">Origin</MyTooltip>
       </Th>
   },
-  { 
-    name: 'port', 
-    type: 'Number', 
-    showBody: (p: Packet) => <Td textAlign="center">{p.port.toString()}</Td>,
+  {
+    name: 'port',
+    type: 'Number',
+    showBody: (p: Packet) => <Td>{p.port.toString()}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Request's port">Port</MyTooltip>
       </Th>
   },
-  { 
-    name: 'path', 
-    type: 'String', 
+  {
+    name: 'path',
+    type: 'String',
     showBody: (p: Packet) => <Td maxW="320px">{p.path}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Request's path">Path</MyTooltip>
       </Th>
   },
-  { 
-    name: 'querystring', 
-    type: 'String', 
+  {
+    name: 'querystring',
+    type: 'String',
     showBody: (p: Packet) => <Td maxW="320px">{p.querystring || ''}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Request's querystring">Qs</MyTooltip>
       </Th>
   },
-  { 
-    name: 'parameters', 
+  {
+    name: 'parameters',
     type: 'String[]',
     showBody: (p: Packet) => <Td maxW="280px">[{p.parameters.join(', ')}]</Td>,
     showCol: () => <Th><MyTooltip label="parameters">Params</MyTooltip></Th>
   },
-  { 
-    name: 'requestHeaders', 
+  {
+    name: 'requestHeaders',
     type: 'String[]',
-    showBody: (p: Packet) => <Td maxW="280px">[{p.requestHeaders.join(', ')}]</Td>,
+    showBody: (p: Packet) => <Td maxW="500px">[{p.requestHeaders.join(',')}]</Td>,
     showCol: () => <Th><MyTooltip label="Request headers">ReqHeader</MyTooltip></Th>
   },
-  { 
-    name: 'responseStatus', 
-    type: 'Number', 
-    showBody: (p: Packet) => <Td textAlign="center">{p.responseStatus.toString()}</Td>,
+  {
+    name: 'responseStatus',
+    type: 'Number',
+    showBody: (p: Packet) => <Td>{p.responseStatus.toString()}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Response status">Status</MyTooltip>
       </Th>
   },
-  { 
-    name: 'responseHeaders', 
+  {
+    name: 'responseHeaders',
     type: 'String[]',
-    showBody: (p: Packet) => <Td maxW="280px">[{p.responseHeaders.join(', ')}]</Td>,
+    showBody: (p: Packet) => <Td maxW="500px">[{p.responseHeaders.join(',')}]</Td>,
     showCol: () => <Th><MyTooltip label="Response headers">ResHeader</MyTooltip></Th>
   },
-  { 
-    name: 'rtt', 
-    type: 'Number', 
-    showBody: (p: Packet) => <Td textAlign="center">{p.rtt.toString()}</Td>,
+  {
+    name: 'rtt',
+    type: 'Number',
+    showBody: (p: Packet) => <Td>{p.rtt.toString()}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Roundtrip time">Rtt</MyTooltip>
       </Th>
   },
-  { 
-    name: 'reflectedParameters', 
-    type: 'Map<String,String>', 
+  {
+    name: 'reflectedParameters',
+    type: 'Map<String,String>',
     showBody: (p: Packet) => <Td maxW="180px" pr="5px">[{Object.keys(p.reflectedParameters || {}).join(', ')}]</Td>,
     showCol: () => <Th><MyTooltip label="reflectedParameters">Reflected</MyTooltip></Th>
   },
-  { 
-    name: 'codeName', 
-    type: 'String', 
+  {
+    name: 'codeName',
+    type: 'String',
     showBody: (p: Packet) => <Td maxW="320px">{p.codeName}</Td>,
     showCol: () =>
       <Th><MyTooltip label="Sender's codename">Author</MyTooltip></Th>
   },
-  { 
-    name: 'staticScore', 
-    type: 'Number', 
-    showBody: (p: Packet) => <Td textAlign="center">{p.staticScore.toString()}</Td>,
+  {
+    name: 'staticScore',
+    type: 'Number',
+    showBody: (p: Packet) => <Td>{p.staticScore.toString()}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Static Score">Score</MyTooltip>

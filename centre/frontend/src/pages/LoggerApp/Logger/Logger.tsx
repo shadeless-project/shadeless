@@ -4,12 +4,11 @@ import { getPackets, Packet, defaultPacket } from "src/libs/apis/packets";
 import SearchBar from "./SearchBar/SearchBar";
 import { notify } from "src/libs/notify";
 import { ApiResponse } from "src/libs/apis/types";
-import { Query2ObjectResult } from "src/libs/query.parser";
+import { ParserPacketProperties, Query2ObjectResult } from "src/libs/query.parser";
 import { LoggerContext } from "../LoggerAppContext";
-import MyTooltip from "../../common/tooltip";
 import BodyViewer from "./BodyViewer/BodyViewer";
 import LoggerOptions from "./logger-options";
-import LoggerColumnsChooser from "./logger-columns-chooser";
+import LoggerColumnsChooser, { ChoosingColumnType } from "./logger-columns-chooser";
 import { MinusIcon } from "@chakra-ui/icons";
 
 export const NUM_PACKETS_PER_PAGE = 30;
@@ -45,6 +44,8 @@ export default function Logger(props: LoggerProps) {
   const [showConfigColumns, setShowConfigColumns] = React.useState(localStorage.getItem('showConfigColumns') === "true");
   const [showFilterBody, setShowFilterBody] = React.useState<boolean>(localStorage.getItem('showFilterBody') === "true");
   const [uniqueEndpointsToggle, setUniqueEndpointsToggle] = React.useState<boolean>(localStorage.getItem('uniqueEndpointsToggle') === "true");
+
+  const [tableColumns, setTableColumns] = React.useState<string[]>([]);
 
   function isSmaller(a: Packet, b: Packet): number {
     const d1 = new Date(a.createdAt || 0) as any;
@@ -133,6 +134,17 @@ export default function Logger(props: LoggerProps) {
     }
   }
 
+  const callbackUpdateColumns = (newCols: ChoosingColumnType[]) => {
+    const arr = JSON.parse(JSON.stringify(newCols)) as ChoosingColumnType[];
+    arr.sort((a, b) => a.index - b.index);
+    const storageChoosingColumns = newCols.reduce((prev, cur, index) => {
+      const colon = (index === newCols.length - 1) ? '' : ',';
+      return `${prev}${cur.index}:${cur.name}${colon}`;
+    }, '');
+    localStorage.setItem('choosingColumns', storageChoosingColumns);
+    setTableColumns(arr.map(v => v.name));
+  }
+
   React.useEffect(() => {
     setPackets([]);
     setEndOfPackets(false);
@@ -153,6 +165,8 @@ export default function Logger(props: LoggerProps) {
     window.addEventListener("scroll", handleScrollBottomPage);
     return () => window.removeEventListener("scroll", handleScrollBottomPage);
   }, [isLoadingPackets, packetInterval, applyingFilter, currentProject]);
+
+  console.log(tableColumns);
 
   return (
     <Box
@@ -177,7 +191,9 @@ export default function Logger(props: LoggerProps) {
             <MinusIcon />
           </Button>
         </Text>
-        <LoggerColumnsChooser />
+        <LoggerColumnsChooser
+          callbackUpdateColumns={callbackUpdateColumns}
+        />
       </Box>
       <Divider my="var(--component-distance)" display={showConfigColumns ? "block" : 'none'} />
 
@@ -190,7 +206,7 @@ export default function Logger(props: LoggerProps) {
         setShowConfigColumns={setShowConfigColumns}
       />
       <Divider my="var(--component-distance)" />
-      
+
       <SearchBar
         filter={filter}
         setFilter={setFilter}
@@ -208,21 +224,11 @@ export default function Logger(props: LoggerProps) {
       >
         <Thead fontSize="2xs">
           <Tr>
-            <Th textAlign="center">
-              <MyTooltip label="The index correspond with Burpsuite Shadeless log">ID</MyTooltip>
-            </Th>
-            <Th textAlign="center">
-              <MyTooltip label="Number of packets look-alike with this packet">CNT</MyTooltip>
-            </Th>
-            <Th textAlign="center">
-              <MyTooltip label="Heuristical static score of the packet (from 0 to 100)">Score</MyTooltip>
-            </Th>
-            <Th textAlign="center">Status</Th>
-            <Th>Method</Th>
-            <Th>Origin</Th>
-            <Th>Path</Th>
-            <Th><MyTooltip label="parameters">Params</MyTooltip></Th>
-            <Th><MyTooltip label="reflectedParameters">Reflected</MyTooltip></Th>
+            {tableColumns.map((v, index) =>
+              <React.Fragment key={`col-${v}`}>
+                {ParserPacketProperties.find(prop => prop.name === v)?.showCol()}
+              </React.Fragment>
+            )}
           </Tr>
         </Thead>
         <Tbody>
@@ -242,15 +248,11 @@ export default function Logger(props: LoggerProps) {
                 fontWeight: "500"
               }}
             >
-              <Td textAlign="center">{p.requestPacketIndex}</Td>
-              <Td textAlign="center">{p.count}</Td>
-              <Td textAlign="center">{p.staticScore}</Td>
-              <Td textAlign="center">{p.responseStatus}</Td>
-              <Td>{p.method}</Td>
-              <Td minW="200px">{p.origin}</Td>
-              <Td maxW="320px">{p.path}</Td>
-              <Td maxW="280px">[{p.parameters.join(', ')}]</Td>
-              <Td maxW="180px" pr="5px">[{Object.keys(p.reflectedParameters || {}).join(', ')}]</Td>
+              {tableColumns.map(v =>
+                <React.Fragment key={`row-${v}`}>
+                  {ParserPacketProperties.find(prop => prop.name === v)?.showBody(p)}
+                </React.Fragment>
+              )}
             </Tr>
           )}
         </Tbody>
