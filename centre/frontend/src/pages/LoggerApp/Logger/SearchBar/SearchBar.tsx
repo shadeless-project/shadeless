@@ -6,7 +6,6 @@ import { notify } from "src/libs/notify";
 import { ParserError, query2Object, ParserPacketProperties, Query2ObjectResult, PacketColumnProperty } from "src/libs/query.parser";
 import MyTooltip from "../../../common/tooltip";
 import { FilterBodyTypes } from "../../App";
-import OptionCheckBox from "./option-checkbox";
 import SearchBarBody from "./search-bar-body";
 import Suggestions from "./suggestions";
 
@@ -18,6 +17,8 @@ function auto_grow() {
 }
 
 type SearchBarProps = {
+  showFilterBody: boolean;
+  uniqueEndpointsToggle: boolean;
   setApplyingFilter: React.Dispatch<React.SetStateAction<Query2ObjectResult>>;
   filter: {
     before: string;
@@ -29,14 +30,12 @@ type SearchBarProps = {
   }>>;
 }
 export default function SearchBar (props: SearchBarProps) {
-  const { setApplyingFilter, filter, setFilter } = props;
+  const { setApplyingFilter, filter, setFilter, showFilterBody } = props;
 
   const toast = useToast();
 
   const [filterBody, setFilterBody] = React.useState<string>('');
   const [filterBodyType, setFilterBodyType] = React.useState<FilterBodyTypes>(FilterBodyTypes.BODY);
-  const [showFilterBody, setShowFilterBody] = React.useState<boolean>(localStorage.getItem('showFilterBody') === "true");
-  const [uniqueEndpointsToggle, setUniqueEndpointsToggle] = React.useState<boolean>(localStorage.getItem('uniqueEndpointsToggle') === "true");
 
   const [filterFocus, setFilterFocus] = React.useState(false);
   const [suggests, setSuggests] = React.useState<PacketColumnProperty[]>([]);
@@ -82,32 +81,6 @@ export default function SearchBar (props: SearchBarProps) {
 
   return (
     <Box w="95%" ml="2.5%">
-      <Box mb="15px">
-        <OptionCheckBox
-          isChecked={showFilterBody}
-          onClick={(e) => {
-            const newVal = !showFilterBody;
-            setShowFilterBody(newVal);
-            localStorage.setItem('showFilterBody', newVal.toString());
-          }}
-          bg="custom.black"
-        >
-          Query with body
-        </OptionCheckBox>
-        <OptionCheckBox
-          isChecked={uniqueEndpointsToggle}
-          bg="orange.600"
-          ml="15px"
-          onClick={(e) => {
-              const newVal = !uniqueEndpointsToggle;
-              setUniqueEndpointsToggle(newVal);
-              localStorage.setItem('uniqueEndpointsToggle', newVal.toString());
-            }}
-          >
-          Unique endpoints only
-        </OptionCheckBox>
-      </Box>
-      <Divider my="var(--component-distance)" />
       <Flex
         justifyContent='space-between'
         alignItems="center"

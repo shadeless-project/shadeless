@@ -38,7 +38,6 @@ export default function Login() {
       const redirect = urlParams.get('redirect') || '';
       window.location.href = parseSafeUrl(redirect);
     } else {
-      alert(resp.error);
       setError(resp.error);
       setTimeout(() => {setError('')}, 4000);
     }

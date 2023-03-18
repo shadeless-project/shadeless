@@ -8,6 +8,7 @@ import { Query2ObjectResult } from "src/libs/query.parser";
 import { LoggerContext } from "../LoggerAppContext";
 import MyTooltip from "../../common/tooltip";
 import BodyViewer from "./BodyViewer/BodyViewer";
+import LoggerOptions from "./logger-options";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
@@ -38,6 +39,10 @@ export default function Logger(props: LoggerProps) {
   const [packets, setPackets] = React.useState<Packet[]>([]);
   const [isShowingDetail, setIsShowingDetail] = React.useState(false);
   const [choosingPacket, setChoosingPacket] = React.useState(defaultPacket);
+
+  const [showConfigColumns, setShowConfigColumns] = React.useState(localStorage.getItem('showConfigColumns') === "true");
+  const [showFilterBody, setShowFilterBody] = React.useState<boolean>(localStorage.getItem('showFilterBody') === "true");
+  const [uniqueEndpointsToggle, setUniqueEndpointsToggle] = React.useState<boolean>(localStorage.getItem('uniqueEndpointsToggle') === "true");
 
   function isSmaller(a: Packet, b: Packet): number {
     const d1 = new Date(a.createdAt || 0) as any;
@@ -156,10 +161,20 @@ export default function Logger(props: LoggerProps) {
       borderRadius="var(--component-border)"
       p="1em"
     >
+      <LoggerOptions
+        showFilterBody={showFilterBody}
+        setShowFilterBody={setShowFilterBody}
+        uniqueEndpointsToggle={uniqueEndpointsToggle}
+        setUniqueEndpointsToggle={setUniqueEndpointsToggle}
+        showConfigColumns={showConfigColumns}
+        setShowConfigColumns={setShowConfigColumns}
+      />
       <SearchBar
         filter={filter}
         setFilter={setFilter}
         setApplyingFilter={setApplyingFilter}
+        showFilterBody={showFilterBody}
+        uniqueEndpointsToggle={uniqueEndpointsToggle}
       />
       <Table
         border="1.3px solid gray"

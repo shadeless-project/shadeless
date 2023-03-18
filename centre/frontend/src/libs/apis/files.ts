@@ -1,10 +1,17 @@
-import storage from 'src/libs/storage';
-import { HeuristicValidator } from 'src/libs/heuristic.validator';
 import { ErrorType, MyError } from 'src/libs/error';
 import { API_URL } from './types';
 
-const NUMBER_OF_CHARACTER_NON_READDABLE = 200;
-const validator = new HeuristicValidator();
+function isNonReadableString (value: string): boolean {
+  if (value.length <= 100) return false;
+  let cntNonReaddable = 0;
+  for (let i = 0; i < value.length; i++) {
+    const cur = value.charCodeAt(i);
+    if (cur < 32 || cur >= 127) cntNonReaddable++;
+  }
+  return (cntNonReaddable >= Math.floor(value.length / 2));
+}
+
+const NUMBER_OF_CHARACTER_NON_READDABLE = 300;
 
 export async function getFileContentFromId (project: string, id: string): Promise<[string, MyError | null]> {
   const data = await fetch(`${API_URL}/files/${project}/${id}`);
@@ -13,7 +20,7 @@ export async function getFileContentFromId (project: string, id: string): Promis
     return ['', new MyError(ErrorType.FILE_RESPONSE_NOT_FOUND)];
   }
   let response = await data.text();
-  if (validator.isNonReadableString(response)) {
+  if (isNonReadableString(response)) {
     response = response.slice(0, NUMBER_OF_CHARACTER_NON_READDABLE);
     return [response, new MyError(ErrorType.FILE_RESPONSE_NON_READDABLE)];
   }
