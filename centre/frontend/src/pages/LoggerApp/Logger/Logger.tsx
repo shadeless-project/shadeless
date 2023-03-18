@@ -1,4 +1,4 @@
-import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Text } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, useToast, Td, Progress, Text, Divider, Button } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getPackets, Packet, defaultPacket } from "src/libs/apis/packets";
 import SearchBar from "./SearchBar/SearchBar";
@@ -9,6 +9,8 @@ import { LoggerContext } from "../LoggerAppContext";
 import MyTooltip from "../../common/tooltip";
 import BodyViewer from "./BodyViewer/BodyViewer";
 import LoggerOptions from "./logger-options";
+import LoggerColumnsChooser from "./logger-columns-chooser";
+import { MinusIcon } from "@chakra-ui/icons";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
@@ -161,6 +163,24 @@ export default function Logger(props: LoggerProps) {
       borderRadius="var(--component-border)"
       p="1em"
     >
+      <Box w="95%" ml="2.5%" mb="15px" display={showConfigColumns ? "block" : 'none'}>
+        <Text>
+          Config columns
+          <Button
+            bg="inherit"
+            p="0"
+            mt="-5px"
+            _hover={{ opacity: '.6'}}
+            _active={{ opacity: '.8'}}
+            onClick={() => setShowConfigColumns(false)}
+          >
+            <MinusIcon />
+          </Button>
+        </Text>
+        <LoggerColumnsChooser />
+      </Box>
+      <Divider my="var(--component-distance)" display={showConfigColumns ? "block" : 'none'} />
+
       <LoggerOptions
         showFilterBody={showFilterBody}
         setShowFilterBody={setShowFilterBody}
@@ -169,6 +189,8 @@ export default function Logger(props: LoggerProps) {
         showConfigColumns={showConfigColumns}
         setShowConfigColumns={setShowConfigColumns}
       />
+      <Divider my="var(--component-distance)" />
+      
       <SearchBar
         filter={filter}
         setFilter={setFilter}
@@ -176,6 +198,7 @@ export default function Logger(props: LoggerProps) {
         showFilterBody={showFilterBody}
         uniqueEndpointsToggle={uniqueEndpointsToggle}
       />
+
       <Table
         border="1.3px solid gray"
         borderRadius="10px"
@@ -223,7 +246,7 @@ export default function Logger(props: LoggerProps) {
               <Td textAlign="center">{p.count}</Td>
               <Td textAlign="center">{p.staticScore}</Td>
               <Td textAlign="center">{p.responseStatus}</Td>
-              <Td >{p.method}</Td>
+              <Td>{p.method}</Td>
               <Td minW="200px">{p.origin}</Td>
               <Td maxW="320px">{p.path}</Td>
               <Td maxW="280px">[{p.parameters.join(', ')}]</Td>

@@ -30,7 +30,13 @@ type SearchBarProps = {
   }>>;
 }
 export default function SearchBar (props: SearchBarProps) {
-  const { setApplyingFilter, filter, setFilter, showFilterBody } = props;
+  const { 
+    setApplyingFilter, 
+    filter, 
+    setFilter, 
+    showFilterBody,
+    uniqueEndpointsToggle,
+  } = props;
 
   const toast = useToast();
 

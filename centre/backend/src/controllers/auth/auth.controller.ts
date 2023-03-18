@@ -34,10 +34,11 @@ export class AuthController {
     const account = await this.authService.login(body.username, body.password);
     const id = getRandomString(40);
     await redis.set(`cookieId:${id}`, account._id.toString());
-    response.setHeader(
-      'Set-Cookie',
-      `id=${id}; HttpOnly; SameSite=Lax; Path=/api; Max-Age=${cookieAge}`,
-    );
+
+    let setCookieHeader = `id=${id}; HttpOnly; SameSite=Lax; Path=/api; Max-Age=${cookieAge}`;
+    if (process.env.NODE_ENV === 'production')
+      setCookieHeader += '; Secure; Partitioned';
+    response.setHeader('Set-Cookie', setCookieHeader);
     response.send({
       statusCode: 200,
       data: account,

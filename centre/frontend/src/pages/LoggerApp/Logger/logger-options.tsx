@@ -24,7 +24,7 @@ export default function LoggerOptions(props: Props) {
 
   return (
     <React.Fragment>
-      <Box mb="15px">
+      <Box mb="15px" w="95%" ml="2.5%">
         <Text as="span" mr="18px">
           Options
         </Text>
@@ -61,17 +61,9 @@ export default function LoggerOptions(props: Props) {
               localStorage.setItem('showConfigColumns', newVal.toString());
             }}
           >
-          Show config conlumns
+          Show config columns
         </OptionCheckBox>
       </Box>
-
-      <Divider my="var(--component-distance)" display={showConfigColumns ? "block" : 'none'} />
-
-      <Box mb="15px" display={showConfigColumns ? "block" : 'none'}>
-
-      </Box>
-
-      <Divider my="var(--component-distance)" />
     </React.Fragment>
   );
 }
