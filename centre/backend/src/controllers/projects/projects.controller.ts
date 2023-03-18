@@ -15,7 +15,6 @@ import {
   PutProjectDto,
   QueryMiniDashboardAdditionalDataDto,
   QueryMiniDashboardDto,
-  QueryPacketAfterTimeDto,
   QueryPacketDto,
 } from './projects.dto';
 import { ProjectPacketsService } from './project-packets/project-packets.service';
@@ -130,8 +129,13 @@ export class ProjectsController {
   }
 
   @Delete(':name')
-  @UseGuards(AdminGuard)
   async deleteProject(@Param('name') name: string) {
+    return this.projectsService.deleteProject(name);
+  }
+
+  @Delete(':name/packets')
+  @UseGuards()
+  async deletePackets(@Param('name') name: string) {
     return this.projectsService.deleteProject(name);
   }
 }

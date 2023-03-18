@@ -95,7 +95,7 @@ export class QueryPacketDto {
   minimal?: boolean;
 }
 
-export class QueryPacketAfterTimeDto {
+export class DeletePacketDto {
   @IsString()
   @IsOptional()
   body?: string;
@@ -111,14 +111,7 @@ export class QueryPacketAfterTimeDto {
   @IsObject()
   criteria: any;
 
-  @IsString()
-  from: string;
-
   @IsBoolean()
   @IsOptional()
   queryDistinct?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  minimal?: boolean;
 }
