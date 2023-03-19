@@ -1,11 +1,15 @@
-import { DeleteIcon, DownloadIcon, QuestionIcon, SettingsIcon } from "@chakra-ui/icons";
-import { Box, Button, Divider, Flex, Menu, MenuButton, MenuItem, MenuList, Text, Textarea, useToast } from "@chakra-ui/react";
-import React from "react";
+import { DeleteIcon, QuestionIcon, SettingsIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text, Textarea, useDisclosure, useToast } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { AccountRole } from "src/libs/apis/account";
+import { deletePackets } from "src/libs/apis/packets";
 import { INSTRUCTION_FILTER_URL } from "src/libs/apis/types";
-import { notify, notifyErr } from "src/libs/notify";
+import { notifyErr, notifySuccess } from "src/libs/notify";
 import { ParserError, query2Object, ParserPacketProperties, Query2ObjectResult, PacketColumnProperty } from "src/libs/query.parser";
 import MyTooltip from "../../../common/tooltip";
 import { FilterBodyTypes } from "../../App";
+import { LoggerContext } from "../../LoggerAppContext";
+import DeleteVerification from "./delete-verification";
 import SearchBarBody from "./search-bar-body";
 import Suggestions from "./suggestions";
 
@@ -39,7 +43,9 @@ export default function SearchBar (props: SearchBarProps) {
   } = props;
 
   const toast = useToast();
+  const currentProject = useContext(LoggerContext);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [filterBody, setFilterBody] = React.useState<string>('');
   const [filterBodyType, setFilterBodyType] = React.useState<FilterBodyTypes>(FilterBodyTypes.BODY);
 
@@ -63,6 +69,24 @@ export default function SearchBar (props: SearchBarProps) {
         } : {},
         queryDistinct: uniqueEndpointsToggle,
       });
+    } catch (err) {
+      const e = err as ParserError;
+      notifyErr(toast, `${e.type}: ${e.message}` , 'filter-error-toast');
+    }
+  }
+
+  async function uiDeletePackets() {
+    try {
+      const criteria = query2Object(filter.now);
+      await deletePackets(currentProject, {
+        criteria,
+        ...showFilterBody ? {
+          [filterBodyType]: filterBody,
+        } : {},
+        queryDistinct: uniqueEndpointsToggle,
+      });
+      notifySuccess(toast, 'Success, the server is deleting matched packets in the background');
+      onClose();
     } catch (err) {
       const e = err as ParserError;
       notifyErr(toast, `${e.type}: ${e.message}` , 'filter-error-toast');
@@ -160,14 +184,30 @@ export default function SearchBar (props: SearchBarProps) {
                 <SettingsIcon />
               </MenuButton>
               <MenuList fontSize="sm">
-                <MenuItem icon={<DownloadIcon />}>Download matched</MenuItem>
-                <Divider />
-                <MenuItem icon={<DeleteIcon />} color="red">Delete matched</MenuItem>
+                {/* <MenuItem icon={<DownloadIcon />}>Download matched</MenuItem> */}
+                {/* <Divider /> */}
+                <MenuItem
+                  icon={<DeleteIcon />}
+                  color="red"
+                  onClick={() => {
+                    if (window.getUserRole() !== AccountRole.ADMIN) alert('Only admin can delete packets');
+                    else onOpen();
+                  }}
+                >
+                  Delete matched
+                </MenuItem>
               </MenuList>
             </Menu>
           </Box>
         </Flex>
       </Flex>
+      <DeleteVerification
+        isOpen={isOpen}
+        onClose={onClose}
+        query={filter.now}
+        confirmedDeleteCallback={uiDeletePackets}
+        uniqueEndpointsToggle={uniqueEndpointsToggle}
+      />
       <SearchBarBody
         isShowing={showFilterBody}
         setFilterBody={setFilterBody}

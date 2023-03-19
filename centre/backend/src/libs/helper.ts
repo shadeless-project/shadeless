@@ -28,6 +28,10 @@ export async function grepRegexInDirectory(
     .map((line) => line.slice(line.length - FILE_NAME_LENGTH));
 }
 
+export function getOneExist<T>(...args: T[]): T {
+  return args.find((v) => !!v);
+}
+
 /**
  * Calculate hash for a rawPacket
  * For detecting least frequently used feature :)

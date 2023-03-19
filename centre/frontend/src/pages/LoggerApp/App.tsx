@@ -2,7 +2,7 @@ import React from 'react';
 import Logger from './Logger/Logger';
 import LoggerDashboard from './Logger/LoggerDashboard';
 import { defaultQuery2ObjectResult, Query2ObjectResult } from 'src/libs/query.parser';
-import { LoggerContext } from './LoggerAppContext';
+import { LoggerContext, LoggerDashboardContext } from './LoggerAppContext';
 import AppHeader from './app-header';
 import CensorPage from '../censor/CensorsPage';
 import { Box } from '@chakra-ui/react';
@@ -38,6 +38,7 @@ function AppPage (props: AppPageProps) {
   });
 
   const [choosingTab, setChoosingTab] = React.useState<Tabs>(Tabs.DEFAULT);
+  const [dashboardNumPackets, setDasboardNumPackets] = React.useState(0);
 
   React.useEffect(() => {
     if (page === 'censors') {
@@ -51,39 +52,43 @@ function AppPage (props: AppPageProps) {
 
   return (
     <LoggerContext.Provider value={project}>
-      <AppHeader choosingTab={choosingTab} />
+      <LoggerDashboardContext.Provider value={dashboardNumPackets}>
+        <AppHeader choosingTab={choosingTab} />
 
-      {choosingTab === Tabs.LOGGER &&
-        <React.Fragment>
-          <LoggerDashboard
-            applyingFilter={applyingFilter}
-          />
-          <Logger
-            applyingFilter={applyingFilter}
-            setApplyingFilter={setApplyingFilter}
-          />
-        </React.Fragment>
-      }
+        {choosingTab === Tabs.LOGGER &&
+          <React.Fragment>
+            <LoggerDashboard
+              dashboardNumPackets={dashboardNumPackets}
+              setDasboardNumPackets={setDasboardNumPackets}
+              applyingFilter={applyingFilter}
+            />
+            <Logger
+              applyingFilter={applyingFilter}
+              setApplyingFilter={setApplyingFilter}
+            />
+          </React.Fragment>
+        }
 
-      {choosingTab === Tabs.CENSORS &&
-        <Box
-          mt="var(--component-distance)"
-          w="var(--component-width)"
-          mx="auto"
-        >
-          <CensorPage />
-        </Box>
-      }
+        {choosingTab === Tabs.CENSORS &&
+          <Box
+            mt="var(--component-distance)"
+            w="var(--component-width)"
+            mx="auto"
+          >
+            <CensorPage />
+          </Box>
+        }
 
-      {choosingTab === Tabs.DEFAULT &&
-        <Box
-          mt="var(--component-distance)"
-          w="var(--component-width)"
-          mx="auto"
-        >
-          <Page404 />
-        </Box>
-      }
+        {choosingTab === Tabs.DEFAULT &&
+          <Box
+            mt="var(--component-distance)"
+            w="var(--component-width)"
+            mx="auto"
+          >
+            <Page404 />
+          </Box>
+        }
+      </LoggerDashboardContext.Provider>
     </LoggerContext.Provider>
   );
 }

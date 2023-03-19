@@ -16,8 +16,6 @@ import { UploadPacketDto } from 'controllers/burp/burp.dto';
 
 @Injectable()
 export class BurpPacketService {
-  private logger = new Logger(BurpPacketService.name);
-
   constructor(
     @InjectModel(RawPacket.name)
     private rawPacketModel: Model<RawPacketDocument>,

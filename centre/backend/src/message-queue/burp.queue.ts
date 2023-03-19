@@ -5,17 +5,8 @@ import fs from 'fs/promises';
 import mv from 'mv';
 import path from 'path';
 import { Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import {
-  ItemStatus,
-  RawPacket,
-  RawPacketDocument,
-} from 'libs/schemas/raw_packet.schema';
-import { Path, PathDocument } from 'libs/schemas/path.schema';
-import { Model } from 'mongoose';
-import { Occurence, OccurenceDocument } from 'libs/schemas/occurence.schema';
-import { Project, ProjectDocument } from 'libs/schemas/project.schema';
-import { User, UserDocument } from 'libs/schemas/user.schema';
+import { ItemStatus, RawPacket } from 'libs/schemas/raw_packet.schema';
+import { Path } from 'libs/schemas/path.schema';
 import { calculateHash } from 'libs/helper';
 import { BurpPacketService } from './burp.queue.service';
 

@@ -5,12 +5,14 @@ import {
   Delete,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   Post,
   Put,
   UseGuards,
 } from '@nestjs/common';
 import {
+  DeletePacketsDto,
   PostProjectDto,
   PutProjectDto,
   QueryMiniDashboardAdditionalDataDto,
@@ -21,6 +23,13 @@ import { ProjectPacketsService } from './project-packets/project-packets.service
 import { ProjectUsersService } from './project-users/project-users.service';
 import { ProjectsService } from './projects/projects.service';
 import { AdminGuard, LoginGuard } from 'libs/middlewares/auth.guard';
+import { Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
+import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
+import { Project, ProjectDocument } from 'libs/schemas/project.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { BurpQueue } from 'message-queue/burp.queue';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -35,6 +44,9 @@ export class ProjectsController {
     private projectPacketsService: ProjectPacketsService,
     private usersService: ProjectUsersService,
     private projectsService: ProjectsService,
+    @InjectQueue(BurpQueue.name) private burpQueue: Queue,
+    @InjectQueue(PacketActionsQueue.name) private actionsQueue: Queue,
+    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
   ) {}
 
   @Get()
@@ -129,13 +141,36 @@ export class ProjectsController {
   }
 
   @Delete(':name')
+  @UseGuards(AdminGuard)
   async deleteProject(@Param('name') name: string) {
     return this.projectsService.deleteProject(name);
   }
 
   @Delete(':name/packets')
-  @UseGuards()
-  async deletePackets(@Param('name') name: string) {
-    return this.projectsService.deleteProject(name);
+  @UseGuards(AdminGuard)
+  async deletePackets(
+    @Param('name') name: string,
+    @Body() query: DeletePacketsDto,
+  ) {
+    const project = await this.projectModel.findOne({ name });
+    if (!project) throw new NotFoundException([], `Not found project ${name}`);
+
+    if (!onlyOneExist(query.body, query.requestBody, query.responseBody))
+      throw new BadRequestException(
+        [],
+        'There should only have 1 "body" or "requestBody" or "responseBody"',
+      );
+
+    await this.actionsQueue.add(
+      PacketActionsQueue.prototype.deletePackets.name,
+      {
+        ...query,
+        criteria: {
+          project: name,
+          ...query.criteria,
+        },
+      },
+    );
+    return 'OK';
   }
 }

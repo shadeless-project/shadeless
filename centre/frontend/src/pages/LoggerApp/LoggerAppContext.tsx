@@ -5,3 +5,4 @@ import React from "react";
 
 // Create a context for the current theme (with "light" as the default).
 export const LoggerContext = React.createContext('');
+export const LoggerDashboardContext = React.createContext(0);

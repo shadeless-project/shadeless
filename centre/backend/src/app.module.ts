@@ -17,6 +17,7 @@ import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
 import { Path, PathSchema } from 'libs/schemas/path.schema';
 import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
 import { RawPacket, RawPacketSchema } from 'libs/schemas/raw_packet.schema';
+import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 
 function getAppModuleImports() {
   const modules = [
@@ -51,7 +52,7 @@ function getAppModuleImports() {
 @Module({
   imports: getAppModuleImports(),
   controllers: [HealthcheckController],
-  providers: [BurpQueue, BurpPacketService],
+  providers: [BurpQueue, PacketActionsQueue, BurpPacketService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {

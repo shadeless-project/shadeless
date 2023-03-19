@@ -153,3 +153,11 @@ export async function getDashboardAdditionalData(projectName: string, filter: Da
   });
   return results.json() as unknown as ApiResponse<any>;
 }
+export async function deletePackets(projectName: string, filter: Query2ObjectResult): Promise<ApiResponse<string>> {
+  const results = await fetch(`${API_URL}/projects/${projectName}/packets`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(filter)
+  });
+  return results.json() as unknown as ApiResponse<any>;
+}

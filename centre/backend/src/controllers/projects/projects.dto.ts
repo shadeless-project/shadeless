@@ -95,7 +95,7 @@ export class QueryPacketDto {
   minimal?: boolean;
 }
 
-export class DeletePacketDto {
+export class DeletePacketsDto {
   @IsString()
   @IsOptional()
   body?: string;

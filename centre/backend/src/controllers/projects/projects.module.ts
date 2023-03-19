@@ -11,6 +11,9 @@ import { Path, PathSchema } from 'libs/schemas/path.schema';
 import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
 import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
 import { Account, AccountSchema } from 'libs/schemas/account.schema';
+import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
+import { BullModule } from '@nestjs/bull';
+import { BurpQueue } from 'message-queue/burp.queue';
 
 @Module({
   controllers: [ProjectsController],
@@ -26,6 +29,8 @@ import { Account, AccountSchema } from 'libs/schemas/account.schema';
     MongooseModule.forFeature([
       { name: RawPacket.name, schema: RawPacketSchema },
     ]),
+    BullModule.registerQueue({ name: BurpQueue.name }),
+    BullModule.registerQueue({ name: PacketActionsQueue.name }),
   ],
   providers: [ProjectPacketsService, ProjectUsersService, ProjectsService],
 })

@@ -8,9 +8,11 @@ import { LoggerContext } from "../LoggerAppContext";
 
 type LoggerDashboardProps = {
   applyingFilter: Query2ObjectResult;
+  dashboardNumPackets: number;
+  setDasboardNumPackets: React.Dispatch<React.SetStateAction<number>>;
 };
 export default function LoggerDashboard (props: LoggerDashboardProps) {
-  const { applyingFilter } = props;
+  const { applyingFilter, dashboardNumPackets, setDasboardNumPackets } = props;
   const currentProject = useContext(LoggerContext);
 
   const toast = useToast();
@@ -22,7 +24,6 @@ export default function LoggerDashboard (props: LoggerDashboardProps) {
   const [dashboardOrigins, setDasboardOrigins] = React.useState<string[]>([]);
 
   const [isNumPacketsLoading, setIsNumPacketsLoading] = React.useState(true);
-  const [dashboardNumPackets, setDasboardNumPackets] = React.useState(0);
 
   const [isUniqueEndpointsLoading, setIsUniqueEndpointsLoading] = React.useState(true);
   const [dashboardUniqueEndpoints, setDashboardUniqueEndpoints] = React.useState(0);

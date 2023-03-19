@@ -85,7 +85,6 @@ export default function Logger(props: LoggerProps) {
     }
   }
   async function getFirstPackets() {
-    console.log(applyingFilter);
     const packets = await getPackets(
       currentProject,
       applyingFilter,

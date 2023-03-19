@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { grepRegexInDirectory } from 'libs/helper';
+import { getOneExist, grepRegexInDirectory } from 'libs/helper';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
 import { Model } from 'mongoose';
@@ -189,10 +189,6 @@ function filterBodyQuery({
     }
   }
   return results;
-}
-
-function getOneExist<T>(...args: T[]): T {
-  return args.find((v) => !!v);
 }
 
 function complexPacketCount(packets: RawPacket[]) {

@@ -121,7 +121,7 @@ export const ParserPacketProperties: PacketColumnProperty[] = [
   {
     name: 'origin',
     type: 'String',
-    showBody: (p: Packet) => <Td maxW="300px">{p.protocol}</Td>,
+    showBody: (p: Packet) => <Td maxW="300px">{p.origin}</Td>,
     showCol: () =>
       <Th>
         <MyTooltip label="Request's origin">Origin</MyTooltip>
