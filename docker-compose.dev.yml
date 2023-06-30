@@ -48,6 +48,15 @@ services:
     environment:
       - DATABASE_URL=mongodb://host.docker.internal:27017/shadeless
       - REDIS_HOST=app-redis
+  
+  app-fuzzer:
+    container_name: app-fuzzer
+    build:
+      context: ./fuzzer-server/
+      dockerfile: dockerfile
+    ports:
+      - 5000:5000
+    
 volumes:
   app-volume:
     external: false

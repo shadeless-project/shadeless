@@ -13,25 +13,36 @@ import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
 import { Account, AccountSchema } from 'libs/schemas/account.schema';
 import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { BullModule } from '@nestjs/bull';
-import { BurpQueue } from 'message-queue/burp.queue';
+import { ScannerQueue } from 'message-queue/scanner.queue';
+import { ProjectScannersService } from './project-scanners/project-scanners.service';
+import { ScanRun, ScanRunSchema } from 'libs/schemas/scan_run.schema';
+import {
+  JaelesScanner,
+  JaelesScannerSchema,
+} from 'libs/schemas/jaeles_scanner.schema';
 
 @Module({
   controllers: [ProjectsController],
   imports: [
-    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
-    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([
+      { name: Account.name, schema: AccountSchema },
+      { name: Project.name, schema: ProjectSchema },
+      { name: User.name, schema: UserSchema },
       { name: Occurence.name, schema: OccurenceSchema },
-    ]),
-    MongooseModule.forFeature([{ name: Path.name, schema: PathSchema }]),
-    MongooseModule.forFeature([{ name: Censor.name, schema: CensorSchema }]),
-    MongooseModule.forFeature([
+      { name: Path.name, schema: PathSchema },
+      { name: Censor.name, schema: CensorSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
+      { name: ScanRun.name, schema: ScanRunSchema },
+      { name: JaelesScanner.name, schema: JaelesScannerSchema },
     ]),
-    BullModule.registerQueue({ name: BurpQueue.name }),
+    BullModule.registerQueue({ name: ScannerQueue.name }),
     BullModule.registerQueue({ name: PacketActionsQueue.name }),
   ],
-  providers: [ProjectPacketsService, ProjectUsersService, ProjectsService],
+  providers: [
+    ProjectsService,
+    ProjectUsersService,
+    ProjectPacketsService,
+    ProjectScannersService,
+  ],
 })
 export class ProjectsModule {}

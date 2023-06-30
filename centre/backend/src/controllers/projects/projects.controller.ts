@@ -29,7 +29,6 @@ import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BurpQueue } from 'message-queue/burp.queue';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -44,7 +43,6 @@ export class ProjectsController {
     private projectPacketsService: ProjectPacketsService,
     private usersService: ProjectUsersService,
     private projectsService: ProjectsService,
-    @InjectQueue(BurpQueue.name) private burpQueue: Queue,
     @InjectQueue(PacketActionsQueue.name) private actionsQueue: Queue,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
   ) {}

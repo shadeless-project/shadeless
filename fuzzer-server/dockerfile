@@ -9,4 +9,4 @@ COPY ./test-signatures/ ./custom-signatures/
 
 RUN jaeles config init
 RUN jaeles config reload --signDir ~/custom-signatures/
-CMD jaeles server --host 0.0.0.0 -A -L 4 --verbose
+CMD jaeles server --host 0.0.0.0 -A -L 4 --verbose --save-raw

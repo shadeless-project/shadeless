@@ -42,17 +42,17 @@ export class PutAccountDto {
   @IsOptional()
   @MinLength(1)
   @MaxLength(50)
-  username: string;
+  username?: string;
 
   @IsString()
   @IsOptional()
   @MaxLength(50)
-  email: string;
+  email?: string;
 
   @IsString()
   @IsOptional()
   @MaxLength(1000)
-  description: string;
+  description?: string;
 
   @IsEnum(AccountRole)
   role: AccountRole;

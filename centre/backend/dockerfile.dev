@@ -1,7 +1,14 @@
-FROM node:16-buster
+FROM golang:buster AS builder
+
+# RUN apk add build-base
+RUN GO111MODULE=on go install github.com/jaeles-project/jaeles@latest
+
+FROM node:16-buster AS final
 
 WORKDIR /app
 
 RUN apt update -y && apt install ripgrep
+
+COPY --from=builder /go/bin/jaeles /bin/jaeles
 
 CMD npm i && npm run start:dev

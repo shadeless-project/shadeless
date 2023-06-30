@@ -18,21 +18,26 @@ import { Path, PathSchema } from 'libs/schemas/path.schema';
 import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
 import { RawPacket, RawPacketSchema } from 'libs/schemas/raw_packet.schema';
 import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
+import {
+  JaelesScanner,
+  JaelesScannerSchema,
+} from 'libs/schemas/jaeles_scanner.schema';
+import { JaelesModule } from 'controllers/jaeles/jaeles.module';
 
 function getAppModuleImports() {
   const modules = [
     MongooseModule.forRoot(process.env.DATABASE_URL),
-    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([
+      { name: Project.name, schema: ProjectSchema },
+      { name: User.name, schema: UserSchema },
       { name: Occurence.name, schema: OccurenceSchema },
-    ]),
-    MongooseModule.forFeature([{ name: Path.name, schema: PathSchema }]),
-    MongooseModule.forFeature([{ name: Censor.name, schema: CensorSchema }]),
-    MongooseModule.forFeature([
+      { name: Path.name, schema: PathSchema },
+      { name: Censor.name, schema: CensorSchema },
+      { name: JaelesScanner.name, schema: JaelesScannerSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
     ]),
     BurpModule,
+    JaelesModule,
     ProjectsModule,
     AuthModule,
     CensorsModule,

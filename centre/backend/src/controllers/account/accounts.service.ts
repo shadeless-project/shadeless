@@ -1,10 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
   Account,
   AccountDocument,
-  AccountRole,
   hashBcrypt,
 } from 'libs/schemas/account.schema';
 import {
@@ -42,6 +45,9 @@ export class AccountsService {
 
   async editAccount(_id: string, data: PutAccountDto) {
     const editingUser = await this.accountModel.findById(_id);
+    if (!editingUser)
+      throw new NotFoundException({}, `Not found account id ${_id}`);
+
     if (data.username && editingUser.username !== data.username) {
       const foundUser = await this.accountModel.findOne({
         username: data.username,
@@ -58,6 +64,10 @@ export class AccountsService {
   }
 
   async resetAccountPassword(_id: string, data: ResetPasswordAccountDto) {
+    const editingUser = await this.accountModel.findById(_id);
+    if (!editingUser)
+      throw new NotFoundException({}, `Not found account id ${_id}`);
+
     await this.accountModel.findByIdAndUpdate(_id, {
       $set: { password: await hashBcrypt(data.password) },
     });

@@ -8,9 +8,9 @@ import { StaticFileController } from './static-file.controller';
 @Module({
   controllers: [StaticFileController],
   imports: [
-    MongooseModule.forFeature([{ name: Censor.name, schema: CensorSchema }]),
-    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
     MongooseModule.forFeature([
+      { name: Censor.name, schema: CensorSchema },
+      { name: Account.name, schema: AccountSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
     ]),
   ],

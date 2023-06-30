@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, Grid, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, Select, Text, Tooltip, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getFileContentFromId } from "src/libs/apis/files";
 import { Packet } from "src/libs/apis/packets";
@@ -9,7 +9,7 @@ import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
 import { LoggerContext } from "../../LoggerAppContext";
 import MyTooltip from "src/pages/common/tooltip";
-import { useLocation } from "wouter";
+import { JaelesScanner } from "src/libs/apis/jaeles";
 
 type PacketDetailProps = {
   setIsShowingDetail: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,13 +18,13 @@ type PacketDetailProps = {
     before: string;
     now: string;
   }>>;
+  scanners: JaelesScanner[];
 }
 export default function BodyViewer(props: PacketDetailProps) {
   const { setIsShowingDetail, packet, setFilter } = props;
   const currentProject = useContext(LoggerContext);
 
   const toast = useToast();
-  const setLocation = useLocation()[1];
 
   const storageHeight = localStorage.getItem('detailHeight') || '45';
   const [choosingHeight, setChoosingHeight] = React.useState(storageHeight);
@@ -155,6 +155,15 @@ export default function BodyViewer(props: PacketDetailProps) {
         >
           ⏱️
         </UtilityButton>
+
+        <Box ml="auto">
+          <Select
+            id="choosingScannerName"
+            size="xs"
+          >
+
+          </Select>
+        </Box>
 
         <Box ml="auto" color="black" fontSize="2xs">
           <UtilityButton

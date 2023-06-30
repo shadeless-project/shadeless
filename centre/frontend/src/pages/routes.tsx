@@ -11,6 +11,8 @@ import SettingPage from './setting/SettingPage';
 import CensorPage from './censor/CensorsPage';
 import AccountsPage from './accounts/AccountsPage';
 import Footer from './common/footer';
+import JaelesScannerPage from './jaelesScanners/JaelesPage';
+import JaelesSignaturesPage from './jaelesSignatures/JaelesSignaturesPage';
 
 function BottomFooter () {
   const [h, setH] = React.useState(document.body.offsetHeight);
@@ -102,6 +104,10 @@ function Routes () {
                   return <SettingPage body={<CensorPage />}/>
                 case 'accounts':
                   return <SettingPage body={<AccountsPage />}/>
+                case 'jaeles_scanners':
+                  return <SettingPage body={<JaelesScannerPage />}/>
+                case 'jaeles_signatures':
+                  return <SettingPage body={<JaelesSignaturesPage />}/>
               }
               return <SettingPage body={<Page404 />} />
             }}
