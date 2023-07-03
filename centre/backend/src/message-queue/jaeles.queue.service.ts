@@ -1,52 +1,43 @@
-import { Model } from 'mongoose';
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-
-import { Path, PathDocument } from 'libs/schemas/path.schema';
-import { User, UserDocument } from 'libs/schemas/user.schema';
-import { Project, ProjectDocument } from 'libs/schemas/project.schema';
-import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
-import { Occurence, OccurenceDocument } from 'libs/schemas/occurence.schema';
 import path from 'path';
-import { ScanRun } from 'libs/schemas/scan_run.schema';
-import { exec } from '@drstrain/drutil';
+import { ScanRunDetail } from 'libs/schemas/scan_run.schema';
+import { exec, system } from '@drstrain/drutil';
 
+function escapeShellArg(arg) {
+  return `'${arg.replace(/'/g, `'\\''`)}'`;
+}
+
+function getScannerLogLocation(id: string): string {
+  const fileLocation = path.join('/files', 'scan-logs', id);
+  return fileLocation;
+}
 @Injectable()
 export class JaelesService {
   private logger = new Logger(JaelesService.name);
 
-  constructor(
-    @InjectModel(RawPacket.name)
-    private rawPacketModel: Model<RawPacketDocument>,
-    @InjectModel(Path.name) private pathModel: Model<PathDocument>,
-    @InjectModel(Occurence.name)
-    private occurenceModel: Model<OccurenceDocument>,
-    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-  ) {}
-
-  getScannerLogLocation(id: string): string {
-    const fileLocation = path.join('/files', 'scan-logs', id);
-    return fileLocation;
-  }
-
-  async runJaelesScan(scanRun: ScanRun) {
-    const packet = await this.rawPacketModel.findOne({
-      requestPacketId: scanRun.requestPacketId,
-    });
-    if (!packet) return;
-
+  async runJaelesScan(scanRunDetail: ScanRunDetail) {
+    const { packet } = scanRunDetail;
     const url = `${packet.origin}${packet.path}${
       packet.querystring ? '?' + packet.querystring : ''
     }`;
 
     const headerArgs = packet.requestHeaders.slice(1).reduce((prev, cur) => {
-      return [...prev, '-H', cur];
-    }, []);
+      return prev + ` -H ${escapeShellArg(cur)}`;
+    }, '');
 
-    console.log(url);
-    console.log(headerArgs);
+    const cmd = `/bin/jaeles scan -u '${url}' -s '${
+      scanRunDetail.scanner.scanKeyword
+    }' ${headerArgs.trim()} -v -L 4 > ${getScannerLogLocation(
+      scanRunDetail._id.toString(),
+    )}`;
+    this.logger.log(`Running command: ${cmd}`);
 
-    // const { stdout } = await exec('jaeles', ['scan', '-u', url, ...headerArgs]);
+    const { stdout, stderr } = await exec('bash', ['-c', cmd]);
+    this.logger.log(`Stdout: ${stdout}`);
+    this.logger.log(`Stderr: ${stderr}`);
+
+    // const { stdout, stderr } = await exec('whoami');
+    // this.logger.log(`Stdout: ${stdout}`);
+    // this.logger.log(`Stderr: ${stderr}`);
   }
 }

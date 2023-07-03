@@ -1,4 +1,7 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
+import { JaelesScanner } from './jaeles_scanner.schema';
+import { Project } from './project.schema';
+import { RawPacket } from './raw_packet.schema';
 
 export class ScanRun {
   _id?: Types.ObjectId;
@@ -6,6 +9,14 @@ export class ScanRun {
   project: string;
   requestPacketId: string;
 }
+
+export class ScanRunDetail {
+  _id: Types.ObjectId;
+  project: Project;
+  scanner: JaelesScanner;
+  packet: RawPacket;
+}
+
 export interface ScanRunDocument extends ScanRun, Document {
   _id: Types.ObjectId;
 }

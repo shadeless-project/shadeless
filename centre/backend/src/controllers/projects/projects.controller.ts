@@ -18,6 +18,7 @@ import {
   QueryMiniDashboardAdditionalDataDto,
   QueryMiniDashboardDto,
   QueryPacketDto,
+  TriggerScanDto,
 } from './projects.dto';
 import { ProjectPacketsService } from './project-packets/project-packets.service';
 import { ProjectUsersService } from './project-users/project-users.service';
@@ -29,6 +30,7 @@ import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ProjectScannersService } from './project-scanners/project-scanners.service';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -41,7 +43,8 @@ function onlyOneExist(...arr: string[]): boolean {
 export class ProjectsController {
   constructor(
     private projectPacketsService: ProjectPacketsService,
-    private usersService: ProjectUsersService,
+    private projectScannersService: ProjectScannersService,
+    private projectUsersService: ProjectUsersService,
     private projectsService: ProjectsService,
     @InjectQueue(PacketActionsQueue.name) private actionsQueue: Queue,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
@@ -59,7 +62,7 @@ export class ProjectsController {
 
   @Get(':name/users')
   async getUsersInProject(@Param('name') projectName: string) {
-    return this.usersService.getUsersInProject(projectName);
+    return this.projectUsersService.getUsersInProject(projectName);
   }
 
   @Post(':name/query_mini_dashboard')
@@ -170,5 +173,19 @@ export class ProjectsController {
       },
     );
     return 'OK';
+  }
+
+  @Get(':name/scanRuns')
+  async getScanRuns(@Param('name') name: string) {
+    return this.projectScannersService.getScanRuns(name);
+  }
+
+  @Post(':name/scanRuns')
+  async triggerScan(
+    @Param('name') name: string,
+    @Body() triggerScan: TriggerScanDto,
+  ) {
+    // name is redundant ...
+    return this.projectScannersService.triggerScan(triggerScan);
   }
 }

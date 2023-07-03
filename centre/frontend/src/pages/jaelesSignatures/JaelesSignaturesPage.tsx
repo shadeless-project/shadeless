@@ -73,7 +73,7 @@ export default function JaelesSignaturesPage() {
             <InputRightElement pointerEvents='none'>
               <Search2Icon color='gray.300' />
             </InputRightElement>
-            <Input 
+            <Input
               p="14px"
               placeholder='Search ...'
               borderWidth="1px"
@@ -81,9 +81,9 @@ export default function JaelesSignaturesPage() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </InputGroup>
-          <Box 
-            maxHeight="400px" 
-            overflow="auto" 
+          <Box
+            maxHeight="400px"
+            overflow="auto"
             border="1.3px solid"
             borderColor="custom.grey"
             borderBottom="none"
@@ -94,14 +94,13 @@ export default function JaelesSignaturesPage() {
                 padding="2"
                 width="100%"
                 key={`signature-${sig}`}
-                bg="transparent"
-                _hover={{"bg": "custom.grey"}}
+                _hover={{"bg": "custom.hover-grey"}}
                 fontSize="xs"
-                textDecor={urlSigId === sig ? 'underline' : 'none'}
+                bg={urlSigId === sig ? 'custom.grey' : 'inherit'}
                 onClick={() => setLocation(`?sig=${sig}`)}
               >
                 {sig}
-              </Text>  
+              </Text>
             )}
           </Box>
           <Divider my="10px" />
@@ -111,7 +110,7 @@ export default function JaelesSignaturesPage() {
         </Box>
         <Box padding="3">
           <SkeletonText display={isLoadingSigFile ? 'block' : 'none'} noOfLines={5} mt="8px" />
-          {sig !== "" ? 
+          {sig !== "" ?
             <Textarea
               fontSize="xs"
               bg="custom.grey"
@@ -120,7 +119,7 @@ export default function JaelesSignaturesPage() {
               rows={sig.split('\n').length}
               disabled
             />
-          : 
+          :
             <Text
               _hover={{"cursor":"default"}}
               color="custom.black"
@@ -130,7 +129,7 @@ export default function JaelesSignaturesPage() {
               Choose a signature file to view its content !
             </Text>
           }
-          
+
         </Box>
       </Grid>
     </Box>

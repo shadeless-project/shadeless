@@ -7,7 +7,7 @@ import {
   JaelesScannerDocument,
 } from 'libs/schemas/jaeles_scanner.schema';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
-import { ScanRun, ScanRunDocument } from 'libs/schemas/scan_run.schema';
+import { ScanRun, ScanRunDetail, ScanRunDocument } from 'libs/schemas/scan_run.schema';
 import { ScannerQueue } from 'message-queue/scanner.queue';
 import { Model } from 'mongoose';
 import { TriggerScanDto } from '../projects.dto';
@@ -30,10 +30,10 @@ export class ProjectScannersService {
     const project = await this.projectModel.findOne({ project: projectName });
     if (!project)
       throw new NotFoundException(' ', `Not found project ${projectName}`);
-    const runScans = await this.scanRunModel.find({
+    const scanRuns = await this.scanRunModel.find({
       project: projectName,
     });
-    return runScans;
+    return scanRuns;
   }
 
   async triggerScan(triggerScan: TriggerScanDto) {
@@ -60,9 +60,16 @@ export class ProjectScannersService {
       );
 
     const scanRun = await this.scanRunModel.create(triggerScan);
+    const scanRunDetail: ScanRunDetail = {
+      _id: scanRun._id,
+      project,
+      scanner,
+      packet,
+    };
+
     await this.scannerQueue.add(
       ScannerQueue.prototype.runJaelesScan.name,
-      scanRun,
+      scanRunDetail,
     );
     const cnt = await this.scanRunModel.countDocuments({
       project: scanRun.project,

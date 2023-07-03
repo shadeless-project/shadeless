@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, Grid, Select, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Grid, Select, Text, Tooltip, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getFileContentFromId } from "src/libs/apis/files";
 import { Packet } from "src/libs/apis/packets";
@@ -9,7 +9,7 @@ import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
 import { LoggerContext } from "../../LoggerAppContext";
 import MyTooltip from "src/pages/common/tooltip";
-import { JaelesScanner } from "src/libs/apis/jaeles";
+import { JaelesScanner, triggerScanRun } from "src/libs/apis/jaeles";
 
 type PacketDetailProps = {
   setIsShowingDetail: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +21,7 @@ type PacketDetailProps = {
   scanners: JaelesScanner[];
 }
 export default function BodyViewer(props: PacketDetailProps) {
-  const { setIsShowingDetail, packet, setFilter } = props;
+  const { setIsShowingDetail, packet, setFilter, scanners } = props;
   const currentProject = useContext(LoggerContext);
 
   const toast = useToast();
@@ -56,6 +56,12 @@ export default function BodyViewer(props: PacketDetailProps) {
       const e = err as ParserError;
       notify(toast, { statusCode: 500, data: '', error: `${e.type}: ${e.message}` }, 'filter-error');
     }
+  }
+
+  async function uiTriggerScanRun(packet: Packet) {
+    const choosingScanner = (document.getElementById('choosingScannerName') as HTMLInputElement).value;
+    const resp = await triggerScanRun(packet.requestPacketId, currentProject, choosingScanner);
+    notify(toast, resp);
   }
 
   const [isLoading, setIsLoading] = React.useState(true);
@@ -156,14 +162,39 @@ export default function BodyViewer(props: PacketDetailProps) {
           ⏱️
         </UtilityButton>
 
-        <Box ml="auto">
-          <Select
-            id="choosingScannerName"
-            size="xs"
-          >
+        {scanners.length !== 0 ?
+          <React.Fragment>
+            <Box ml="50px">
+              <Select
+                id="choosingScannerName"
+                size="xs"
+                fontSize="2xs"
+                p="1"
+                cursor="pointer"
+                bg="custom.white !important"
+                borderColor="custom.black !important"
+              >
+                {scanners.map(scanner =>
+                  <option key={`body-viewer-scanner-${scanner._id}`} value={scanner._id}>{scanner.scanKeyword}</option>
+                )}
+              </Select>
+            </Box>
+            <MyTooltip label="Run Jaeles scan with this keyword">
+              <Button size="xs" colorScheme="facebook" onClick={() => uiTriggerScanRun(packet)}>
+                Scan
+              </Button>
+            </MyTooltip>
+          </React.Fragment>
+        :
+          <React.Fragment>
+            <MyTooltip label="Create a Jaeles scanner to use this feature">
+              <Button disabled size="xs" ml="80px">
+                Scan
+              </Button>
+            </MyTooltip>
+          </React.Fragment>
+        }
 
-          </Select>
-        </Box>
 
         <Box ml="auto" color="black" fontSize="2xs">
           <UtilityButton
