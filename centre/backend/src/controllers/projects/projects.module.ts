@@ -14,12 +14,12 @@ import { Account, AccountSchema } from 'libs/schemas/account.schema';
 import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { BullModule } from '@nestjs/bull';
 import { ScannerQueue } from 'message-queue/scanner.queue';
-import { ProjectScannersService } from './project-scanners/project-scanners.service';
 import { ScanRun, ScanRunSchema } from 'libs/schemas/scan_run.schema';
 import {
   JaelesScanner,
   JaelesScannerSchema,
 } from 'libs/schemas/jaeles_scanner.schema';
+import { ProjectScanRunsService } from './project-scanRuns/project-scanRuns.service';
 
 @Module({
   controllers: [ProjectsController],
@@ -42,7 +42,7 @@ import {
     ProjectsService,
     ProjectUsersService,
     ProjectPacketsService,
-    ProjectScannersService,
+    ProjectScanRunsService,
   ],
 })
 export class ProjectsModule {}

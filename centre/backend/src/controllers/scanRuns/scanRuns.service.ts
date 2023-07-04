@@ -7,14 +7,20 @@ import {
   JaelesScannerDocument,
 } from 'libs/schemas/jaeles_scanner.schema';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
-import { ScanRun, ScanRunDetail, ScanRunDocument } from 'libs/schemas/scan_run.schema';
+import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
+import {
+  ScanRun,
+  ScanRunDetail,
+  ScanRunDocument,
+} from 'libs/schemas/scan_run.schema';
 import { ScannerQueue } from 'message-queue/scanner.queue';
 import { Model } from 'mongoose';
-import { TriggerScanDto } from '../projects.dto';
-import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
+import { TriggerScanDto } from './scanRuns.dto';
+import { getJaelesScannerLogLocation } from 'libs/helper';
+import fsPromise from 'fs/promises';
 
 @Injectable()
-export class ProjectScannersService {
+export class ScanRunsService {
   constructor(
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
     @InjectModel(ScanRun.name) private scanRunModel: Model<ScanRunDocument>,
@@ -26,14 +32,44 @@ export class ProjectScannersService {
     @InjectQueue(ScannerQueue.name) private scannerQueue: Queue,
   ) {}
 
-  async getScanRuns(projectName: string) {
-    const project = await this.projectModel.findOne({ project: projectName });
-    if (!project)
-      throw new NotFoundException(' ', `Not found project ${projectName}`);
-    const scanRuns = await this.scanRunModel.find({
-      project: projectName,
+  async getScanRunDetail(id: string) {
+    const scanRun = await this.scanRunModel.findById(id);
+    if (!scanRun)
+      throw new NotFoundException(' ', `Not found scanRun with specified id`);
+
+    const project = await this.projectModel.findOne({
+      project: scanRun.project,
     });
-    return scanRuns;
+    if (!project)
+      throw new NotFoundException(
+        ' ',
+        `Not found project ${scanRun.project}. It seems the project was removed`,
+      );
+
+    const packet = await this.rawPacketModel.findOne({
+      requestPacketId: scanRun.requestPacketId,
+    });
+    if (!packet)
+      throw new NotFoundException(
+        ' ',
+        `Not found packet ${scanRun.requestPacketId}. It seems the packet was removed !`,
+      );
+
+    const scanner = await this.jaelesScannerModel.findById(scanRun.scannerId);
+    if (!scanner)
+      throw new NotFoundException(
+        ' ',
+        `Not found scanner ${scanRun.scannerId}. It seems the scanner was removed !`,
+      );
+
+    const scanRunDetail: ScanRunDetail = {
+      _id: scanRun._id,
+      project,
+      scanner,
+      packet,
+      status: scanRun.status,
+    };
+    return scanRunDetail;
   }
 
   async triggerScan(triggerScan: TriggerScanDto) {
@@ -65,6 +101,7 @@ export class ProjectScannersService {
       project,
       scanner,
       packet,
+      status: scanRun.status,
     };
 
     await this.scannerQueue.add(
@@ -76,5 +113,11 @@ export class ProjectScannersService {
     });
 
     return `Scan run #${cnt} is triggered and is running in the background`;
+  }
+
+  async getScanRunLog(id: string) {
+    const loc = getJaelesScannerLogLocation(id);
+    const content = await fsPromise.readFile(loc, 'utf-8');
+    return content;
   }
 }

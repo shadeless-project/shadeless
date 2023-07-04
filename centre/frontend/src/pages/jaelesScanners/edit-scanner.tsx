@@ -2,7 +2,7 @@ import { Box, Code, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalC
 import React from "react";
 import { notify } from "src/libs/notify";
 import SubmitButton from "../common/submit-button";
-import { JaelesScanner, editScanner, getAllSignatures } from "src/libs/apis/jaeles";
+import { JaelesScanner, editScanner, getAllSignatures } from "src/libs/apis/scanners";
 
 type Props = {
   isOpen: boolean;

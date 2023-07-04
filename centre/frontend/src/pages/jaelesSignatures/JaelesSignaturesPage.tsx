@@ -1,9 +1,9 @@
-import { Box, Button, Divider, Flex, Grid, Input, InputGroup, InputLeftElement, InputRightElement, SkeletonText, Spinner, Text, Textarea, Tooltip, useToast } from '@chakra-ui/react';
+import { Box, Divider, Flex, Grid, Input, InputGroup, InputRightElement, SkeletonText, Spinner, Text, Textarea, useToast } from '@chakra-ui/react';
 import React from 'react';
 import { notify } from 'src/libs/notify';
-import { getAllSignatures, getOneSignature } from 'src/libs/apis/jaeles';
+import { getAllSignatures, getOneSignature } from 'src/libs/apis/scanners';
 import { useLocation } from 'wouter';
-import { QuestionIcon, Search2Icon } from '@chakra-ui/icons';
+import { Search2Icon } from '@chakra-ui/icons';
 
 export default function JaelesSignaturesPage() {
   const toast = useToast();

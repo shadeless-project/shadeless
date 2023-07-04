@@ -24,7 +24,9 @@ import {
 } from 'libs/schemas/jaeles_scanner.schema';
 import { JaelesModule } from 'controllers/jaeles/jaeles.module';
 import { ScannerQueue } from 'message-queue/scanner.queue';
-import { JaelesService } from 'message-queue/jaeles.queue.service';
+import { JaelesQueue } from 'message-queue/jaeles.queue.service';
+import { ScanRun, ScanRunSchema } from 'libs/schemas/scan_run.schema';
+import { ScanRunsModule } from 'controllers/scanRuns/scanRuns.module';
 
 function getAppModuleImports() {
   const modules = [
@@ -37,6 +39,7 @@ function getAppModuleImports() {
       { name: Censor.name, schema: CensorSchema },
       { name: JaelesScanner.name, schema: JaelesScannerSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
+      { name: ScanRun.name, schema: ScanRunSchema },
     ]),
     BurpModule,
     JaelesModule,
@@ -45,6 +48,7 @@ function getAppModuleImports() {
     CensorsModule,
     StaticFileModule,
     AccountsModule,
+    ScanRunsModule,
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
@@ -64,7 +68,7 @@ function getAppModuleImports() {
     BurpQueue,
     PacketActionsQueue,
     ScannerQueue,
-    JaelesService,
+    JaelesQueue,
   ],
 })
 export class AppModule implements NestModule {

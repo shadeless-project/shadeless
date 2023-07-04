@@ -11,7 +11,7 @@ import LoggerOptions from "./logger-options";
 import LoggerColumnsChooser, { ChoosingColumnType } from "./logger-columns-chooser";
 import { MinusIcon, QuestionIcon } from "@chakra-ui/icons";
 import MyTooltip from "src/pages/common/tooltip";
-import { JaelesScanner, getAllScanners } from "src/libs/apis/jaeles";
+import { JaelesScanner, getAllScanners } from "src/libs/apis/scanners";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 

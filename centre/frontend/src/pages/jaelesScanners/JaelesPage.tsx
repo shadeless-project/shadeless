@@ -2,7 +2,7 @@ import { Box, Flex, Spinner, Text, useDisclosure, useToast } from '@chakra-ui/re
 import React from 'react';
 import { notify } from 'src/libs/notify';
 import SubmitButton from '../common/submit-button';
-import { JaelesScanner, defaultJaelesScanner, getAllScanners } from 'src/libs/apis/jaeles';
+import { JaelesScanner, defaultJaelesScanner, getAllScanners } from 'src/libs/apis/scanners';
 import ScannerTable from './scanner-table';
 import DeleteScannerModal from './delete-scanner';
 import AddScannerModal from './add-scanner';

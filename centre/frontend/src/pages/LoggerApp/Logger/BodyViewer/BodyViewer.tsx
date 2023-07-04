@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Box, Button, Divider, Flex, Grid, Select, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, Select, Text, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getFileContentFromId } from "src/libs/apis/files";
 import { Packet } from "src/libs/apis/packets";
@@ -9,7 +9,8 @@ import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
 import { LoggerContext } from "../../LoggerAppContext";
 import MyTooltip from "src/pages/common/tooltip";
-import { JaelesScanner, triggerScanRun } from "src/libs/apis/jaeles";
+import { JaelesScanner } from "src/libs/apis/scanners";
+import { triggerScanRun } from "src/libs/apis/scanRuns";
 
 type PacketDetailProps = {
   setIsShowingDetail: React.Dispatch<React.SetStateAction<boolean>>;

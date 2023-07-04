@@ -29,7 +29,7 @@ export class JaelesSignatureService {
       throw new BadRequestException('{}', 'Wrong fileName');
     }
 
-    const f = await fs.readFile(filePath);
-    return f.toString('utf-8');
+    const f = await fs.readFile(filePath, 'utf-8');
+    return f;
   }
 }

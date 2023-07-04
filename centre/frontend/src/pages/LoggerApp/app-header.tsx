@@ -148,6 +148,22 @@ export default function AppHeader (props: Props) {
       >
         Censors
       </Button>
+      <Button
+        bg="inherit"
+        borderRadius={0}
+        py="2em"
+        px="3.5em"
+        fontSize="xs"
+        height="100%"
+        borderColor="custom.primary"
+        {...choosingTab === Tabs.CENSORS && {
+          borderBottomWidth: '3px',
+          fontWeight: '600'
+        }}
+        onClick={() => setLocation(`/projects/${project.name}/scan_runs`)}
+      >
+        Scan Runs
+      </Button>
     </Box>
   );
 }

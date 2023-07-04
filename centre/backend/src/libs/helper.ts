@@ -1,5 +1,18 @@
 import { exec, hash } from '@drstrain/drutil';
 import { RawPacket } from './schemas/raw_packet.schema';
+import { join } from 'path';
+
+/**
+ * Return Jaeles Scanner Log location
+ *
+ * @function
+ * @param {string} id - The id of the Jaeles Scanner
+ * @return {string} The location of the log in backend's pespective
+ */
+export function getJaelesScannerLogLocation(id: string): string {
+  const fileLocation = join('/files', 'scan-logs', id);
+  return fileLocation;
+}
 
 /**
  * Run ripgrep with value `val` in specified directory

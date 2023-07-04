@@ -7,13 +7,6 @@ export interface JaelesScanner {
   scanKeyword: string;
   createdAt: Date;
 }
-
-export interface ScanRun {
-  _id?: string;
-  project: string;
-  scannerId: string;
-  requestPacketId: string;
-}
 export const defaultJaelesScanner: JaelesScanner = {
   name: '',
   description: '',
@@ -77,20 +70,4 @@ export async function editScanner (_id: string, name: string, description: strin
     body: JSON.stringify({ name, description, scanKeyword }),
   });
   return data.json() as unknown as ApiResponse<string>;
-}
-
-export async function triggerScanRun (requestPacketId: string, project: string, scannerId: string): Promise<ApiResponse<string>> {
-  const data = await fetch(`${API_URL}/projects/${project}/scanRuns`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ requestPacketId, project, scannerId }),
-  });
-  return data.json() as unknown as ApiResponse<string>;
-}
-
-export async function getScanRun (project: string): Promise<ApiResponse<ScanRun[]>> {
-  const data = await fetch(`${API_URL}/projects/${project}/scanRuns`, {
-    method: 'GET',
-  });
-  return data.json() as unknown as ApiResponse<ScanRun[]>;
 }

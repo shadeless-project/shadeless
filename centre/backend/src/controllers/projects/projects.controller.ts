@@ -18,7 +18,6 @@ import {
   QueryMiniDashboardAdditionalDataDto,
   QueryMiniDashboardDto,
   QueryPacketDto,
-  TriggerScanDto,
 } from './projects.dto';
 import { ProjectPacketsService } from './project-packets/project-packets.service';
 import { ProjectUsersService } from './project-users/project-users.service';
@@ -30,7 +29,7 @@ import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProjectScannersService } from './project-scanners/project-scanners.service';
+import { ProjectScanRunsService } from './project-scanRuns/project-scanRuns.service';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -43,7 +42,7 @@ function onlyOneExist(...arr: string[]): boolean {
 export class ProjectsController {
   constructor(
     private projectPacketsService: ProjectPacketsService,
-    private projectScannersService: ProjectScannersService,
+    private projectScanRunsService: ProjectScanRunsService,
     private projectUsersService: ProjectUsersService,
     private projectsService: ProjectsService,
     @InjectQueue(PacketActionsQueue.name) private actionsQueue: Queue,
@@ -177,15 +176,6 @@ export class ProjectsController {
 
   @Get(':name/scanRuns')
   async getScanRuns(@Param('name') name: string) {
-    return this.projectScannersService.getScanRuns(name);
-  }
-
-  @Post(':name/scanRuns')
-  async triggerScan(
-    @Param('name') name: string,
-    @Body() triggerScan: TriggerScanDto,
-  ) {
-    // name is redundant ...
-    return this.projectScannersService.triggerScan(triggerScan);
+    return this.projectScanRunsService.getScanRunDetails(name);
   }
 }

@@ -1,34 +1,20 @@
 import { Code, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import ConfigIcon from "../common/config-icon";
-import { JaelesScanner, getAllSignatures } from "src/libs/apis/scanners";
 import React from "react";
+import { ScanRun } from "src/libs/apis/scanRuns";
 
-type ScannerTableProps = {
-  scanners: JaelesScanner[];
+type ScanRunsTableProps = {
+  scanRuns: ScanRun[];
   isLoading: boolean;
-  setDeletingScanner: React.Dispatch<React.SetStateAction<JaelesScanner>>;
-  onOpenModalDel: () => void;
-  setEditingScanner: React.Dispatch<React.SetStateAction<JaelesScanner>>;
-  onOpenEditModal: () => void;
+  setViewingScanRun: React.Dispatch<React.SetStateAction<ScanRun>>;
+  onOpenModalViewScanRun: () => void;
 }
-export default function ScannerTable (props: ScannerTableProps) {
+export default function ScanRunsTable (props: ScanRunsTableProps) {
   const {
-    scanners,
+    scanRuns,
     isLoading,
-    setDeletingScanner,
-    onOpenModalDel,
-    setEditingScanner,
-    onOpenEditModal,
+    setViewingScanRun,
+    onOpenModalViewScanRun,
   } = props;
-
-  const [signatures, setSignatures] = React.useState<string[]>([]);
-  async function uiLoadSignatures() {
-    const resp = await getAllSignatures();
-    if (resp.statusCode === 200) {
-      setSignatures(resp.data);
-    }
-  }
-  React.useEffect(() => { uiLoadSignatures() }, []);
 
   return (
     <TableContainer p="10px">
@@ -44,9 +30,9 @@ export default function ScannerTable (props: ScannerTableProps) {
           </Tr>
         </Thead>
         <Tbody>
-          {scanners.map((scanner, index) =>
+          {scanRuns.map((scanRun, index) =>
             <Tr
-              key={`scanner-${scanner._id}`}
+              key={`scanRun-${scanRun._id}`}
               _hover={{ bg: 'custom.hover-grey' }}
             >
               <Td pl="20px">{index+1}</Td>

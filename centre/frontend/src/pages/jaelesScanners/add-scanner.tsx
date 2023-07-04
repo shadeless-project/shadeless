@@ -3,7 +3,7 @@ import React from "react";
 import { notify } from "src/libs/notify";
 import RequiredTooltip from "../common/required-tooltip";
 import SubmitButton from "../common/submit-button";
-import { createNewScanner, getAllSignatures } from "src/libs/apis/jaeles";
+import { createNewScanner, getAllSignatures } from "src/libs/apis/scanners";
 
 type Props = {
   isOpen: boolean;
@@ -101,7 +101,7 @@ export default function AddScannerModal(props: Props) {
             )}
           </Box>
 
-          
+
         </ModalBody>
 
         <ModalFooter>
