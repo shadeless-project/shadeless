@@ -88,7 +88,7 @@ export async function triggerScanRun (requestPacketId: string, project: string, 
   return data.json() as unknown as ApiResponse<string>;
 }
 
-export async function getScanRun (project: string): Promise<ApiResponse<ScanRun[]>> {
+export async function getScanRuns (project: string): Promise<ApiResponse<ScanRun[]>> {
   const data = await fetch(`${API_URL}/projects/${project}/scanRuns`, {
     method: 'GET',
   });
