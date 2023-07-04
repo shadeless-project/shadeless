@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import path from 'path';
 import { ScanRunDetail } from 'libs/schemas/scan_run.schema';
-import { exec, system } from '@drstrain/drutil';
+import { exec } from '@drstrain/drutil';
 
 function escapeShellArg(arg) {
   return `'${arg.replace(/'/g, `'\\''`)}'`;
@@ -35,9 +35,5 @@ export class JaelesService {
     const { stdout, stderr } = await exec('bash', ['-c', cmd]);
     this.logger.log(`Stdout: ${stdout}`);
     this.logger.log(`Stderr: ${stderr}`);
-
-    // const { stdout, stderr } = await exec('whoami');
-    // this.logger.log(`Stdout: ${stdout}`);
-    // this.logger.log(`Stderr: ${stderr}`);
   }
 }
