@@ -1,8 +1,7 @@
-import { Box, Divider, Flex, Grid, Input, InputGroup, InputRightElement, Spinner, Text, useDisclosure, useToast } from '@chakra-ui/react';
+import { Box, Flex, Spinner, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { notify } from 'src/libs/notify';
-import { ScanRun, ScanRunDetail, defaultScanRun, defaultScanRunDetail, getProjectScanRuns, getScanRunDetail } from 'src/libs/apis/scanRuns';
-import { Search2Icon } from '@chakra-ui/icons';
+import { ScanRunDetail, defaultScanRun, defaultScanRunDetail, getProjectScanRuns } from 'src/libs/apis/scanRuns';
 import { LoggerContext } from '../LoggerAppContext';
 import ScanRunLogDetailModal from './scanRunLogModal';
 import ScanRunsTable from './ScanRunsTable';
@@ -13,7 +12,7 @@ export default function ScanRunsPage() {
   const currentProject = useContext(LoggerContext);
   const [scanRunDetails, setScanRunDetails] = React.useState<ScanRunDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [viewingScanRun, setViewingScanRun] = React.useState<ScanRun>(defaultScanRun);
+  const [viewingScanRun, setViewingScanRun] = React.useState<ScanRunDetail>(defaultScanRunDetail);
   const { isOpen: isOpenModalViewScanRun, onOpen: onOpenModalViewScanRun, onClose: onCloseModalViewScanRun } = useDisclosure();
 
   async function uiLoadProjectScanRuns() {
@@ -27,12 +26,6 @@ export default function ScanRunsPage() {
     }
   }
   React.useEffect(() => { uiLoadProjectScanRuns() }, []);
-  // React.useEffect(() => {
-  //   if (urlSigId) uiLoadOneSignature(urlSigId);
-  // }, [urlSigId]);
-  // React.useEffect(() => {
-  //   setShowingSignatures(signatures.filter(s => s.toLowerCase().includes(search)));
-  // }, [search, signatures]);
 
   return (
     <Box
@@ -51,12 +44,12 @@ export default function ScanRunsPage() {
           as="h2"
           fontSize="3xl"
         >
-          Scan Runs history {isLoading ? <Spinner ml="10px" /> : <Text as="span">({scanRuns.length})</Text>}
+          Scan Runs history {isLoading ? <Spinner ml="10px" /> : <Text as="span">({scanRunDetails.length})</Text>}
         </Text>
       </Flex>
 
       <ScanRunsTable
-        scanRunDetails={scanRunDetails}
+        scanRuns={scanRunDetails}
         isLoading={isLoading}
         setViewingScanRun={setViewingScanRun}
         onOpenModalViewScanRun={onOpenModalViewScanRun}

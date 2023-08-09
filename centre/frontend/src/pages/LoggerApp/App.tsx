@@ -7,6 +7,7 @@ import AppHeader from './app-header';
 import CensorPage from '../censor/CensorsPage';
 import { Box } from '@chakra-ui/react';
 import Page404 from '../Page404';
+import ScanRunsPage from './scanRuns/ScanRunsPage';
 
 export const enum Tabs {
   DEFAULT,

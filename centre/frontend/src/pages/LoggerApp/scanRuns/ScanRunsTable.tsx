@@ -1,11 +1,11 @@
-import { Code, Menu, MenuButton, MenuItem, MenuList, Progress, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Progress, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
-import { ScanRun } from "src/libs/apis/scanRuns";
+import { ScanRunDetail, parseScanRunStatus } from "src/libs/apis/scanRuns";
 
 type ScanRunsTableProps = {
-  scanRuns: ScanRun[];
+  scanRuns: ScanRunDetail[];
   isLoading: boolean;
-  setViewingScanRun: React.Dispatch<React.SetStateAction<ScanRun>>;
+  setViewingScanRun: React.Dispatch<React.SetStateAction<ScanRunDetail>>;
   onOpenModalViewScanRun: () => void;
 }
 export default function ScanRunsTable (props: ScanRunsTableProps) {
@@ -23,9 +23,9 @@ export default function ScanRunsTable (props: ScanRunsTableProps) {
           <Tr>
             <Th>#</Th>
             <Th>Name</Th>
-            <Th>Description</Th>
-            <Th>Scanner command</Th>
-            <Th># of run signatures</Th>
+            <Th>Target</Th>
+            <Th>Status</Th>
+            <Th>Found</Th>
             <Th>Created at</Th>
           </Tr>
         </Thead>
@@ -35,47 +35,18 @@ export default function ScanRunsTable (props: ScanRunsTableProps) {
               key={`scanRun-${scanRun._id}`}
               _hover={{ bg: 'custom.hover-grey' }}
             >
-              <Td pl="20px">{index+1}</Td>
-              <Td>{scanner.name}</Td>
-              <Td>{scanner.description}</Td>
+              <Td>{index+1}</Td>
+              <Td>{scanRun.scanner.name}</Td>
               <Td>
-                <Code fontSize="xs" p="2">jaeles scan -u &lt;target&gt; -L 4 -s "{scanner.scanKeyword}" -v</Code>
+                <Text as="strong">{scanRun.packet.method}</Text>&nbsp;
+                {`${scanRun.packet.origin}${scanRun.packet.path}${ scanRun.packet.querystring ? `?${scanRun.packet.querystring}` : '' }`}
               </Td>
-              <Td textAlign="center">
-                {signatures.filter(sig => sig.toLowerCase().includes(scanner.scanKeyword)).length}
-              </Td>
-              <Td>{window.formatDate(scanner.createdAt)}</Td>
+
               <Td>
-                <Menu>
-                  <MenuButton
-                    p={2}
-                    _hover={{ bg: 'custom.focus-grey' }}
-                    _expanded={{ bg: 'custom.focus-grey' }}
-                  >
-                    <ConfigIcon />
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem
-                      disabled
-                      onClick={() => {
-                        setEditingScanner(scanner);
-                        onOpenEditModal();
-                      }}
-                    >
-                      Edit scanner
-                    </MenuItem>
-                    <MenuItem
-                      color="red.500"
-                      onClick={() => {
-                        setDeletingScanner(scanner);
-                        onOpenModalDel();
-                      }}
-                    >
-                      Remove
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                {parseScanRunStatus(scanRun.status)}
               </Td>
+              <Td></Td>
+              <Td>{window.formatDate(scanRun.createdAt)}</Td>
             </Tr>
           )}
         </Tbody>

@@ -15,9 +15,6 @@ export class ProjectScanRunsService {
     const project = await this.projectModel.findOne({ project: projectName });
     if (!project)
       throw new NotFoundException(' ', `Not found project ${projectName}`);
-    const scanRuns = await this.scanRunModel.find({
-      project: projectName,
-    });
 
     const agg: any[] = [
       { $match: { project: projectName } },

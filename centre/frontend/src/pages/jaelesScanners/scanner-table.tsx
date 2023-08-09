@@ -32,14 +32,14 @@ export default function ScannerTable (props: ScannerTableProps) {
 
   return (
     <TableContainer p="10px">
-      <Table size="sm">
+      <Table size="xs" fontSize="xs">
         <Thead>
           <Tr>
             <Th>#</Th>
             <Th>Name</Th>
             <Th>Description</Th>
             <Th>Scanner command</Th>
-            <Th># of run signatures</Th>
+            <Th># signatures</Th>
             <Th>Created at</Th>
           </Tr>
         </Thead>
@@ -49,13 +49,13 @@ export default function ScannerTable (props: ScannerTableProps) {
               key={`scanner-${scanner._id}`}
               _hover={{ bg: 'custom.hover-grey' }}
             >
-              <Td pl="20px">{index+1}</Td>
+              <Td>{index+1}</Td>
               <Td>{scanner.name}</Td>
               <Td>{scanner.description}</Td>
               <Td>
-                <Code fontSize="xs" p="2">jaeles scan -u &lt;target&gt; -L 4 -s "{scanner.scanKeyword}" -v</Code>
+                <Code fontSize="2xs" p="1">jaeles scan -u &lt;target&gt; -L 4 -s "{scanner.scanKeyword}" -H &lt;injected_headers&gt; -v</Code>
               </Td>
-              <Td textAlign="center">
+              <Td>
                 {signatures.filter(sig => sig.toLowerCase().includes(scanner.scanKeyword)).length}
               </Td>
               <Td>{window.formatDate(scanner.createdAt)}</Td>

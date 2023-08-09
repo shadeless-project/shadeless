@@ -23,8 +23,6 @@ import {
   JaelesScannerSchema,
 } from 'libs/schemas/jaeles_scanner.schema';
 import { JaelesModule } from 'controllers/jaeles/jaeles.module';
-import { ScannerQueue } from 'message-queue/scanner.queue';
-import { JaelesQueue } from 'message-queue/jaeles.queue.service';
 import { ScanRun, ScanRunSchema } from 'libs/schemas/scan_run.schema';
 import { ScanRunsModule } from 'controllers/scanRuns/scanRuns.module';
 
@@ -63,13 +61,7 @@ function getAppModuleImports() {
 @Module({
   imports: getAppModuleImports(),
   controllers: [HealthcheckController],
-  providers: [
-    BurpPacketService,
-    BurpQueue,
-    PacketActionsQueue,
-    ScannerQueue,
-    JaelesQueue,
-  ],
+  providers: [BurpPacketService, BurpQueue, PacketActionsQueue],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
