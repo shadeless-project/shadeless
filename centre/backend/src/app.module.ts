@@ -18,13 +18,7 @@ import { Path, PathSchema } from 'libs/schemas/path.schema';
 import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
 import { RawPacket, RawPacketSchema } from 'libs/schemas/raw_packet.schema';
 import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
-import {
-  JaelesScanner,
-  JaelesScannerSchema,
-} from 'libs/schemas/jaeles_scanner.schema';
-import { JaelesModule } from 'controllers/jaeles/jaeles.module';
-import { ScanRun, ScanRunSchema } from 'libs/schemas/scan_run.schema';
-import { ScanRunsModule } from 'controllers/scanRuns/scanRuns.module';
+import { FfufModule } from 'controllers/ffuf/ffuf.module';
 
 function getAppModuleImports() {
   const modules = [
@@ -35,18 +29,15 @@ function getAppModuleImports() {
       { name: Occurence.name, schema: OccurenceSchema },
       { name: Path.name, schema: PathSchema },
       { name: Censor.name, schema: CensorSchema },
-      { name: JaelesScanner.name, schema: JaelesScannerSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
-      { name: ScanRun.name, schema: ScanRunSchema },
     ]),
     BurpModule,
-    JaelesModule,
     ProjectsModule,
     AuthModule,
     CensorsModule,
     StaticFileModule,
+    FfufModule,
     AccountsModule,
-    ScanRunsModule,
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
