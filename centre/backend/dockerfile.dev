@@ -1,23 +1,7 @@
-FROM golang:buster AS builder
-
-# RUN apk add build-base
-# RUN GO111MODULE=on go install github.com/jaeles-project/jaeles@latest
-
-WORKDIR /root
-
-RUN git clone https://github.com/jaeles-project/jaeles.git
-RUN cd jaeles && sed -i "s/StringSliceVarP/StringArrayVarP/g" "./cmd/root.go" && go mod download
-RUN cd jaeles && go get github.com/chromedp/chromedp && go get github.com/mattn/go-isatty
-RUN cd jaeles && go build main.go
-
-FROM node:20-buster AS final
+FROM node:buster
 
 WORKDIR /app
 
 RUN apt update -y && apt install ripgrep
-
-COPY --from=builder /root/jaeles/main /bin/jaeles
-COPY ./signatures/ ./signatures/
-RUN jaeles config reload --signDir /app/signatures/ && mkdir -p /files/scan-logs/
 
 CMD npm i && npm run start:dev

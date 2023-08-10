@@ -11,7 +11,6 @@ import LoggerOptions from "./logger-options";
 import LoggerColumnsChooser, { ChoosingColumnType } from "./logger-columns-chooser";
 import { MinusIcon, QuestionIcon } from "@chakra-ui/icons";
 import MyTooltip from "src/pages/common/tooltip";
-import { JaelesScanner, getAllScanners } from "src/libs/apis/scanners";
 
 export const NUM_PACKETS_PER_PAGE = 30;
 
@@ -48,16 +47,6 @@ export default function Logger(props: LoggerProps) {
   const [uniqueEndpointsToggle, setUniqueEndpointsToggle] = React.useState<boolean>(localStorage.getItem('uniqueEndpointsToggle') === "true");
 
   const [tableColumns, setTableColumns] = React.useState<string[]>([]);
-  const [scanners, setScanners] = React.useState<JaelesScanner[]>([]);
-  async function uiLoadJaelesScanners() {
-    const resp = await getAllScanners();
-    if (resp.statusCode === 200) {
-      setScanners(resp.data);
-    } else {
-      notify(toast, resp);
-    }
-  }
-  React.useEffect(() => { uiLoadJaelesScanners() }, []);
 
   function isSmaller(a: Packet, b: Packet): number {
     const d1 = new Date(a.createdAt || 0) as any;
@@ -301,7 +290,6 @@ export default function Logger(props: LoggerProps) {
         <BodyViewer
           setIsShowingDetail={setIsShowingDetail}
           setFilter={setFilter}
-          scanners={scanners}
           packet={choosingPacket}
         />
       }

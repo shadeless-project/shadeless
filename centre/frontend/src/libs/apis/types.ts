@@ -17,3 +17,29 @@ export async function checkServerUp(): Promise<ApiResponse<string>> {
     }).catch(err => reject(err));
   });
 }
+
+export enum FfufDetectType {
+  TIME = 'time',
+  NONE = 'none',
+  KEYWORD = 'keyword',
+  REFLECT = 'reflect',
+}
+
+export type FfufWordlist = {
+  name: string;
+  path: string;
+}
+
+export type FfufFuzzer = {
+  name: string;
+  wordlist: string;
+  overwriteHeader: boolean;
+  detect: FfufDetectType;
+  detectValue?: string;
+}
+
+export type FfufSettingType = {
+  proxy: string;
+  wordlists: FfufWordlist[];
+  fuzzers: FfufFuzzer[];
+}

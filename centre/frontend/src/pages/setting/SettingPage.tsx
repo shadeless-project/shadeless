@@ -2,12 +2,7 @@ import { Box, Divider, Grid, Text } from '@chakra-ui/react';
 import { SHADELESS_VERSION } from 'src/libs/apis/types';
 import { Link } from 'wouter';
 
-const MAP_NAME_URL: any = {
-  "Scanners": "jaeles_scanners",
-  "Signatures": "jaeles_signatures",
-}
 function parseNameToUrl(name: string) {
-  if (MAP_NAME_URL[name]) return MAP_NAME_URL[name];
   return name.toLowerCase().replaceAll(' ', '_');
 }
 
@@ -59,8 +54,7 @@ export default function SettingPage ({ body }: SettingPageProps) {
           <ButtonNavigation>Accounts</ButtonNavigation>
           <Divider my="5px" />
 
-          <ButtonNavigation>Scanners</ButtonNavigation>
-          <ButtonNavigation>Signatures</ButtonNavigation>
+          <ButtonNavigation>Ffuf setting</ButtonNavigation>
         </Box>
         <Divider />
         <Box cursor="default" p="15px" fontSize="2xs" opacity=".7">

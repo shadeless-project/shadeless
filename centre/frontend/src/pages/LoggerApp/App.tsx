@@ -7,7 +7,6 @@ import AppHeader from './app-header';
 import CensorPage from '../censor/CensorsPage';
 import { Box } from '@chakra-ui/react';
 import Page404 from '../Page404';
-import ScanRunsPage from './scanRuns/ScanRunsPage';
 
 export const enum Tabs {
   DEFAULT,
@@ -47,7 +46,7 @@ function AppPage (props: AppPageProps) {
       setChoosingTab(Tabs.CENSORS);
     } else if (page === 'logger') {
       setChoosingTab(Tabs.LOGGER);
-    } else if (page === 'scan_runs') {
+    } else if (page === 'ffuf_settings') {
       setChoosingTab(Tabs.SCAN_RUNS);
     }
     else {
@@ -81,16 +80,6 @@ function AppPage (props: AppPageProps) {
             mx="auto"
           >
             <CensorPage />
-          </Box>
-        }
-
-        {choosingTab === Tabs.SCAN_RUNS &&
-          <Box
-            mt="var(--component-distance)"
-            w="var(--component-width)"
-            mx="auto"
-          >
-            <ScanRunsPage />
           </Box>
         }
 

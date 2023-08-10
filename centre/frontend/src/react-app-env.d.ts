@@ -8,5 +8,6 @@ declare global {
     getUser: () => any;
     escapeHtml: (s: string) => string;
     sleep: (ms: number) => Promise<void>;
+    isSetupFfufCorrect: (obj: any) => boolean;
   }
 }
