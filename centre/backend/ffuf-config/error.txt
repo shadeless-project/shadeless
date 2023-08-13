@@ -1,4 +1,5 @@
 id
+--help
 id --help
 id${IFS}--help
 ;id

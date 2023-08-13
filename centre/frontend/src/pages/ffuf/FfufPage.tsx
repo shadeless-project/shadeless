@@ -19,11 +19,16 @@ export default function FfufPage() {
   const [] = React.useState(0);
 
   function saveFfuf() {
-    if (!window.isSetupFfufCorrect(ffufSetting)) {
+    const setting = {
+      ...ffufSetting,
+      thread: parseInt(ffufSetting.thread as any),
+      delay: parseFloat(ffufSetting.delay as any),
+    }
+    if (!window.isSetupFfufCorrect(setting)) {
       notify(toast, { statusCode: 500, data: '', error: `Error: cannot save ffuf object, something is wrong with ffuf object` }, 'ffuf-object-error');
       return;
     }
-    window.localStorage.setItem('ffuf_setting', JSON.stringify(ffufSetting));
+    window.localStorage.setItem('ffuf_setting', JSON.stringify(setting));
     notify(toast, { statusCode: 200, data: 'Successfully save ffuf setting', error: `` }, 'ffuf-object-error');
   }
 
@@ -45,8 +50,8 @@ export default function FfufPage() {
         >
           ffuf setting
         </Text>
-        <Button 
-          ml="15px" 
+        <Button
+          ml="15px"
           onClick={saveFfuf}
           colorScheme='green'
         >
@@ -58,7 +63,7 @@ export default function FfufPage() {
         <Text as="span">
           Proxy:
         </Text>
-        <Input 
+        <Input
           ml="10px"
           fontSize="sm"
           width="300px"
@@ -69,7 +74,43 @@ export default function FfufPage() {
             })
           }}
           placeholder='http://localhost:8080'
-          value={ffufSetting.proxy} 
+          value={ffufSetting.proxy}
+        />
+
+        <Text ml="20px" as="span">
+          Threads:
+        </Text>
+        <Input
+          ml="10px"
+          fontSize="sm"
+          width="300px"
+          onChange={(e) => {
+            setFfufSetting({
+              ...ffufSetting,
+              thread: e.target.value
+            })
+          }}
+          placeholder='40'
+          value={ffufSetting.thread}
+        />
+      </Box>
+
+      <Box p="15px">
+        <Text as="span">
+          Delay between 2 requests (secs):
+        </Text>
+        <Input
+          ml="10px"
+          fontSize="sm"
+          width="300px"
+          onChange={(e) => {
+            setFfufSetting({
+              ...ffufSetting,
+              delay: e.target.value
+            })
+          }}
+          placeholder='0.1'
+          value={ffufSetting.delay}
         />
       </Box>
 
@@ -77,21 +118,21 @@ export default function FfufPage() {
         <Text as="span" fontSize="2xl">
           # Wordlist
         </Text>
-        <IconButton 
-          borderRadius="200%" 
+        <IconButton
+          borderRadius="200%"
           size="xs"
           ml="7px"
           mt="-7px"
-          fontSize="2xs" 
-          colorScheme='green' 
-          aria-label='Add more wordlist' 
+          fontSize="2xs"
+          colorScheme='green'
+          aria-label='Add more wordlist'
           icon={<AddIcon />}
           onClick={() => {
             const { wordlists } = ffufSetting;
             const names = wordlists.map(v => v.name);
             let newName = `wordlist_${cntUniqueWordlist}`;
             while (names.includes(newName)) newName = `wordlist_${++cntUniqueWordlist}`;
-            wordlists.push({ name: newName, path: `/path/to/wordlist_${cntUniqueWordlist}.txt`});
+            wordlists.push({ name: newName, path: `/path/to/wordlist_${cntUniqueWordlist}.txt` });
             setFfufSetting({
               ...ffufSetting,
               wordlists,
@@ -103,12 +144,12 @@ export default function FfufPage() {
           <React.Fragment key={`wordlist-${index}`}>
             <Grid px="5%" my="15px" gridTemplateColumns='0.3fr 1fr 0.1fr' gap="5">
               <Box>
-                <Text as="span">Name: </Text> 
-                <Input 
+                <Text as="span">Name: </Text>
+                <Input
                   ml="10px"
                   p="2"
                   fontSize="sm"
-                  width={{"sm":"40%","md":"43%","lg":"47%","xl":"55%"}} 
+                  width={{ "sm": "40%", "md": "43%", "lg": "47%", "xl": "55%" }}
                   onChange={(e) => {
                     const { wordlists } = ffufSetting;
                     wordlists[index].name = e.target.value;
@@ -117,7 +158,7 @@ export default function FfufPage() {
                       wordlists,
                     });
                   }}
-                  value={wordlist.name} 
+                  value={wordlist.name}
                 />
               </Box>
               <Box>
@@ -125,7 +166,7 @@ export default function FfufPage() {
                 <Input
                   ml="1%"
                   p="2"
-                  width={{sm:"70%",lg:"80%"}}
+                  width={{ sm: "70%", lg: "80%" }}
                   value={wordlist.path}
                   onChange={(e) => {
                     const { wordlists } = ffufSetting;
@@ -138,13 +179,13 @@ export default function FfufPage() {
                 />
               </Box>
               <Box>
-                <IconButton 
-                  borderRadius="3px" 
-                  size="md" 
-                  fontSize="md" 
-                  colorScheme='red' 
-                  aria-label='Remove this wordlist' 
-                  icon={<DeleteIcon />} 
+                <IconButton
+                  borderRadius="3px"
+                  size="md"
+                  fontSize="md"
+                  colorScheme='red'
+                  aria-label='Remove this wordlist'
+                  icon={<DeleteIcon />}
                   onClick={() => {
                     const { wordlists } = ffufSetting;
                     const newWordlists = wordlists.filter((_, idx) => idx !== index);
@@ -165,7 +206,7 @@ export default function FfufPage() {
         <Text as="span" fontSize="2xl">
           # Fuzz setting
         </Text>
-        <IconButton 
+        <IconButton
           borderRadius="200%"
           size="xs"
           ml="7px"
@@ -176,7 +217,7 @@ export default function FfufPage() {
           icon={<AddIcon />}
           onClick={() => {
             const { fuzzers } = ffufSetting;
-            fuzzers.push({"name":"Error-based 2", "wordlist": "ERROR", "detect": FfufDetectType.KEYWORD, "detectValue": "60481729|(Usage: id)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": true});
+            fuzzers.push({ "name": "Error-based 2", "wordlist": "ERROR", "detect": FfufDetectType.KEYWORD, "detectValue": "60481729|(Usage: id)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": true });
             setFfufSetting({
               ...ffufSetting,
               fuzzers,
@@ -187,11 +228,11 @@ export default function FfufPage() {
           <React.Fragment key={`ffuf-fuzzer-${index}`}>
             <Grid px="3%" my="15px" gridTemplateColumns='1fr 1fr 1fr 1.5fr 1fr 1fr' gap="3">
               <Box>
-                <Text as="span">Name: </Text> 
-                <Input 
+                <Text as="span">Name: </Text>
+                <Input
                   p="2"
                   fontSize="sm"
-                  width={{"sm":"40%","md":"45%","lg":"50%","xl":"60%"}} 
+                  width={{ "sm": "40%", "md": "45%", "lg": "50%", "xl": "60%" }}
                   onChange={(e) => {
                     const { fuzzers } = ffufSetting;
                     fuzzers[index].name = e.target.value;
@@ -200,17 +241,17 @@ export default function FfufPage() {
                       fuzzers,
                     });
                   }}
-                  value={fuzzer.name} 
+                  value={fuzzer.name}
                 />
               </Box>
               <Box mt="4px">
-                <Text as="span">Wordlist: </Text> 
+                <Text as="span">Wordlist: </Text>
                 <Select
                   ml="5px"
                   size="sm"
                   display="inline-block"
                   w="initial"
-                  defaultValue={fuzzer.wordlist} 
+                  defaultValue={fuzzer.wordlist}
                   onChange={(e) => {
                     const { fuzzers } = ffufSetting;
                     fuzzers[index].wordlist = e.target.value;
@@ -231,14 +272,14 @@ export default function FfufPage() {
                 </Select>
               </Box>
               <Box mt="4px">
-                <Text as="span">Detect: </Text> 
+                <Text as="span">Detect: </Text>
                 <Select
                   size="sm"
                   ml="5px"
                   display="inline-block"
                   w="initial"
-                  placeholder='detect' 
-                  defaultValue={fuzzer.detect} 
+                  placeholder='detect'
+                  defaultValue={fuzzer.detect}
                   onChange={(e) => {
                     const { fuzzers } = ffufSetting;
                     fuzzers[index].detect = e.target.value as FfufDetectType;
@@ -258,12 +299,12 @@ export default function FfufPage() {
                 </Select>
               </Box>
               <Box>
-                <Text as="span">Detect value: </Text> 
-                <Input 
+                <Text as="span">Detect value: </Text>
+                <Input
                   p="2"
                   placeholder={getPlaceholderByDetectType(fuzzer.detect)}
                   fontSize="sm"
-                  width={{"sm":"40%","md":"45%","lg":"50%","xl":"60%"}} 
+                  width={{ "sm": "40%", "md": "45%", "lg": "50%", "xl": "60%" }}
                   onChange={(e) => {
                     const { fuzzers } = ffufSetting;
                     fuzzers[index].detectValue = e.target.value;
@@ -273,21 +314,21 @@ export default function FfufPage() {
                     });
                   }}
                   value={fuzzer.detectValue || '<none>'}
-                  disabled={fuzzer.detect === FfufDetectType.NONE || fuzzer.detect === FfufDetectType.REFLECT} 
+                  disabled={fuzzer.detect === FfufDetectType.NONE || fuzzer.detect === FfufDetectType.REFLECT}
                 />
               </Box>
               <Box mt="6px">
-                <Text as="span">Fuzz header: </Text> 
+                <Text as="span">Fuzz header: </Text>
                 <Switch ml="2px" size='md' isChecked={fuzzer.overwriteHeader} />
               </Box>
               <Box>
-                <IconButton 
-                  borderRadius="3px" 
-                  size="md" 
-                  fontSize="md" 
-                  colorScheme='red' 
-                  aria-label='Remove this wordlist' 
-                  icon={<DeleteIcon />} 
+                <IconButton
+                  borderRadius="3px"
+                  size="md"
+                  fontSize="md"
+                  colorScheme='red'
+                  aria-label='Remove this wordlist'
+                  icon={<DeleteIcon />}
                   onClick={() => {
                     const { fuzzers } = ffufSetting;
                     const newFuzzers = fuzzers.filter((_, idx) => idx !== index);

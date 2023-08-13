@@ -49,6 +49,9 @@ window.isObject = (v) => {
   if (typeof v === 'object' && v !== null) return true;
   return false;
 }
+window.isNumber = (v) => {
+  return typeof v === 'number';
+}
 window.isArrayString = (arr) => {
   if (!window.isArray(arr)) return false;
   return !arr.find(s => !window.isString(s));
@@ -74,6 +77,7 @@ window.isSetupFfufCorrect = (ffufSetting) => {
   //     "TIME": "/path/to/time-based/wordlist",
   //     "ERROR": "/path/to/error-based/wordlist",
   //   },
+  //   "thread": 8,
   //   "proxy": "http://proxy:8080",
   //   "fuzzers": [
   //     {"name":"fuzzer_1","wordlist":"wordlist_name1","detect":"time or reflect or keyword or none","detectValue":"value", "overwriteHeader": true or false},
@@ -83,15 +87,27 @@ window.isSetupFfufCorrect = (ffufSetting) => {
   if (!ffufSetting) return false;
   if (window.isString(ffufSetting)) ffufSetting = JSON.parse(ffufSetting);
 
+  const thread = ffufSetting['thread'];
+  const delay = ffufSetting['delay'];
   const proxy = ffufSetting['proxy'];
   const fuzzers = ffufSetting['fuzzers'];
   const wordlists = ffufSetting['wordlists'];
 
+  if (!window.isNumber(delay)) return false;
+  if (!window.isNumber(thread)) return false;
   if (!window.isString(proxy)) return false;
   if (!window.isArrayObject(wordlists)) return false;
   if (!window.isArrayObject(fuzzers)) return false;
 
-  const isCorrectFfufObject = (obj) => {
+  const wordlistNames = wordlists.map(v => v.name);
+
+  const isCorrectFuzzerObject = (obj) => {
+    if (!window.isString(obj.name)) return false;
+    if (!window.isString(obj.wordlist)) return false;
+    if (!window.isString(obj.detect)) return false;
+    if (!window.isBool(obj.overwriteHeader)) return false;
+
+    if (!wordlistNames.includes(obj.wordlist)) return false;
     return true;
   }
   const isCorrectWordlistObject = (obj) => {
@@ -99,27 +115,29 @@ window.isSetupFfufCorrect = (ffufSetting) => {
     if (!window.isString(obj['path'])) return false;
     return true;
   }
-  if (fuzzers.find(fuzzer => !isCorrectFfufObject(fuzzer))) return false;
+  if (fuzzers.find(fuzzer => !isCorrectFuzzerObject(fuzzer))) return false;
   if (wordlists.find(wl => !isCorrectWordlistObject(wl))) return false;
   return true;
 }
-window.onload = function() {
+window.onload = function () {
   const hasSetupFfuf = !!window.localStorage.getItem('has_setup_ffuf');
   if (!hasSetupFfuf || !window.isSetupFfufCorrect(window.localStorage.getItem('ffuf_setting'))) {
     window.localStorage.setItem('has_setup_ffuf', "1");
     const ffufSetting = {
       "proxy": "",
+      "delay": 0.1,
+      "thread": 30,
       "wordlists": [
-        {"name": "DIR", "path": "/path/to/dir/wordlist.txt"},
-        {"name": "TIME", "path": "/path/to/time-based/wordlist.txt"},
-        {"name": "REFLECT", "path": "/path/to/reflect-based/wordlist.txt"},
-        {"name": "ERROR", "path": "/path/to/error-based/wordlist.txt"},
+        { "name": "DIR", "path": "/path/to/dir/wordlist.txt" },
+        { "name": "TIME", "path": "/path/to/time-based/wordlist.txt" },
+        { "name": "REFLECT", "path": "/path/to/reflect-based/wordlist.txt" },
+        { "name": "ERROR", "path": "/path/to/error-based/wordlist.txt" },
       ],
       "fuzzers": [
-        {"name":"Time-based", "wordlist": "TIME", "detect": "time", "detectValue": ">6000", "overwriteHeader": true},
-        {"name":"Reflected", "wordlist": "REFLECT", "detect": "reflect", "overwriteHeader": false},
-        {"name":"Error-based 1", "wordlist": "ERROR", "detect": "keyword", "detectValue": "<regex>", "overwriteHeader": true},
-        {"name":"Error-based 2", "wordlist": "ERROR", "detect": "keyword", "detectValue": "60481729|(Usage: id)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": true},
+        { "name": "Time-based", "wordlist": "TIME", "detect": "time", "detectValue": ">6000", "overwriteHeader": true },
+        { "name": "Reflected", "wordlist": "REFLECT", "detect": "reflect", "overwriteHeader": false },
+        { "name": "Error-based 1", "wordlist": "ERROR", "detect": "keyword", "detectValue": "<regex>", "overwriteHeader": true },
+        { "name": "Error-based 2", "wordlist": "ERROR", "detect": "keyword", "detectValue": "60481729|(Usage: id)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": true },
       ],
     }
     window.localStorage.setItem('ffuf_setting', JSON.stringify(ffufSetting));

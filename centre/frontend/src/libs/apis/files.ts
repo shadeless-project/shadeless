@@ -1,7 +1,7 @@
 import { ErrorType, MyError } from 'src/libs/error';
 import { API_URL } from './types';
 
-function isNonReadableString (value: string): boolean {
+function isNonReadableString(value: string): boolean {
   if (value.length <= 100) return false;
   let cntNonReaddable = 0;
   for (let i = 0; i < value.length; i++) {
@@ -13,7 +13,7 @@ function isNonReadableString (value: string): boolean {
 
 const NUMBER_OF_CHARACTER_NON_READDABLE = 300;
 
-export async function getFileContentFromId (project: string, id: string): Promise<[string, MyError | null]> {
+export async function getFileContentFromId(project: string, id: string): Promise<[string, MyError | null]> {
   const data = await fetch(`${API_URL}/files/${project}/${id}`);
   const header = data.status;
   if (header === 404) {

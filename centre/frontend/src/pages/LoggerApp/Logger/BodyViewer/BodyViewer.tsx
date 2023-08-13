@@ -10,6 +10,7 @@ import { ParserError } from "src/libs/query.parser";
 import { LoggerContext } from "../../LoggerAppContext";
 import MyTooltip from "src/pages/common/tooltip";
 import { FfufSettingType } from "src/libs/apis/types";
+import { copyClipboardFuzzer } from "src/libs/fuzzer-clipboard";
 
 type PacketDetailProps = {
   setIsShowingDetail: React.Dispatch<React.SetStateAction<boolean>>;
@@ -166,8 +167,8 @@ export default function BodyViewer(props: PacketDetailProps) {
 
         <Box ml="200px">
           {ffufSetting.fuzzers.map((fuzzer, index) =>
-            <MyTooltip 
-              label="Fuzz"
+            <MyTooltip
+              label="Copy ffuf command to fuzz this packet"
               key={`fuzzer-${fuzzer.name}-${index}`}
             >
               <Button
@@ -177,9 +178,13 @@ export default function BodyViewer(props: PacketDetailProps) {
                 p="4px"
                 mr="6px"
                 _hover={{ opacity: '0.7' }}
-                onClick={() => {
-                  notify(toast, { statusCode: 200, data: 'Copied ffuf command to clipboard', error: '' }, 'copy-fuzzer');
-                  copyClipboardFuzzer(fuzzer);
+                onClick={async () => {
+                  try {
+                    await copyClipboardFuzzer(ffufSetting, fuzzer, packet);
+                    notify(toast, { statusCode: 200, data: 'Copied ffuf command to clipboard', error: '' }, 'copy-fuzzer');
+                  } catch (err) {
+                    notify(toast, { statusCode: 500, data: '', error: (err as any).toString() }, 'copy-fuzzer');
+                  }
                 }}
               >
                 {fuzzer.name}
@@ -188,7 +193,7 @@ export default function BodyViewer(props: PacketDetailProps) {
           )}
         </Box>
 
-        
+
         <Box ml="auto" color="black" fontSize="2xs">
           <Button
             fontSize="2xs"
