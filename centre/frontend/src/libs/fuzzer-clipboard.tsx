@@ -9,9 +9,12 @@ function escapeBash(param: string) {
   return param.replace(/'/g, "'\\''")
 }
 function addHeaderToCmd(overwriteHeader: boolean, requestHeaders: string[]) {
-  if (!overwriteHeader) return requestHeaders.reduce((prev, cur) => `${prev} -H '${escapeBash(cur)}'`, " -H 'FUZZ: FUZZ'");
+  if (!overwriteHeader) return requestHeaders.reduce((prev, cur) => `${prev} -H '${escapeBash(cur)}'`, " -H 'X-Add-Header: FUZZ'");
   return requestHeaders.reduce((prev, cur) => {
     const [key, value] = cur.split(': ');
+    if (key.toLowerCase().includes('cookie')) {
+      return `${prev} -H '${escapeBash(key)}: ${escapeBash(value)}; additional_cookie=FUZZ'`
+    }
     if (removeForDefaultHeaders.includes(key.toLowerCase())) return prev;
     if (nonFuzzHeaders.includes(key.toLowerCase())) return `${prev} -H '${escapeBash(cur)}'`;
     return `${prev} -H '${escapeBash(key)}: ${escapeBash(value)}, FUZZ'`;
@@ -47,13 +50,13 @@ function isSupportedType(packet: Packet) {
 
 function addFuzzQueryString(querystring: string) {
   if (!querystring) return '';
-  const searchParams = new URLSearchParams(querystring);
-  const fuzzQS = new URLSearchParams();
-  for (const [key, value] of searchParams) {
-    fuzzQS.append(key, 'FUZZ');
+  try {
+    const parsedForm = Qs.parse(querystring)
+    const addedFuzz = recursiveAddFuzz(parsedForm);
+    return '?' + Qs.stringify(addedFuzz);
+  } catch (err) {
+    return '';
   }
-  fuzzQS.append('FUZZ', 'uniqval');
-  return '?' + fuzzQS.toString();
 }
 
 async function getRequestBody(project: string, hash: string) {

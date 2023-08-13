@@ -319,7 +319,14 @@ export default function FfufPage() {
               </Box>
               <Box mt="6px">
                 <Text as="span">Fuzz header: </Text>
-                <Switch ml="2px" size='md' isChecked={fuzzer.overwriteHeader} />
+                <Switch ml="2px" size='md' isChecked={fuzzer.overwriteHeader} onChange={(e) => {
+                  const { fuzzers } = ffufSetting;
+                  fuzzers[index].overwriteHeader = !fuzzers[index].overwriteHeader;
+                  setFfufSetting({
+                    ...ffufSetting,
+                    fuzzers,
+                  });
+                }} />
               </Box>
               <Box>
                 <IconButton
