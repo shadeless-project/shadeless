@@ -148,6 +148,7 @@ export default function AppHeader (props: Props) {
       >
         Censors
       </Button>
+
     </Box>
   );
 }

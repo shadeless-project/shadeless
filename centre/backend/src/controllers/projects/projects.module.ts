@@ -13,25 +13,25 @@ import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
 import { Account, AccountSchema } from 'libs/schemas/account.schema';
 import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { BullModule } from '@nestjs/bull';
-import { BurpQueue } from 'message-queue/burp.queue';
 
 @Module({
   controllers: [ProjectsController],
   imports: [
-    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
-    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([
+      { name: Account.name, schema: AccountSchema },
+      { name: Project.name, schema: ProjectSchema },
+      { name: User.name, schema: UserSchema },
       { name: Occurence.name, schema: OccurenceSchema },
-    ]),
-    MongooseModule.forFeature([{ name: Path.name, schema: PathSchema }]),
-    MongooseModule.forFeature([{ name: Censor.name, schema: CensorSchema }]),
-    MongooseModule.forFeature([
+      { name: Path.name, schema: PathSchema },
+      { name: Censor.name, schema: CensorSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
     ]),
-    BullModule.registerQueue({ name: BurpQueue.name }),
     BullModule.registerQueue({ name: PacketActionsQueue.name }),
   ],
-  providers: [ProjectPacketsService, ProjectUsersService, ProjectsService],
+  providers: [
+    ProjectsService,
+    ProjectUsersService,
+    ProjectPacketsService,
+  ],
 })
-export class ProjectsModule {}
+export class ProjectsModule { }

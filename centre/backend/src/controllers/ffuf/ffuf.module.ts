@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Account, AccountSchema } from 'libs/schemas/account.schema';
-import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
-import { CensorsController } from './censors.controller';
+import { FfufController } from './ffuf.controller';
+import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
 
 @Module({
-  controllers: [CensorsController],
+  controllers: [FfufController],
   imports: [
     MongooseModule.forFeature([
-      { name: Censor.name, schema: CensorSchema },
+      { name: Occurence.name, schema: OccurenceSchema },
       { name: Account.name, schema: AccountSchema },
     ]),
   ],
   providers: [],
 })
-export class CensorsModule {}
+export class FfufModule {}

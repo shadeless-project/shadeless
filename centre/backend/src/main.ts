@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   await fs.mkdir('/files', { recursive: true });
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(cookieParser());
   app.useGlobalPipes(

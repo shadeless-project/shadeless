@@ -12,6 +12,7 @@ export const enum Tabs {
   DEFAULT,
   LOGGER,
   CENSORS,
+  SCAN_RUNS,
 };
 
 export type FilterBodyJsonType = {
@@ -45,7 +46,10 @@ function AppPage (props: AppPageProps) {
       setChoosingTab(Tabs.CENSORS);
     } else if (page === 'logger') {
       setChoosingTab(Tabs.LOGGER);
-    } else {
+    } else if (page === 'ffuf_settings') {
+      setChoosingTab(Tabs.SCAN_RUNS);
+    }
+    else {
       setChoosingTab(Tabs.DEFAULT);
     }
   }, [project, page]);

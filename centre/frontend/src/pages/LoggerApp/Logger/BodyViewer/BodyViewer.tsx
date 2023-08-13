@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, Grid, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, Select, Text, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getFileContentFromId } from "src/libs/apis/files";
 import { Packet } from "src/libs/apis/packets";
@@ -9,7 +9,9 @@ import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
 import { LoggerContext } from "../../LoggerAppContext";
 import MyTooltip from "src/pages/common/tooltip";
-import { useLocation } from "wouter";
+import { FfufSettingType } from "src/libs/apis/types";
+import { copyClipboardFuzzer } from "src/libs/fuzzer-clipboard";
+import { incFuzzedApiByOne } from "src/libs/apis/ffuf";
 
 type PacketDetailProps = {
   setIsShowingDetail: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,8 +25,8 @@ export default function BodyViewer(props: PacketDetailProps) {
   const { setIsShowingDetail, packet, setFilter } = props;
   const currentProject = useContext(LoggerContext);
 
+  const ffufSetting = JSON.parse(localStorage.getItem('ffuf_setting') || '') as unknown as FfufSettingType;
   const toast = useToast();
-  const setLocation = useLocation()[1];
 
   const storageHeight = localStorage.getItem('detailHeight') || '45';
   const [choosingHeight, setChoosingHeight] = React.useState(storageHeight);
@@ -155,16 +157,46 @@ export default function BodyViewer(props: PacketDetailProps) {
         >
           ⏱️
         </UtilityButton>
+        <UtilityButton
+          tooltip="Censor this packet"
+          bg="gray.100"
+          fontSize="xs"
+          onClick={() => window.location.replace(`/projects/${currentProject}/censors?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`)}
+        >
+          🕶️
+        </UtilityButton>
+
+        <Box ml="200px">
+          {ffufSetting.fuzzers.map((fuzzer, index) =>
+            <MyTooltip
+              label="Copy ffuf command to fuzz this packet"
+              key={`fuzzer-${fuzzer.name}-${index}`}
+            >
+              <Button
+                colorScheme="red"
+                fontSize="xs"
+                size="2xs"
+                p="4px"
+                mr="6px"
+                _hover={{ opacity: '0.7' }}
+                onClick={async () => {
+                  try {
+                    await copyClipboardFuzzer(ffufSetting, fuzzer, packet);
+                    await incFuzzedApiByOne(packet.project, packet.hash);
+                    notify(toast, { statusCode: 200, data: 'Copied ffuf command to clipboard', error: '' }, 'copy-fuzzer');
+                  } catch (err) {
+                    notify(toast, { statusCode: 500, data: '', error: (err as any).toString() }, 'copy-fuzzer');
+                  }
+                }}
+              >
+                {fuzzer.name}
+              </Button>
+            </MyTooltip>
+          )}
+        </Box>
+
 
         <Box ml="auto" color="black" fontSize="2xs">
-          <UtilityButton
-            tooltip="Censor this packet"
-            bg="gray.100"
-            fontSize="xs"
-            onClick={() => window.location.replace(`/projects/${currentProject}/censors?censorMethod=${packet.method}&censorOrigin=${packet.origin}&censorPath=${packet.path}`)}
-          >
-            🕶️
-          </UtilityButton>
           <Button
             fontSize="2xs"
             size="xs"

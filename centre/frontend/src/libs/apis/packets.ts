@@ -36,14 +36,17 @@ export interface Packet {
   responseBodyHash: string;
   responseHeaders: string[];
 
+  project: string;
   rtt: number;
   reflectedParameters: Record<string, string>;
   codeName: string;
   count: number;
+  hash: string;
 
   createdAt: string;
   updatedAt?: string;
 
+  fuzzCount: number;
   staticScore: number;
 }
 
@@ -68,6 +71,7 @@ export const defaultPacket: Packet = {
   parameters: [],
   requestHeaders: [],
 
+  project: '',
   responseStatus: 0,
   responseContentType: '',
   responseStatusText: '',
@@ -78,12 +82,14 @@ export const defaultPacket: Packet = {
   responseCookies: '',
   responseBodyHash: '',
   responseHeaders: [],
+  hash: '',
 
   rtt: 0,
   reflectedParameters: {},
   codeName: '',
   count: 0,
 
+  fuzzCount: 0,
   staticScore: 0,
   createdAt: '',
 };
@@ -109,7 +115,7 @@ export async function getPackets(
 
 export type DashboardPackets = {
   origins: string[] | null,
-  numPackets : number | null,
+  numPackets: number | null,
   uniqueEndpoints: number | null,
   packetMost: Packet[] | null,
   packetMin: Packet[] | null,

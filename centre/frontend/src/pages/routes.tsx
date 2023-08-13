@@ -11,6 +11,7 @@ import SettingPage from './setting/SettingPage';
 import CensorPage from './censor/CensorsPage';
 import AccountsPage from './accounts/AccountsPage';
 import Footer from './common/footer';
+import FfufPage from './ffuf/FfufPage';
 
 function BottomFooter () {
   const [h, setH] = React.useState(document.body.offsetHeight);
@@ -102,6 +103,8 @@ function Routes () {
                   return <SettingPage body={<CensorPage />}/>
                 case 'accounts':
                   return <SettingPage body={<AccountsPage />}/>
+                case 'ffuf_setting':
+                  return <SettingPage body={<FfufPage />}/>
               }
               return <SettingPage body={<Page404 />} />
             }}

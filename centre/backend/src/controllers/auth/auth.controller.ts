@@ -29,7 +29,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   async login(@Res() response: Response, @Body() body: AuthLoginDto) {
-    await sleep(getRandomBetween(2000, 4000));
+    await sleep(getRandomBetween(2000, 3500));
 
     const account = await this.authService.login(body.username, body.password);
     const id = getRandomString(40);

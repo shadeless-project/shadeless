@@ -29,7 +29,6 @@ import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BurpQueue } from 'message-queue/burp.queue';
 
 function onlyOneExist(...arr: string[]): boolean {
   let cnt = 0;
@@ -42,12 +41,11 @@ function onlyOneExist(...arr: string[]): boolean {
 export class ProjectsController {
   constructor(
     private projectPacketsService: ProjectPacketsService,
-    private usersService: ProjectUsersService,
+    private projectUsersService: ProjectUsersService,
     private projectsService: ProjectsService,
-    @InjectQueue(BurpQueue.name) private burpQueue: Queue,
     @InjectQueue(PacketActionsQueue.name) private actionsQueue: Queue,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
-  ) {}
+  ) { }
 
   @Get()
   async getAllProjects() {
@@ -61,7 +59,7 @@ export class ProjectsController {
 
   @Get(':name/users')
   async getUsersInProject(@Param('name') projectName: string) {
-    return this.usersService.getUsersInProject(projectName);
+    return this.projectUsersService.getUsersInProject(projectName);
   }
 
   @Post(':name/query_mini_dashboard')
@@ -173,4 +171,5 @@ export class ProjectsController {
     );
     return 'OK';
   }
+
 }

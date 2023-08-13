@@ -1,5 +1,6 @@
 import { exec, hash } from '@drstrain/drutil';
 import { RawPacket } from './schemas/raw_packet.schema';
+import { join } from 'path';
 
 /**
  * Run ripgrep with value `val` in specified directory
