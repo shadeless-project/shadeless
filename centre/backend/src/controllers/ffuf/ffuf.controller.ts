@@ -16,19 +16,26 @@ import { Occurence, OccurenceDocument } from 'libs/schemas/occurence.schema';
 @UseGuards(LoginGuard)
 export class FfufController {
   constructor(
-    @InjectModel(Occurence.name) private occurenceModel: Model<OccurenceDocument>,
-  ) { }
+    @InjectModel(Occurence.name)
+    private occurenceModel: Model<OccurenceDocument>,
+  ) {}
 
   @Post('/')
   @HttpCode(200)
   async createCensor(@Body() body: PostFuzzIncReqDto) {
-    const found = await this.occurenceModel.findOneAndUpdate({
-      project: body.project,
-      hash: body.hash,
-    }, {
-      $inc: { fuzzCount: 1 }
-    });
+    const found = await this.occurenceModel.findOneAndUpdate(
+      {
+        project: body.project,
+        hash: body.hash,
+      },
+      {
+        $inc: { fuzzCount: 1 },
+      },
+    );
     if (found) return 'Successfully acknowledged';
-    throw new NotFoundException({}, `Not found request to acknowledge the fuzz`);
+    throw new NotFoundException(
+      {},
+      `Not found request to acknowledge the fuzz`,
+    );
   }
 }

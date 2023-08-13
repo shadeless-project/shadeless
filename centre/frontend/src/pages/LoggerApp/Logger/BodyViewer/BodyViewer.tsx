@@ -11,6 +11,7 @@ import { LoggerContext } from "../../LoggerAppContext";
 import MyTooltip from "src/pages/common/tooltip";
 import { FfufSettingType } from "src/libs/apis/types";
 import { copyClipboardFuzzer } from "src/libs/fuzzer-clipboard";
+import { incFuzzedApiByOne } from "src/libs/apis/ffuf";
 
 type PacketDetailProps = {
   setIsShowingDetail: React.Dispatch<React.SetStateAction<boolean>>;
@@ -181,6 +182,7 @@ export default function BodyViewer(props: PacketDetailProps) {
                 onClick={async () => {
                   try {
                     await copyClipboardFuzzer(ffufSetting, fuzzer, packet);
+                    await incFuzzedApiByOne(packet.project, packet.hash);
                     notify(toast, { statusCode: 200, data: 'Copied ffuf command to clipboard', error: '' }, 'copy-fuzzer');
                   } catch (err) {
                     notify(toast, { statusCode: 500, data: '', error: (err as any).toString() }, 'copy-fuzzer');

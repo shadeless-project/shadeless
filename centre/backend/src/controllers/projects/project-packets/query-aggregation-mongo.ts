@@ -78,6 +78,7 @@ export const projectAgg = {
     codeName: 1,
     hash: '$count.hash',
     count: '$count.count',
+    fuzzCount: '$count.fuzzCount',
     createdAt: 1,
     updatedAt: 1,
   },

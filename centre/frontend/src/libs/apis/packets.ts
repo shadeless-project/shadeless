@@ -41,6 +41,7 @@ export interface Packet {
   reflectedParameters: Record<string, string>;
   codeName: string;
   count: number;
+  hash: string;
 
   createdAt: string;
   updatedAt?: string;
@@ -81,6 +82,7 @@ export const defaultPacket: Packet = {
   responseCookies: '',
   responseBodyHash: '',
   responseHeaders: [],
+  hash: '',
 
   rtt: 0,
   reflectedParameters: {},

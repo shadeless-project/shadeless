@@ -74,6 +74,15 @@ export const ParserPacketProperties: PacketColumnProperty[] = [
       </Th>
   },
   {
+    name: 'fuzzCount',
+    type: 'Number',
+    showBody: (p: Packet) => <Td>{p.fuzzCount}</Td>,
+    showCol: () =>
+      <Th>
+        <MyTooltip label="Number of copied ffuf fuzz command">FuzzCnt</MyTooltip>
+      </Th>
+  },
+  {
     name: 'count',
     type: 'Number',
     showBody: (p: Packet) => <Td>{p.count}</Td>,

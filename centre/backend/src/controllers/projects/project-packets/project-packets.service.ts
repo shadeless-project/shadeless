@@ -23,7 +23,10 @@ function countFilteredPacketsAgg(
 ) {
   filter = JSON.parse(JSON.stringify(filter));
   // optimize if there's no count filter
-  if (!isObjectContainKey(filter, 'count')) {
+  if (
+    !isObjectContainKey(filter, 'count') &&
+    !isObjectContainKey(filter, 'fuzzCount')
+  ) {
     return [
       { $match: filter },
       isHashDistinct ? distinctHashAgg : {},
@@ -92,7 +95,10 @@ function findPacketsAggregation(
   filter = JSON.parse(JSON.stringify(filter));
 
   // optimize if there's no count filter
-  if (!isObjectContainKey(filter, 'count')) {
+  if (
+    !isObjectContainKey(filter, 'count') &&
+    !isObjectContainKey(filter, 'fuzzCount')
+  ) {
     return [
       { $match: filter },
       sort ? { $sort: { createdAt: -1, requestPacketIndex: -1 } } : {},

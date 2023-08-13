@@ -14,4 +14,4 @@ import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
   ],
   providers: [],
 })
-export class FfufModule { }
+export class FfufModule {}
