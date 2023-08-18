@@ -115,6 +115,8 @@ function tryFuzzForm(body: string): string {
 }
 
 async function addFuzzBody(packet: Packet) {
+  if (packet.method !== 'POST' && packet.method !== 'PUT' && packet.method !== 'DELETE' && packet.method !== 'PATCH') return '';
+
   const requestBody = await getRequestBody(packet.project, packet.requestBodyHash);
 
   const js = tryFuzzJson(requestBody);
