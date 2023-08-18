@@ -2,7 +2,7 @@ import { Packet } from "./apis/packets";
 import { API_URL, FfufDetectType, FfufFuzzer, FfufSettingType } from "./apis/types";
 import Qs from 'qs';
 
-const nonFuzzHeaders = ['host', 'content-type', 'content-length', 'content-encoding', 'origin']
+const nonFuzzHeaders = ['host', 'content-type', 'content-length', 'content-encoding', 'origin', 'authorization']
 const removeForDefaultHeaders = ['host', 'content-length'];
 
 function escapeBash(param: string) {
