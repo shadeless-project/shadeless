@@ -39,14 +39,14 @@ function addDetectionType(chosenFuzzer: FfufFuzzer): string {
   }
 }
 
-function isSupportedType(packet: Packet) {
-  if (['GET', 'HEAD', 'OPTIONS'].includes(packet.method)) return true;
-  const contentTypeHeader = packet.requestHeaders.slice(1).find(h => h.toLowerCase().includes('content-type'));
-  if (!contentTypeHeader) return true;
+// function isSupportedType(packet: Packet) {
+//   if (['GET', 'HEAD', 'OPTIONS'].includes(packet.method)) return true;
+//   const contentTypeHeader = packet.requestHeaders.slice(1).find(h => h.toLowerCase().includes('content-type'));
+//   if (!contentTypeHeader) return true;
 
-  const supported = ['json', 'x-www-form-urlencoded'];
-  return !!packet.requestHeaders.slice(1).find(v => v.toLowerCase().includes('content-type') && !!supported.find(type => v.includes(type)));
-}
+//   const supported = ['json', 'x-www-form-urlencoded'];
+//   return !!packet.requestHeaders.slice(1).find(v => v.toLowerCase().includes('content-type') && !!supported.find(type => v.includes(type)));
+// }
 
 function addFuzzQueryString(querystring: string) {
   if (!querystring) return '';
@@ -132,7 +132,7 @@ async function parseFfufToCmd(ffuf: FfufSettingType, chosenFuzzer: FfufFuzzer, p
   const url = `${packet.origin}${packet.path}` + addFuzzQueryString(packet.querystring);
   const wordlist = ffuf.wordlists.find(v => v.name === chosenFuzzer.wordlist);
   if (!wordlist) throw new Error('Something is wrong with FfufSetting');
-  if (!isSupportedType(packet)) throw new Error('Currently only support [json, x-www-form-urlencoded]');
+  // if (!isSupportedType(packet)) throw new Error('Currently only support [json, x-www-form-urlencoded]');
 
   const cmd = `ffuf -c -mmode 'and' -v -mc 'all' -t ${ffuf.thread} -p ${ffuf.delay} -w '${escapeBash(wordlist.path)}' -X ${packet.method}${addHeaderToCmd(chosenFuzzer.overwriteHeader, packet.requestHeaders.slice(1))}${addProxyToCmd(ffuf.proxy)}${addDetectionType(chosenFuzzer)}${await addFuzzBody(packet)} -u '${escapeBash(url)}'`;
   return cmd;
