@@ -1,7 +1,7 @@
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Box, Button, Divider, Flex, Grid, IconButton, Input, Select, Switch, Text, useToast } from '@chakra-ui/react';
 import React from 'react';
-import { FfufDetectType, FfufSettingType } from 'src/libs/apis/types';
+import { FfufDetectType, FfufFuzzMode, FfufFuzzer, FfufSettingType } from 'src/libs/apis/types';
 import { notify } from 'src/libs/notify';
 
 let cntUniqueWordlist = 0;
@@ -10,6 +10,17 @@ function getPlaceholderByDetectType(type: FfufDetectType): string {
   if (type === FfufDetectType.TIME) return '>6000';
   if (type === FfufDetectType.KEYWORD) return '<regex>';
   return '';
+}
+
+function generateDefaultFuzzer(): FfufFuzzer {
+  return {
+    "name": `Error-based (New)`,
+    "wordlist": "ERROR",
+    "detect": FfufDetectType.KEYWORD,
+    "detectValue": "60481729|(Usage:)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)",
+    "overwriteHeader": true,
+    "fuzzMode": FfufFuzzMode.CLUSTERBOMB,
+  }
 }
 
 export default function FfufPage() {
@@ -217,7 +228,7 @@ export default function FfufPage() {
           icon={<AddIcon />}
           onClick={() => {
             const { fuzzers } = ffufSetting;
-            fuzzers.push({ "name": "Error-based 2", "wordlist": "ERROR", "detect": FfufDetectType.KEYWORD, "detectValue": "60481729|(Usage: id)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": true });
+            fuzzers.push(generateDefaultFuzzer());
             setFfufSetting({
               ...ffufSetting,
               fuzzers,
@@ -226,7 +237,7 @@ export default function FfufPage() {
         />
         {ffufSetting.fuzzers.map((fuzzer, index) =>
           <React.Fragment key={`ffuf-fuzzer-${index}`}>
-            <Grid px="3%" my="15px" gridTemplateColumns='1fr 1fr 1fr 1.5fr 1fr 1fr' gap="3">
+            <Grid p="1em" borderRadius="3px" border="1px solid black" px="1%" my="15px" gridTemplateColumns='1fr 1fr 1fr 1fr' gap="3">
               <Box>
                 <Text as="span">Name: </Text>
                 <Input
@@ -243,8 +254,7 @@ export default function FfufPage() {
                   }}
                   value={fuzzer.name}
                 />
-              </Box>
-              <Box mt="4px">
+                <br />
                 <Text as="span">Wordlist: </Text>
                 <Select
                   ml="5px"
@@ -278,7 +288,6 @@ export default function FfufPage() {
                   ml="5px"
                   display="inline-block"
                   w="initial"
-                  placeholder='detect'
                   defaultValue={fuzzer.detect}
                   onChange={(e) => {
                     const { fuzzers } = ffufSetting;
@@ -297,8 +306,7 @@ export default function FfufPage() {
                   <option value={FfufDetectType.TIME}>{FfufDetectType.TIME}</option>
                   <option value={FfufDetectType.REFLECT}>{FfufDetectType.REFLECT}</option>
                 </Select>
-              </Box>
-              <Box>
+                <br />
                 <Text as="span">Detect value: </Text>
                 <Input
                   p="2"
@@ -327,6 +335,28 @@ export default function FfufPage() {
                     fuzzers,
                   });
                 }} />
+                <br />
+
+                <Text as="span">Mode: </Text>
+                <Select
+                  size="sm"
+                  ml="5px"
+                  display="inline-block"
+                  w="initial"
+                  defaultValue={fuzzer.fuzzMode}
+                  onChange={(e) => {
+                    const { fuzzers } = ffufSetting;
+                    fuzzers[index].fuzzMode = e.target.value as FfufFuzzMode;
+                    setFfufSetting({
+                      ...ffufSetting,
+                      fuzzers,
+                    })
+                  }}
+                >
+                  <option value={FfufFuzzMode.CLUSTERBOMB}>{FfufFuzzMode.CLUSTERBOMB}</option>
+                  <option value={FfufFuzzMode.SNIPER}>{FfufFuzzMode.SNIPER}</option>
+                  <option value={FfufFuzzMode.PITCHFORK}>{FfufFuzzMode.PITCHFORK}</option>
+                </Select>
               </Box>
               <Box>
                 <IconButton
@@ -347,7 +377,6 @@ export default function FfufPage() {
                 />
               </Box>
             </Grid>
-            <Divider w="100%" display={index === ffufSetting.wordlists.length - 1 ? 'none' : 'default'} />
           </React.Fragment>
         )}
       </Box>

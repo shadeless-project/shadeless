@@ -25,6 +25,12 @@ export enum FfufDetectType {
   REFLECT = 'reflect',
 }
 
+export enum FfufFuzzMode {
+  SNIPER = 'sniper',
+  CLUSTERBOMB = 'clusterbomb',
+  PITCHFORK = 'pitchfork',
+}
+
 export type FfufWordlist = {
   name: string;
   path: string;
@@ -36,6 +42,7 @@ export type FfufFuzzer = {
   overwriteHeader: boolean;
   detect: FfufDetectType;
   detectValue?: string;
+  fuzzMode: FfufFuzzMode;
 }
 
 export type FfufSettingType = {

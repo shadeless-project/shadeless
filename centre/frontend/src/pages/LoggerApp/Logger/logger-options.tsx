@@ -44,13 +44,13 @@ export default function LoggerOptions(props: Props) {
           bg="orange.600"
           ml="15px"
           onClick={async (e) => {
-              const newVal = !uniqueEndpointsToggle;
-              setUniqueEndpointsToggle(newVal);
-              localStorage.setItem('uniqueEndpointsToggle', newVal.toString());
-              await window.sleep(150);
-              document.getElementById('apply-filter-btn')?.click();
-            }}
-          >
+            const newVal = !uniqueEndpointsToggle;
+            setUniqueEndpointsToggle(newVal);
+            localStorage.setItem('uniqueEndpointsToggle', newVal.toString());
+            await window.sleep(150);
+            document.getElementById('apply-filter-btn')?.click();
+          }}
+        >
           Unique endpoints only
         </OptionCheckBox>
         <OptionCheckBox
@@ -58,11 +58,11 @@ export default function LoggerOptions(props: Props) {
           bg="gray.600"
           ml="15px"
           onClick={(e) => {
-              const newVal = !showConfigColumns;
-              setShowConfigColumns(newVal);
-              localStorage.setItem('showConfigColumns', newVal.toString());
-            }}
-          >
+            const newVal = !showConfigColumns;
+            setShowConfigColumns(newVal);
+            localStorage.setItem('showConfigColumns', newVal.toString());
+          }}
+        >
           Show config columns
         </OptionCheckBox>
       </Box>

@@ -103,8 +103,9 @@ window.isSetupFfufCorrect = (ffufSetting) => {
 
   const isCorrectFuzzerObject = (obj) => {
     if (!window.isString(obj.name)) return false;
-    if (!window.isString(obj.wordlist)) return false;
     if (!window.isString(obj.detect)) return false;
+    if (!window.isString(obj.wordlist)) return false;
+    if (!window.isString(obj.fuzzMode)) return false;
     if (!window.isBool(obj.overwriteHeader)) return false;
 
     if (!wordlistNames.includes(obj.wordlist)) return false;
@@ -128,16 +129,16 @@ window.onload = function () {
       "delay": 0.1,
       "thread": 30,
       "wordlists": [
-        { "name": "DIR", "path": "/path/to/dir/wordlist.txt" },
         { "name": "TIME", "path": "/path/to/time-based/wordlist.txt" },
         { "name": "REFLECT", "path": "/path/to/reflect-based/wordlist.txt" },
         { "name": "ERROR", "path": "/path/to/error-based/wordlist.txt" },
       ],
       "fuzzers": [
-        { "name": "Time-based", "wordlist": "TIME", "detect": "time", "detectValue": ">6000", "overwriteHeader": true },
-        { "name": "Reflected", "wordlist": "REFLECT", "detect": "reflect", "overwriteHeader": false },
-        { "name": "Error-based 1", "wordlist": "ERROR", "detect": "keyword", "detectValue": "<regex>", "overwriteHeader": true },
-        { "name": "Error-based 2", "wordlist": "ERROR", "detect": "keyword", "detectValue": "60481729|(Usage: id)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": true },
+        { "name": "Reflected", "wordlist": "REFLECT", "detect": "reflect", "overwriteHeader": false, "fuzzMode": "sniper" },
+        { "name": "Time-based header", "wordlist": "TIME", "detect": "time", "detectValue": ">6000", "overwriteHeader": true, "fuzzMode": "clusterbomb" },
+        { "name": "Time-based payload", "wordlist": "TIME", "detect": "time", "detectValue": ">6000", "overwriteHeader": false, "fuzzMode": "sniper" },
+        { "name": "Error-based header", "wordlist": "ERROR", "detect": "keyword", "detectValue": "60481729|(Usage:)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": true, "fuzzMode": "clusterbomb" },
+        { "name": "Error-based payload", "wordlist": "ERROR", "detect": "keyword", "detectValue": "60481729|(Usage:)|(uid=)|(id: command not found)|(id: not found)|('id' not found)|('id' is not recognized as)|(mysql_fetch_)|(not a valid MySQL)|(not a legal PLSQL identifer)|(mysql_connect)|(SELECT\s+[^:>]+\sFROM\s+[^:>]+\sWHERE\s+)|(at\s[[:alnum:]\/\._]+\sline\s\d+)|ociparse\(\)|(must be a syntactically valid variable)|(CFSQLTYPE)|(Unknown column)|(Microsoft OLE DB Provider for SQL)|(SQL QUERY FAILURE)|(Syntax error.{1,50}in query)|(You have an error in your SQL syntax)|(Unclosed quotation mark)", "overwriteHeader": false, "fuzzMode": "sniper" },
       ],
     }
     window.localStorage.setItem('ffuf_setting', JSON.stringify(ffufSetting));

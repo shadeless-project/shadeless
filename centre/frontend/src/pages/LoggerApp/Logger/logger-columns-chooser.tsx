@@ -14,10 +14,10 @@ function ChooserBtn(props: ChooserBtnProps) {
       size="sm"
       p="1em"
       borderRadius="2em"
-      _hover={{"opacity": ".6"}}
-      _active={{"opacity": ".8"}}
+      _hover={{ "opacity": ".6" }}
+      _active={{ "opacity": ".8" }}
       {...props}
-      onClick={() => onClick(children) }
+      onClick={() => onClick(children)}
       fontSize="xs"
     >
       {children}
@@ -44,8 +44,8 @@ function ColumnChooserBtn(props: ColumnChooserBtnProps) {
             size="sm"
             bg="custom.primary"
             color="custom.white"
-            _hover={{"opacity": ".6"}}
-            _active={{"opacity": ".8"}}
+            _hover={{ "opacity": ".6" }}
+            _active={{ "opacity": ".8" }}
             onClick={() => onClickIndex(index, name)}
             fontSize="xs"
           >
@@ -60,7 +60,7 @@ function ColumnChooserBtn(props: ColumnChooserBtnProps) {
             {name}
           </ChooserBtn>
         </Box>
-      :
+        :
         <ChooserBtn onClick={onClick} m="3px">
           {name}
         </ChooserBtn>
@@ -69,7 +69,7 @@ function ColumnChooserBtn(props: ColumnChooserBtnProps) {
   );
 }
 
-function fromStringToChooseColumnType(val:string) {
+function fromStringToChooseColumnType(val: string) {
   const value = val.split(':');
   return {
     index: +value[0],
@@ -78,7 +78,7 @@ function fromStringToChooseColumnType(val:string) {
 }
 const MAX_COLUMNS = 12;
 const ColumnNames = ParserPacketProperties.map(prop => prop.name);
-const defaultColumns = `1:${ColumnNames[2]},2:${ColumnNames[3]},3:${ColumnNames[19]},4:${ColumnNames[14]},5:${ColumnNames[5]},6:${ColumnNames[8]},7:${ColumnNames[10]},8:${ColumnNames[12]},9:${ColumnNames[17]}`;
+const defaultColumns = `1:${ColumnNames[2]},2:${ColumnNames[3]},3:${ColumnNames[4]},4:${ColumnNames[20]},5:${ColumnNames[15]},6:${ColumnNames[6]},7:${ColumnNames[9]},8:${ColumnNames[11]},9:${ColumnNames[13]},10:${ColumnNames[18]}`;
 const defaultArrColumns = defaultColumns.split(',').map(val => fromStringToChooseColumnType(val));
 
 export type ChoosingColumnType = {

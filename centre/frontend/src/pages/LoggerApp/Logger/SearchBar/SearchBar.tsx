@@ -17,7 +17,7 @@ function auto_grow() {
   const element = document.getElementById('search-bar');
   if (!element) return;
   element.style.height = "5px";
-  element.style.height = (element.scrollHeight)+"px";
+  element.style.height = (element.scrollHeight) + "px";
 }
 
 type SearchBarProps = {
@@ -33,7 +33,7 @@ type SearchBarProps = {
     now: string;
   }>>;
 }
-export default function SearchBar (props: SearchBarProps) {
+export default function SearchBar(props: SearchBarProps) {
   const {
     setApplyingFilter,
     filter,
@@ -71,7 +71,7 @@ export default function SearchBar (props: SearchBarProps) {
       });
     } catch (err) {
       const e = err as ParserError;
-      notifyErr(toast, `${e.type}: ${e.message}` , 'filter-error-toast');
+      notifyErr(toast, `${e.type}: ${e.message}`, 'filter-error-toast');
     }
   }
 
@@ -89,7 +89,7 @@ export default function SearchBar (props: SearchBarProps) {
       onClose();
     } catch (err) {
       const e = err as ParserError;
-      notifyErr(toast, `${e.type}: ${e.message}` , 'filter-error-toast');
+      notifyErr(toast, `${e.type}: ${e.message}`, 'filter-error-toast');
     }
   }
 
@@ -144,9 +144,14 @@ export default function SearchBar (props: SearchBarProps) {
                 if (!e.relatedTarget?.className.includes('suggest-btn')) setFilterFocus(false)
               }}
               onFocus={() => setFilterFocus(true)}
-              onChange={ (e) => {
+              onChange={(e) => {
                 auto_grow();
-                setFilter({ before: filter.now, now: e.target.value} );
+                setFilter({ before: filter.now, now: e.target.value });
+              }}
+              onKeyDown={(e) => {
+                if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+                  document.getElementById('apply-filter-btn')?.click();
+                }
               }}
               placeholder="(staticScore <= 50 && responseHeaders contains 'text/html') || reflectedParameters != null"
               _placeholder={{ opacity: '.6' }}

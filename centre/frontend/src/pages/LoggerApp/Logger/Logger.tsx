@@ -12,7 +12,7 @@ import LoggerColumnsChooser, { ChoosingColumnType } from "./logger-columns-choos
 import { MinusIcon, QuestionIcon } from "@chakra-ui/icons";
 import MyTooltip from "src/pages/common/tooltip";
 
-export const NUM_PACKETS_PER_PAGE = 30;
+export const NUM_PACKETS_PER_PAGE = 50;
 
 type LoggerProps = {
   applyingFilter: Query2ObjectResult;
@@ -191,8 +191,8 @@ export default function Logger(props: LoggerProps) {
             bg="inherit"
             p="0"
             mt="-5px"
-            _hover={{ opacity: '.6'}}
-            _active={{ opacity: '.8'}}
+            _hover={{ opacity: '.6' }}
+            _active={{ opacity: '.8' }}
             onClick={() => setShowConfigColumns(false)}
           >
             <MinusIcon />
