@@ -1,4 +1,4 @@
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import { AddIcon, ArrowDownIcon, ArrowUpIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Box, Button, Divider, Flex, Grid, IconButton, Input, Select, Switch, Text, useToast } from '@chakra-ui/react';
 import React from 'react';
 import { FfufDetectType, FfufFuzzMode, FfufFuzzer, FfufSettingType } from 'src/libs/apis/types';
@@ -236,7 +236,7 @@ export default function FfufPage() {
           }}
         />
         {ffufSetting.fuzzers.map((fuzzer, index) =>
-          <React.Fragment key={`ffuf-fuzzer-${index}`}>
+          <React.Fragment key={`ffuf-fuzzer-${index}-${fuzzer.name}-${fuzzer.fuzzMode}-${fuzzer.wordlist}`}>
             <Grid p="1em" borderRadius="3px" border="1px solid black" px="1%" my="15px" gridTemplateColumns='1fr 1fr 1fr 1fr' gap="3">
               <Box>
                 <Text as="span">Name: </Text>
@@ -355,7 +355,6 @@ export default function FfufPage() {
                 >
                   <option value={FfufFuzzMode.CLUSTERBOMB}>{FfufFuzzMode.CLUSTERBOMB}</option>
                   <option value={FfufFuzzMode.SNIPER}>{FfufFuzzMode.SNIPER}</option>
-                  <option value={FfufFuzzMode.PITCHFORK}>{FfufFuzzMode.PITCHFORK}</option>
                 </Select>
               </Box>
               <Box>
@@ -364,6 +363,7 @@ export default function FfufPage() {
                   size="md"
                   fontSize="md"
                   colorScheme='red'
+                  mx="3px"
                   aria-label='Remove this wordlist'
                   icon={<DeleteIcon />}
                   onClick={() => {
@@ -375,6 +375,48 @@ export default function FfufPage() {
                     });
                   }}
                 />
+                {index < ffufSetting.fuzzers.length - 1 &&
+                  <IconButton
+                    borderRadius="3px"
+                    size="md"
+                    fontSize="md"
+                    colorScheme='blue'
+                    mx="3px"
+                    aria-label='Move this fuzzer down'
+                    icon={<ArrowDownIcon />}
+                    onClick={() => {
+                      const { fuzzers } = ffufSetting;
+                      const tmp = fuzzers[index + 1];
+                      fuzzers[index + 1] = fuzzers[index];
+                      fuzzers[index] = tmp;
+                      setFfufSetting({
+                        ...ffufSetting,
+                        fuzzers,
+                      });
+                    }}
+                  />
+                }
+                {index > 0 &&
+                  <IconButton
+                    borderRadius="3px"
+                    size="md"
+                    fontSize="md"
+                    mx="3px"
+                    colorScheme='blue'
+                    aria-label='Move this fuzzer up'
+                    icon={<ArrowUpIcon />}
+                    onClick={() => {
+                      const { fuzzers } = ffufSetting;
+                      const tmp = fuzzers[index - 1];
+                      fuzzers[index - 1] = fuzzers[index];
+                      fuzzers[index] = tmp;
+                      setFfufSetting({
+                        ...ffufSetting,
+                        fuzzers,
+                      });
+                    }}
+                  />
+                }
               </Box>
             </Grid>
           </React.Fragment>

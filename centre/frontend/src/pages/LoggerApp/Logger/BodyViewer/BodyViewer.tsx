@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, Grid, Select, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, IconButton, Select, Text, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { getFileContentFromId } from "src/libs/apis/files";
 import { Packet } from "src/libs/apis/packets";
@@ -9,7 +9,7 @@ import UtilityButton from "./utility-btn";
 import { ParserError } from "src/libs/query.parser";
 import { LoggerContext } from "../../LoggerAppContext";
 import MyTooltip from "src/pages/common/tooltip";
-import { FfufSettingType } from "src/libs/apis/types";
+import { FfufFuzzMode, FfufSettingType } from "src/libs/apis/types";
 import { copyClipboardFuzzer } from "src/libs/fuzzer-clipboard";
 import { incFuzzedApiByOne } from "src/libs/apis/ffuf";
 
@@ -173,11 +173,13 @@ export default function BodyViewer(props: PacketDetailProps) {
               key={`fuzzer-${fuzzer.name}-${index}`}
             >
               <Button
+                border="1px solid black"
                 colorScheme="red"
                 fontSize="xs"
                 size="2xs"
                 p="4px"
                 mr="6px"
+                leftIcon={<Text p="1px" borderRadius="200%" bg="inherit">{fuzzer.fuzzMode === FfufFuzzMode.SNIPER ? "⭕" : "💣"}</Text>}
                 _hover={{ opacity: '0.7' }}
                 onClick={async () => {
                   try {

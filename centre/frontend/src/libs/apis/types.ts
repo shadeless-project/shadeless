@@ -28,7 +28,7 @@ export enum FfufDetectType {
 export enum FfufFuzzMode {
   SNIPER = 'sniper',
   CLUSTERBOMB = 'clusterbomb',
-  PITCHFORK = 'pitchfork',
+  // PITCHFORK = 'pitchfork',
 }
 
 export type FfufWordlist = {
