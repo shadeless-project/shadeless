@@ -1,15 +1,23 @@
 # Shadeless
 
-Service is hosting at: http://shadeless.linesec-apps-beta.com/
+Shadeless is a visualization tool that takes data from a Burp Extension called [Shadeless-Burp](https://github.com/shadeless-project/shadeless-burp), with included the following features:
+- UI & main purpose of Shadeless is to support blackbox testing / bug bounty hunters
+- Multiple collaboration between bug bounty hunters at ease
+- Query past HTTP req/res via understandable english grammar: `origin contains "viettel" and responseHeader contains "Set-Cookie"`, or `origin not_matches "gstatic|hotjar|cdn" and responseBody contains "e8c402ce81f5bce65d4799646d3485dc"`
+- Able to delete undesirable req/res at ease.
+- After queried at desired req/res, you can view req/res around that particular time (I call this feature as "time travel")
+- By viewing the content of req/res, there's a button that generate `ffuf` command to fuzz that endpoint.
+- CAUTION: Because multiple hackers are storing data in the same place, their credentials may get leaked to each other. There's also a feature to "CENSOR" the req/res of AUTHENTICATION. However the credentials are still stored on Shadeless Database, which is inevitable :) 
+- And much more !
 
-The data centre that store all web traffic under mongodb:
+Demo hosted at: https://demo.shadeless.app/
+Documentation hosted at: https://docs.shadeless.app/
+
+Below is architecture of Shadeless
 
 ![shadeless drawio](https://user-images.githubusercontent.com/25105395/215317587-4a1b32b0-486b-46e0-8276-bfa9b75f4690.png)
 
-More documentation can be found at:
-
-- What is Shadeless: https://gist.github.com/phvietan/3f3507311436218b95dbbeee045daf9e
-- How to use filter in Shadeless app: https://gist.github.com/phvietan/db95dbda1bb7ebb7dc15efae70905658
+Youtube tutorial: to be updated
 
 ## How to run (for dev only)
 
