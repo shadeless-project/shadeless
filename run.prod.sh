@@ -22,8 +22,8 @@ stopDockers() {
 }
 
 myPrint "initializing static folder"
-mkdir -p files files-prod
-chmod 777 files files-prod
+mkdir -p files
+chmod 777 files
 
 if ! command -v docker-compose &> /dev/null
 then
