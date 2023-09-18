@@ -47,6 +47,11 @@ export default function SearchBarBody(props: SearchBarBodyProps) {
         ml="5px"
         _placeholder={{ opacity: '.6' }}
         onChange={(e) => setFilterBody(e.target.value)}
+        onKeyDown={(e) => {
+          if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+            document.getElementById('apply-filter-btn')?.click();
+          }
+        }}
       />
     </Box>
   );
