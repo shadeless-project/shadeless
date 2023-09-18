@@ -7,7 +7,6 @@ import { ProjectPacketsService } from './project-packets/project-packets.service
 import { ProjectUsersService } from './project-users/project-users.service';
 import { ProjectsService } from './projects/projects.service';
 import { RawPacket, RawPacketSchema } from 'libs/schemas/raw_packet.schema';
-import { Path, PathSchema } from 'libs/schemas/path.schema';
 import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
 import { Occurence, OccurenceSchema } from 'libs/schemas/occurence.schema';
 import { Account, AccountSchema } from 'libs/schemas/account.schema';
@@ -22,7 +21,6 @@ import { BullModule } from '@nestjs/bull';
       { name: Project.name, schema: ProjectSchema },
       { name: User.name, schema: UserSchema },
       { name: Occurence.name, schema: OccurenceSchema },
-      { name: Path.name, schema: PathSchema },
       { name: Censor.name, schema: CensorSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
     ]),

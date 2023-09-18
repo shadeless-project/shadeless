@@ -6,7 +6,6 @@ import mv from 'mv';
 import path from 'path';
 import { Logger } from '@nestjs/common';
 import { ItemStatus, RawPacket } from 'libs/schemas/raw_packet.schema';
-import { Path } from 'libs/schemas/path.schema';
 import { calculateHash } from 'libs/helper';
 import { BurpPacketService } from './burp.queue.service';
 
@@ -41,27 +40,6 @@ export class BurpQueue {
       },
     );
     return rawPacket;
-  }
-
-  parsePathsFromPacket(body: UploadPacketDto): Path[] {
-    const result: Path[] = [];
-    const paths = body.path.split('/');
-
-    let curPath = '';
-    paths.forEach((val, idx) => {
-      if (idx === paths.length - 1 && val == '') return;
-      if (idx !== paths.length - 1 || body.staticScore <= 50) {
-        curPath += val + '/';
-        result.push({
-          requestPacketId: body.requestPacketId,
-          origin: body.origin,
-          path: curPath,
-          project: body.project,
-          status: ItemStatus.TODO,
-        });
-      }
-    });
-    return result;
   }
 
   @Process(BurpQueue.prototype.handlePacket.name)

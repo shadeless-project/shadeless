@@ -18,7 +18,6 @@ import {
   OccurenceDocument,
   OccurenceSchema,
 } from 'libs/schemas/occurence.schema';
-import { Path, PathSchema } from 'libs/schemas/path.schema';
 import { Censor, CensorSchema } from 'libs/schemas/censor.schema';
 import { RawPacket, RawPacketSchema } from 'libs/schemas/raw_packet.schema';
 import { PacketActionsQueue } from 'message-queue/packets-actions.queue';
@@ -32,7 +31,6 @@ function getAppModuleImports() {
       { name: Project.name, schema: ProjectSchema },
       { name: User.name, schema: UserSchema },
       { name: Occurence.name, schema: OccurenceSchema },
-      { name: Path.name, schema: PathSchema },
       { name: Censor.name, schema: CensorSchema },
       { name: RawPacket.name, schema: RawPacketSchema },
     ]),

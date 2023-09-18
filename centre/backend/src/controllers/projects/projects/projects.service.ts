@@ -7,7 +7,6 @@ import { Model } from 'mongoose';
 import { PostProjectDto, PutProjectDto } from '../projects.dto';
 import { User, UserDocument } from 'libs/schemas/user.schema';
 import { RawPacket, RawPacketDocument } from 'libs/schemas/raw_packet.schema';
-import { Path, PathDocument } from 'libs/schemas/path.schema';
 import { Occurence, OccurenceDocument } from 'libs/schemas/occurence.schema';
 import { Censor, CensorDocument } from 'libs/schemas/censor.schema';
 
@@ -19,7 +18,6 @@ export class ProjectsService {
     private occurenceModel: Model<OccurenceDocument>,
     @InjectModel(Censor.name) private censorModel: Model<CensorDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(Path.name) private pathModel: Model<PathDocument>,
     @InjectModel(RawPacket.name)
     private rawPacketModel: Model<RawPacketDocument>,
   ) {}
@@ -59,7 +57,6 @@ export class ProjectsService {
       this.userModel.deleteMany({ project: projectName }),
       this.rawPacketModel.deleteMany({ project: projectName }),
       this.occurenceModel.deleteMany({ project: projectName }),
-      this.pathModel.deleteMany({ project: projectName }),
       this.censorModel.deleteMany({ project: projectName }),
     ]);
     return 'Successfully deleted project';
