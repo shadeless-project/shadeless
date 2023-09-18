@@ -1,12 +1,10 @@
 import { Model } from 'mongoose';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Path, PathDocument } from 'libs/schemas/path.schema';
 import { User, UserDocument } from 'libs/schemas/user.schema';
 import { Project, ProjectDocument } from 'libs/schemas/project.schema';
 import {
-  ItemStatus,
   RawPacket,
   RawPacketDocument,
 } from 'libs/schemas/raw_packet.schema';
@@ -19,7 +17,6 @@ export class BurpPacketService {
   constructor(
     @InjectModel(RawPacket.name)
     private rawPacketModel: Model<RawPacketDocument>,
-    @InjectModel(Path.name) private pathModel: Model<PathDocument>,
     @InjectModel(Occurence.name)
     private occurenceModel: Model<OccurenceDocument>,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
@@ -44,36 +41,13 @@ export class BurpPacketService {
     return rawPacket;
   }
 
-  parsePathsFromPacket(body: UploadPacketDto): Path[] {
-    const result: Path[] = [];
-    const paths = body.path.split('/');
-
-    let curPath = '';
-    paths.forEach((val, idx) => {
-      if (idx === paths.length - 1 && val == '') return;
-      if (idx !== paths.length - 1 || body.staticScore <= 50) {
-        curPath += val + '/';
-        result.push({
-          requestPacketId: body.requestPacketId,
-          origin: body.origin,
-          path: curPath,
-          project: body.project,
-          status: ItemStatus.TODO,
-        });
-      }
-    });
-    return result;
-  }
-
   async handlePacketUpload(body: UploadPacketDto) {
     const rawPacket = this.parseUploadPacket(body);
-    const paths = this.parsePathsFromPacket(body);
     await Promise.all([
       this.tryAddRawPacket(rawPacket),
       this.tryUpdateOccurence(rawPacket),
       this.tryAddUser(rawPacket),
       this.tryAddProject(rawPacket),
-      this.tryAddPaths(paths),
     ]);
   }
 
@@ -94,22 +68,6 @@ export class BurpPacketService {
     try {
       await this.projectModel.create({ name: p.project });
     } catch (e) {}
-  }
-  async tryAddPaths(paths: Path[]) {
-    for (let i = 0; i < paths.length; ++i) {
-      try {
-        await this.pathModel.create(paths[i]);
-      } catch (e) {
-        await this.pathModel.updateOne(
-          {
-            path: paths[i].path,
-            origin: paths[i].origin,
-            project: paths[i].project,
-          },
-          { $set: { requestPacketId: paths[i].requestPacketId } },
-        );
-      }
-    }
   }
   async tryUpdateOccurence(p: RawPacket) {
     try {
