@@ -11,7 +11,7 @@ function escapeBash(param: string) {
 function addHeaderToCmd(fuzzer: FfufFuzzer, requestHeaders: string[]) {
   const { overwriteHeader, fuzzMode } = fuzzer;
   const additionalHeader = fuzzMode === FfufFuzzMode.CLUSTERBOMB ? " -H 'X-Add-Header: FUZZ'" : " ";
-  const additionalCookie = fuzzMode === FfufFuzzMode.CLUSTERBOMB ? "; additional_cookie=FUZZ'" : "";
+  const additionalCookie = fuzzMode === FfufFuzzMode.CLUSTERBOMB ? "; additional_cookie=FUZZ" : "";
 
   if (!overwriteHeader) return requestHeaders.reduce((prev, cur) => {
     const [key, value] = cur.split(': ');
