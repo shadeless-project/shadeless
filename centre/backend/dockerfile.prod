@@ -8,14 +8,15 @@ RUN npm i && npm run build
 
 FROM node:buster
 
-RUN apt update -y && apt install ripgrep
-
 WORKDIR /app
 
+COPY --from=builder /app/tool/ ./tool/
 COPY --from=builder /app/dist/ ./dist/
 COPY --from=builder /app/node_modules ./node_modules/
 COPY --from=builder /app/package.json .
 COPY --from=builder /app/entrypoint.sh .
+
+RUN dpkg -i /app/tool/ripgrep_13.0.0_amd64.deb
 
 RUN useradd -ms /bin/bash shadelessuser
 
