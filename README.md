@@ -1,5 +1,12 @@
 # Shadeless
 
+Update: 
+
+- The code in this repo might not be latest release.
+- Current code is close-sourced.
+- Powerpoint is hosted at: https://stc.drstrange.org/shadeless.pptx
+- Demo hosted at: https://shadeless.drstrange.org . Cred: anpham / anpham
+
 Shadeless takes data from a Burp Extension called [Shadeless-Burp](https://github.com/shadeless-project/shadeless-burp), then visualize and allow users to query for intesting request/response that mainly support bug bounty hunters & blackbox testing, below are some features that Shadeless support:
 - Multiple hunters can collaborate with each other.
 - Query past HTTP req/res via understandable english grammar, for example:
@@ -11,10 +18,6 @@ Shadeless takes data from a Burp Extension called [Shadeless-Burp](https://githu
 - By viewing the content of req/res, there's a button that generate `ffuf` command to fuzz that endpoint.
 - By clicking on generating `ffuf` command, the server automatically acknowledge that we've tried fuzz that endpoint so it +1 to the `fuzzCnt` attribute of the api endpoint. => We can write query for non-fuzzed endpoint for example: `origin contains "<target_origin>" and fuzzCnt == 0`
 - CAUTION: Because multiple hackers are storing data in the same place, their credentials may get leaked to each other. There's also a feature to "CENSOR" the req/res of AUTHENTICATION. However the credentials are still stored on Shadeless Database, which is inevitable :) 
-
-- Demo hosted at: https://demo.shadeless.app/
-- Documentation hosted at: https://docs.shadeless.app/
-- Youtube tutorial: `to be updated`
 
 Below is architecture of Shadeless
 
